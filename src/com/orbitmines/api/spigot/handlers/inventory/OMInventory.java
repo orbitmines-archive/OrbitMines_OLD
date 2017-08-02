@@ -8,31 +8,31 @@ import org.bukkit.inventory.ItemStack;
 
 public abstract class OMInventory {
 
-	protected Inventory inventory;
-	protected ItemInstance[] itemInstances;
+    protected Inventory inventory;
+    protected ItemInstance[] itemInstances;
 
-	/* Called before inventory is opened, return false to cancel */
+    /* Called before inventory is opened, return false to cancel */
     protected abstract boolean onOpen(OMPlayer omp);
 
     /* Called after a player clicks a registered item */
     protected abstract void onClick(InventoryClickEvent event, OMPlayer omp);
 
-	public Inventory getInventory(){
-		return inventory;
-	}
+    public Inventory getInventory(){
+        return inventory;
+    }
 
-	protected void newInventory(int size, String title) {
-	    this.inventory = Bukkit.createInventory(null, size, title);
-	    this.itemInstances = new ItemInstance[inventory.getSize()];
+    protected void newInventory(int size, String title) {
+        this.inventory = Bukkit.createInventory(null, size, title);
+        this.itemInstances = new ItemInstance[inventory.getSize()];
     }
 
     protected void add(int slot, ItemInstance itemInstance) {
-	    itemInstances[slot] = itemInstance;
+        itemInstances[slot] = itemInstance;
     }
 
     public void open(OMPlayer omp) {
-	    if (!onOpen(omp))
-	        return;
+        if (!onOpen(omp))
+            return;
 
         omp.getPlayer().openInventory(inventory);
         omp.setLastInventory(this);
@@ -62,10 +62,10 @@ public abstract class OMInventory {
 
     public abstract class ItemInstance {
 
-	    protected final ItemStack itemStack;
+        protected final ItemStack itemStack;
 
-	    public ItemInstance(ItemStack itemStack) {
-	        this.itemStack = itemStack;
+        public ItemInstance(ItemStack itemStack) {
+            this.itemStack = itemStack;
         }
 
         public abstract void onClick(InventoryClickEvent event, OMPlayer omp);

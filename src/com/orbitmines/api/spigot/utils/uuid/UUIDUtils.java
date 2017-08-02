@@ -4,11 +4,11 @@ import java.util.*;
 
 public class UUIDUtils {
 
-	private static Map<String, UUID> playerUUIDs = new HashMap<>();
+    private static Map<String, UUID> playerUUIDs = new HashMap<>();
     private static Map<UUID, String> playerNames = new HashMap<>();
 
-	public static UUID getUUID(String playerName) {
-		if (playerUUIDs.containsKey(playerName))
+    public static UUID getUUID(String playerName) {
+        if (playerUUIDs.containsKey(playerName))
             return playerUUIDs.get(playerName);
 
         UUIDFetcher uuidFetcher = new UUIDFetcher(Collections.singletonList(playerName));
@@ -20,10 +20,10 @@ public class UUIDUtils {
         } catch (Exception ex) {
             return null;
         }
-	}
+    }
 
-	public static String getName(UUID uuid) {
-		if (!playerNames.containsKey(uuid))
+    public static String getName(UUID uuid) {
+        if (!playerNames.containsKey(uuid))
             return playerNames.get(uuid);
 
         NameFetcher nameFetcher = new NameFetcher(uuid);
@@ -36,35 +36,35 @@ public class UUIDUtils {
         } catch (Exception ex) {
             return null;
         }
-	}
+    }
 
-	public static String getNameDate(UUID uuid) {
-		NameFetcher nameFetcher = new NameFetcher(uuid);
-		try {
-			String name = nameFetcher.call().get(uuid).get(nameFetcher.call().get(uuid).size() - 1);
-			String[] nameParts = name.split(" ", 1);
-			return nameParts[1];
-		} catch (Exception ex) {
-			return null;
-		}
-	}
+    public static String getNameDate(UUID uuid) {
+        NameFetcher nameFetcher = new NameFetcher(uuid);
+        try {
+            String name = nameFetcher.call().get(uuid).get(nameFetcher.call().get(uuid).size() - 1);
+            String[] nameParts = name.split(" ", 1);
+            return nameParts[1];
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
-	public static HashMap<String, String> getNames(UUID uuid) {
-		NameFetcher nameFetcher = new NameFetcher(uuid);
-		try {
-			HashMap<String, String> names = new HashMap<>();
-			for (String name : nameFetcher.call().get(uuid)) {
-				String[] nameParts = name.split(" ", 1);
-				if (nameParts.length > 1) {
-					names.put(nameParts[0], nameParts[1]);
-				} else {
-					names.put(nameParts[0], null);
-				}
-			}
+    public static HashMap<String, String> getNames(UUID uuid) {
+        NameFetcher nameFetcher = new NameFetcher(uuid);
+        try {
+            HashMap<String, String> names = new HashMap<>();
+            for (String name : nameFetcher.call().get(uuid)) {
+                String[] nameParts = name.split(" ", 1);
+                if (nameParts.length > 1) {
+                    names.put(nameParts[0], nameParts[1]);
+                } else {
+                    names.put(nameParts[0], null);
+                }
+            }
 
-			return names;
-		} catch (Exception ex) {
-			return null;
-		}
-	}
+            return names;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 }
