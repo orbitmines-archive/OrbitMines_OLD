@@ -1,11 +1,14 @@
 package com.orbitmines.api.spigot.handlers.inventory.perks;
 
 import com.orbitmines.api.Message;
+import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.inventory.ConfirmInventory;
 import com.orbitmines.api.spigot.handlers.inventory.OMInventory;
 import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
+import com.orbitmines.api.spigot.handlers.itembuilders.LeatherArmorBuilder;
 import com.orbitmines.api.spigot.perks.Perk;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -15,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 */
 public abstract class PerkInventory extends OMInventory {
 
+    protected OrbitMinesApi api;
     private int cosmeticPerksSlot;
     private ItemInstance cosmeticPerks;
 
@@ -23,6 +27,8 @@ public abstract class PerkInventory extends OMInventory {
     }
 
     public PerkInventory(int size, String title, int cosmeticPerksSlot) {
+        api = OrbitMinesApi.getApi();
+
         this.cosmeticPerksSlot = cosmeticPerksSlot;
 
         newInventory(size, title);
@@ -77,6 +83,10 @@ public abstract class PerkInventory extends OMInventory {
 
     public ItemBuilder toItemBuilder(Perk perk, OMPlayer omp) {
         return new ItemBuilder(perk.item().getMaterial(), perk.item().getAmount(), perk.item().getDurability(), perk.getDisplayName(), "", perk.hasAccess(omp) ? "§a§l" + omp.getMessage(new Message("Ontgrendeld", "Unlocked")) : perk.obtainable().getRequiredLore(omp), "");
+    }
+
+    public LeatherArmorBuilder toLeatherArmorBuilder(Perk perk, OMPlayer omp, LeatherArmorBuilder.Type type, Color color) {
+        return new LeatherArmorBuilder(type, color, perk.item().getAmount(), perk.getDisplayName(), "", perk.hasAccess(omp) ? "§a§l" + omp.getMessage(new Message("Ontgrendeld", "Unlocked")) : perk.obtainable().getRequiredLore(omp), "");
     }
 
     protected abstract class ConfirmItemInstance extends ItemInstance {

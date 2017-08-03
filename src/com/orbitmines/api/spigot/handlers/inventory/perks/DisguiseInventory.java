@@ -26,7 +26,7 @@ public class DisguiseInventory extends PerkInventory {
 
         int slot = 0;
         for (Disguise disguise : Disguise.values()) {
-            add(slot, new ConfirmItemInstance(toItemBuilder(disguise, omp).build()) {
+            add(slot, new ConfirmItemInstance(api.getNms().customItem().setEggId(toItemBuilder(disguise, omp).build(), disguise.mob())) {
 
                 @Override
                 protected void onConfirm(InventoryClickEvent event, OMPlayer omp) {

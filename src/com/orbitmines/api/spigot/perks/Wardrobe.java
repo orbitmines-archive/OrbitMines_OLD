@@ -37,6 +37,8 @@ public enum Wardrobe implements Perk {
     DIAMOND("Diamond", Color.AQUA, new ItemSet(Material.DIAMOND_CHESTPLATE), new Obtainable(VipRank.DIAMOND)),
     EMERALD("Emerald", Color.LIME, new ItemSet(Material.CHAINMAIL_CHESTPLATE), new Obtainable(VipRank.EMERALD));
 
+    public static final Wardrobe[] COLORS = { AQUA, BLACK, BLACK, FUCHSIA, GRAY, GREEN, LIME, NAVY, ORANGE, PURPLE, RED, TEAL, WHITE, YELLOW };
+
     private final String name;
     private final Color color;
 

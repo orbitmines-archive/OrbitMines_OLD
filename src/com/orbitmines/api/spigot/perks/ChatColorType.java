@@ -11,7 +11,7 @@ import org.bukkit.Material;
 */
 public enum ChatColorType implements Perk {
 
-    BOLD("§l", "Bold", new ItemSet(Material.STAINED_GLASS_PANE), new Obtainable(VipRank.NONE)),
+    BOLD("§l", "Bold", new ItemSet(Material.STAINED_GLASS_PANE), new Obtainable(VipRank.EMERALD)),
     CURSIVE("§o", "Cursive", new ItemSet(Material.STAINED_GLASS_PANE), new Obtainable(VipRank.DIAMOND)),;
 
     private final String type;

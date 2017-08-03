@@ -55,7 +55,7 @@ public class ChatColorInventory extends PerkInventory {
 
         slot = 13;
         for (ChatColorType chatColorType : ChatColorType.values()) {
-            add(slot, new ConfirmItemInstance(new ItemBuilder(chatColorType.item().getMaterial(), chatColorType.item().getAmount(), chatColorType.item().getDurability(), chatColorType.getDisplayName() + ": " + omp.statusString(data.getChatColorType() == chatColorType),
+            add(slot, new ConfirmItemInstance(new ItemBuilder(chatColorType.item().getMaterial(), chatColorType.item().getAmount(), data.getChatColorType() == chatColorType ? 5 : 14, chatColorType.getDisplayName() + ": " + omp.statusString(data.getChatColorType() == chatColorType),
                     "", chatColorType.hasAccess(omp) ? "§a§l" + omp.getMessage(new Message("Ontgrendeld", "Unlocked")) : chatColorType.obtainable().getRequiredLore(omp), "").build()) {
                 @Override
                 protected void onConfirm(InventoryClickEvent event, OMPlayer omp) {

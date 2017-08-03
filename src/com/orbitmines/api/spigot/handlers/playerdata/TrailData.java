@@ -2,7 +2,10 @@ package com.orbitmines.api.spigot.handlers.playerdata;
 
 import com.orbitmines.api.Data;
 import com.orbitmines.api.Message;
+import com.orbitmines.api.VipRank;
+import com.orbitmines.api.spigot.handlers.Currency;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
+import com.orbitmines.api.spigot.handlers.Obtainable;
 import com.orbitmines.api.spigot.handlers.particle.Particle;
 import com.orbitmines.api.spigot.handlers.particle.ParticleAnimation;
 import com.orbitmines.api.spigot.perks.Trail;
@@ -20,7 +23,9 @@ public class TrailData extends PlayerData {
 
     private List<Trail> trails;
     private List<TrailType> trailTypes;
+    private Obtainable specialTrailObtainable = new Obtainable(Currency.VIP_POINTS, 750);
     private boolean unlockedSpecialTrail;
+    private Obtainable particleAmountObtainable = new Obtainable(VipRank.GOLD);
 
     private Trail trail;
     private TrailType trailType;
@@ -103,6 +108,14 @@ public class TrailData extends PlayerData {
         return getTrailTypes().contains(trailType);
     }
 
+    public Obtainable getSpecialTrailObtainable() {
+        return specialTrailObtainable;
+    }
+
+    public Obtainable getParticleAmountObtainable() {
+        return particleAmountObtainable;
+    }
+
     public boolean hasUnlockedSpecialTrail() {
         return unlockedSpecialTrail;
     }
@@ -155,7 +168,6 @@ public class TrailData extends PlayerData {
         this.particleAmount = particleAmount;
 
         omp.getPlayer().playSound(omp.getPlayer().getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 5, 1);
-        omp.sendMessage(new Message("§7Je §fTrail's §7§lParticle Amount§7 is nu §f§l" + particleAmount + "§7", "§7Set your §fTrail's §7§lParticle Amount§7 to §f§l" + particleAmount + "§7."));
     }
 
     public void addParticleAmount() {

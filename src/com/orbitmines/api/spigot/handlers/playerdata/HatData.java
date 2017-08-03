@@ -2,7 +2,9 @@ package com.orbitmines.api.spigot.handlers.playerdata;
 
 import com.orbitmines.api.Data;
 import com.orbitmines.api.Message;
+import com.orbitmines.api.VipRank;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
+import com.orbitmines.api.spigot.handlers.Obtainable;
 import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
 import com.orbitmines.api.spigot.perks.Hat;
 import org.bukkit.Sound;
@@ -17,7 +19,7 @@ import java.util.List;
 public class HatData extends PlayerData {
 
     private List<Hat> hats;
-    private boolean unlockedHatsBlockTrail;
+    private Obtainable blockTrailObtainable = new Obtainable(VipRank.EMERALD);
     private boolean hatsBlockTrail;
 
     /* Not saved in database */
@@ -28,7 +30,6 @@ public class HatData extends PlayerData {
 
         /* Load Defaults */
         hats = new ArrayList<>();
-        unlockedHatsBlockTrail = false;
         hatsBlockTrail = false;
     }
 
@@ -74,12 +75,8 @@ public class HatData extends PlayerData {
         return getHats().contains(hat);
     }
 
-    public boolean hasUnlockedHatsBlockTrail() {
-        return unlockedHatsBlockTrail;
-    }
-
-    public void setUnlockedHatsBlockTrail(boolean unlockedHatsBlockTrail) {
-        this.unlockedHatsBlockTrail = unlockedHatsBlockTrail;
+    public Obtainable getBlockTrailObtainable() {
+        return blockTrailObtainable;
     }
 
     public boolean hasHatsBlockTrail() {

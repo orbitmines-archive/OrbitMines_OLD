@@ -54,6 +54,19 @@ public class HatInventory extends PerkInventory {
             slot++;
         }
 
+        add(49, new ItemInstance(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, data.hasHatsBlockTrail() ? 5 : 14, "Hat Block Trail: " + omp.statusString(data.hasHatsBlockTrail()),
+                "", omp.isEligible(data.getBlockTrailObtainable().getVipRank()) ? "§a§l" + omp.getMessage(new Message("Ontgrendeld", "Unlocked")) : data.getBlockTrailObtainable().getRequiredLore(omp), "").build()) {
+            @Override
+            public void onClick(InventoryClickEvent event, OMPlayer omp) {
+                if (omp.isEligible(data.getBlockTrailObtainable().getVipRank())) {
+                    omp.getPlayer().closeInventory();
+                    data.setHatsBlockTrail(!data.hasHatsBlockTrail());
+                } else {
+                    data.getBlockTrailObtainable().msgNoAccess(omp);
+                }
+            }
+        });
+
         if (data.getPage() != 0)
             add(36, new ItemInstance(new ItemBuilder(Material.EMPTY_MAP, 1, 0, "§e§n<< " + omp.getMessage(new Message("Meer Hats", "More Hats"))).build()) {
                 @Override
@@ -73,10 +86,6 @@ public class HatInventory extends PerkInventory {
                     open(omp);
                 }
             });
-
-        {
-
-        }
 
         if (data.hasHatEnabled())
             add(50, new ItemInstance(new ItemBuilder(Material.BARRIER, 1, 0, omp.getMessage(new Message("§4§nZet Hat UIT", "§4§nDisable Hat"))).build()) {

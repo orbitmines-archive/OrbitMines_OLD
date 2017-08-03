@@ -81,6 +81,12 @@ public class FloatingItem {
     }
 
     public void spawn() {
+        String armorStandDisplayName = null;
+        boolean armorStandDisplayNameVisible = false;
+        if (armorStand != null) {
+            armorStandDisplayName = armorStand.getCustomName();
+            armorStandDisplayNameVisible = armorStand.isCustomNameVisible();
+        }
         clear();
 
         Chunk chunk = location.getChunk();
@@ -91,20 +97,30 @@ public class FloatingItem {
         armorStand.setRemoveWhenFarAway(false);
         armorStand.setGravity(false);
 
+        if (armorStandDisplayName != null) {
+            armorStand.setCustomName(armorStandDisplayName);
+            armorStand.setCustomNameVisible(armorStandDisplayNameVisible);
+        }
+
         for (ItemInstance itemInstance : itemInstances) {
             itemInstance.spawn();
         }
 
+        FloatingItem floatingItem = this;
         task = new BukkitRunnable() {
             @Override
             public void run() {
                 for (ItemInstance itemInstance : itemInstances) {
                     Item item = itemInstance.getItem();
 
-                    if (item == null || item.isDead())
+                    if (item == null || item.isDead()) {
                         task.cancel();
-                    else
+
+                        if (floatingItems.contains(floatingItem))
+                            spawn();
+                    } else {
                         item.setTicksLived(1);
+                    }
                 }
             }
         }.runTaskTimer(api, 0, 1);

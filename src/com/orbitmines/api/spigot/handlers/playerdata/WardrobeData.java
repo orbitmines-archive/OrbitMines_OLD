@@ -2,8 +2,10 @@ package com.orbitmines.api.spigot.handlers.playerdata;
 
 import com.orbitmines.api.Data;
 import com.orbitmines.api.Message;
+import com.orbitmines.api.VipRank;
 import com.orbitmines.api.spigot.Color;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
+import com.orbitmines.api.spigot.handlers.Obtainable;
 import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
 import com.orbitmines.api.spigot.handlers.itembuilders.LeatherArmorBuilder;
 import com.orbitmines.api.spigot.perks.Wardrobe;
@@ -20,7 +22,7 @@ import java.util.List;
 public class WardrobeData extends PlayerData {
 
     private List<Wardrobe> wardrobe;
-    private boolean unlockedWardrobeDisco;
+    private Obtainable wardrobeDiscoObtainable = new Obtainable(VipRank.DIAMOND);
     private boolean wardrobeDisco;
 
     public WardrobeData(OMPlayer omp) {
@@ -28,7 +30,6 @@ public class WardrobeData extends PlayerData {
 
         /* Load Defaults */
         wardrobe = new ArrayList<>();
-        unlockedWardrobeDisco = false;
         wardrobeDisco = false;
     }
 
@@ -71,12 +72,8 @@ public class WardrobeData extends PlayerData {
         return getWardrobe().contains(wardrobe);
     }
 
-    public boolean hasUnlockedWardrobeDisco() {
-        return unlockedWardrobeDisco;
-    }
-
-    public void setUnlockedWardrobeDisco(boolean unlockedWardrobeDisco) {
-        this.unlockedWardrobeDisco = unlockedWardrobeDisco;
+    public Obtainable getWardrobeDiscoObtainable() {
+        return wardrobeDiscoObtainable;
     }
 
     public boolean isWardrobeDisco() {
