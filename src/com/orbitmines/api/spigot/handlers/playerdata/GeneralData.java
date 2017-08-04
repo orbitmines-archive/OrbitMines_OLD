@@ -14,7 +14,6 @@ import org.bukkit.Sound;
 */
 public class GeneralData extends PlayerData {
 
-    private boolean opMode;
     private Language language;
 
     private boolean silent;
@@ -28,7 +27,6 @@ public class GeneralData extends PlayerData {
         super(Data.GENERAL, omp);
 
         /* Load Defaults */
-        opMode = false;
         language = Language.DUTCH;
         silent = false;
     }
@@ -51,14 +49,6 @@ public class GeneralData extends PlayerData {
     @Override
     public void parse(String string) {
 
-    }
-
-    public boolean isOpMode() {
-        return opMode;
-    }
-
-    public void setOpMode(boolean opMode) {
-        this.opMode = opMode;
     }
 
     public Language getLanguage() {

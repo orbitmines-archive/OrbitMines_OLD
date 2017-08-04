@@ -5,6 +5,7 @@ import com.orbitmines.api.spigot.nms.actionbar.*;
 import com.orbitmines.api.spigot.nms.anvilgui.*;
 import com.orbitmines.api.spigot.nms.armorstand.*;
 import com.orbitmines.api.spigot.nms.customitem.*;
+import com.orbitmines.api.spigot.nms.entity.*;
 import com.orbitmines.api.spigot.nms.firework.*;
 import com.orbitmines.api.spigot.nms.npc.*;
 import com.orbitmines.api.spigot.nms.npc.bat.*;
@@ -72,8 +73,21 @@ import com.orbitmines.api.spigot.nms.npc.zombiehusk.ZombieHuskNpc;
 import com.orbitmines.api.spigot.nms.npc.zombiehusk.ZombieHuskNpc_1_11_R1;
 import com.orbitmines.api.spigot.nms.npc.zombiehusk.ZombieHuskNpc_1_12_R1;
 import com.orbitmines.api.spigot.nms.particles.*;
+import com.orbitmines.api.spigot.nms.pet.chicken.*;
+import com.orbitmines.api.spigot.nms.pet.cow.*;
+import com.orbitmines.api.spigot.nms.pet.creeper.*;
+import com.orbitmines.api.spigot.nms.pet.magmacube.*;
+import com.orbitmines.api.spigot.nms.pet.mushroomcow.*;
+import com.orbitmines.api.spigot.nms.pet.ocelot.*;
+import com.orbitmines.api.spigot.nms.pet.pig.*;
+import com.orbitmines.api.spigot.nms.pet.silverfish.*;
+import com.orbitmines.api.spigot.nms.pet.slime.*;
+import com.orbitmines.api.spigot.nms.pet.spider.*;
+import com.orbitmines.api.spigot.nms.pet.squid.*;
+import com.orbitmines.api.spigot.nms.pet.wolf.*;
 import com.orbitmines.api.spigot.nms.tablist.*;
 import com.orbitmines.api.spigot.nms.title.*;
+import com.orbitmines.api.spigot.utils.ConsoleUtils;
 import org.bukkit.entity.Player;
 
 /*
@@ -129,6 +143,8 @@ public class Nms {
     private ZombieHorseNpc zombieHorseNpc;
     private ZombieHuskNpc zombieHuskNpc;
 
+    /* Entity */
+    private EntityNms entityNms;
     /* Title */
     private TitleNms titleNms;
     /* ActionBar */
@@ -144,6 +160,49 @@ public class Nms {
     /* TabList */
     private TabListNms tabListNms;
 
+    /* Pets */
+//    private BatPet batPet;
+//    private BlazePet blazePet;
+//    private CaveSpiderPet caveSpiderPet;
+    private ChickenPet chickenPet;
+    private CowPet cowPet;
+    private CreeperPet creeperPet;
+//    private EndermanPet endermanPet;
+//    private EndermitePet endermitePet;
+//    private EvokerPet evokerPet;
+//    private GhastPet ghastPet;
+//    private GuardianPet guardianPet;
+//    private HorsePet horsePet;
+//    private IronGolemPet ironGolemPet;
+//    private LlamaPet llamaPet;
+    private MagmaCubePet magmaCubePet;
+//    private MulePet mulePet;
+    private MushroomCowPet mushroomCowPet;
+    private OcelotPet ocelotPet;
+    private PigPet pigPet;
+//    private PigZombiePet pigZombiePet;
+//    private PolarBearPet polarBearPet;
+//    private RabbitPet rabbitPet;
+//    private SheepPet sheepPet;
+    private SilverfishPet silverfishPet;
+//    private SkeletonPet skeletonPet;
+//    private SkeletonHorsePet skeletonHorsePet;
+    private SlimePet slimePet;
+//    private SnowmanPet snowmanPet;
+    private SpiderPet spiderPet;
+    private SquidPet squidPet;
+//    private StrayPet strayPet;
+//    private VexPet vexPet;
+//    private VillagerPet villagerPet;
+//    private VindicatorPet vindicatorPet;
+//    private WitchPet witchPet;
+//    private WitherSkeletonPet witherSkeletonPet;
+//    private WitherPet witherPet;
+    private WolfPet wolfPet;
+//    private ZombiePet zombiePet;
+//    private ZombieHorsePet zombieHorsePet;
+//    private ZombieHuskPet zombieHuskPet;
+
     public Nms() {
         api = OrbitMinesApi.getApi();
 
@@ -151,10 +210,10 @@ public class Nms {
         this.version = version;
 
         if (version == null) {
-            Utils.sendConsoleEmpty();
-            Utils.warnConsole("Error while registering NMS!");
-            Utils.warnConsole("Disabling plugin...");
-            Utils.sendConsoleEmpty();
+            ConsoleUtils.empty();
+            ConsoleUtils.warn("Error while registering NMS!");
+            ConsoleUtils.warn("Disabling plugin...");
+            ConsoleUtils.empty();
             api.getServer().getPluginManager().disablePlugin(api);
         }
     }
@@ -206,6 +265,8 @@ public class Nms {
                 wolfNpc = new WolfNpc_1_8_R1();
                 zombieNpc = new ZombieNpc_1_8_R1();
 
+                /* Entity */
+                entityNms = new EntityNms_1_8_R1();
                 /* Titles */
                 titleNms = new TitleNms_1_8_R1();
                 /* ActionBar */
@@ -220,6 +281,38 @@ public class Nms {
                 particleNms = new ParticleNms_1_8_R1();
                 /* TabList */
                 tabListNms = new TabListNms_1_8_R1();
+                
+                /* Pets */
+//                batPet = new BatPet_1_8_R1();
+//                blazePet = new BlazePet_1_8_R1();
+//                caveSpiderPet = new CaveSpiderPet_1_8_R1();
+                chickenPet = new ChickenPet_1_8_R1();
+                cowPet = new CowPet_1_8_R1();
+                creeperPet = new CreeperPet_1_8_R1();
+//                endermanPet = new EndermanPet_1_8_R1();
+//                endermitePet = new EndermitePet_1_8_R1();
+//                ghastPet = new GhastPet_1_8_R1();
+//                guardianPet = new GuardianPet_1_8_R1();
+//                horsePet = new HorsePet_1_8_R1();
+//                ironGolemPet = new IronGolemPet_1_8_R1();
+                magmaCubePet = new MagmaCubePet_1_8_R1();
+                mushroomCowPet = new MushroomCowPet_1_8_R1();
+                ocelotPet = new OcelotPet_1_8_R1();
+                pigPet = new PigPet_1_8_R1();
+//                pigZombiePet = new PigZombiePet_1_8_R1();
+//                rabbitPet = new RabbitPet_1_8_R1();
+//                sheepPet = new SheepPet_1_8_R1();
+                silverfishPet = new SilverfishPet_1_8_R1();
+//                skeletonPet = new SkeletonPet_1_8_R1();
+                slimePet = new SlimePet_1_8_R1();
+//                snowmanPet = new SnowmanPet_1_8_R1();
+                spiderPet = new SpiderPet_1_8_R1();
+                squidPet = new SquidPet_1_8_R1();
+//                villagerPet = new VillagerPet_1_8_R1();
+//                witchPet = new WitchPet_1_8_R1();
+//                witherPet = new WitherPet_1_8_R1();
+                wolfPet = new WolfPet_1_8_R1();
+//                zombiePet = new ZombiePet_1_8_R1();
 
                 break;
             case "v1_8_R2": // 1.8.3
@@ -258,6 +351,8 @@ public class Nms {
                 wolfNpc = new WolfNpc_1_8_R2();
                 zombieNpc = new ZombieNpc_1_8_R2();
 
+                /* Entity */
+                entityNms = new EntityNms_1_8_R2();
                 /* Titles */
                 titleNms = new TitleNms_1_8_R2();
                 /* ActionBar */
@@ -272,7 +367,38 @@ public class Nms {
                 particleNms = new ParticleNms_1_8_R2();
                 /* TabList */
                 tabListNms = new TabListNms_1_8_R2();
-
+                
+                /* Pets */
+//                batPet = new BatPet_1_8_R2();
+//                blazePet = new BlazePet_1_8_R2();
+//                caveSpiderPet = new CaveSpiderPet_1_8_R2();
+                chickenPet = new ChickenPet_1_8_R2();
+                cowPet = new CowPet_1_8_R2();
+                creeperPet = new CreeperPet_1_8_R2();
+//                endermanPet = new EndermanPet_1_8_R2();
+//                endermitePet = new EndermitePet_1_8_R2();
+//                ghastPet = new GhastPet_1_8_R2();
+//                guardianPet = new GuardianPet_1_8_R2();
+//                horsePet = new HorsePet_1_8_R2();
+//                ironGolemPet = new IronGolemPet_1_8_R2();
+                magmaCubePet = new MagmaCubePet_1_8_R2();
+                mushroomCowPet = new MushroomCowPet_1_8_R2();
+                ocelotPet = new OcelotPet_1_8_R2();
+                pigPet = new PigPet_1_8_R2();
+//                pigZombiePet = new PigZombiePet_1_8_R2();
+//                rabbitPet = new RabbitPet_1_8_R2();
+//                sheepPet = new SheepPet_1_8_R2();
+                silverfishPet = new SilverfishPet_1_8_R2();
+//                skeletonPet = new SkeletonPet_1_8_R2();
+                slimePet = new SlimePet_1_8_R2();
+//                snowmanPet = new SnowmanPet_1_8_R2();
+                spiderPet = new SpiderPet_1_8_R2();
+                squidPet = new SquidPet_1_8_R2();
+//                villagerPet = new VillagerPet_1_8_R2();
+//                witchPet = new WitchPet_1_8_R2();
+//                witherPet = new WitherPet_1_8_R2();
+                wolfPet = new WolfPet_1_8_R2();
+//                zombiePet = new ZombiePet_1_8_R2();
 
                 break;
             case "v1_8_R3": // 1.8.7 - 1.8.9
@@ -311,6 +437,8 @@ public class Nms {
                 wolfNpc = new WolfNpc_1_8_R3();
                 zombieNpc = new ZombieNpc_1_8_R3();
 
+                /* Entity */
+                entityNms = new EntityNms_1_8_R3();
                 /* Titles */
                 titleNms = new TitleNms_1_8_R3();
                 /* ActionBar */
@@ -325,7 +453,38 @@ public class Nms {
                 particleNms = new ParticleNms_1_8_R3();
                 /* TabList */
                 tabListNms = new TabListNms_1_8_R3();
-
+                
+                /* Pets */
+//                batPet = new BatPet_1_8_R3();
+//                blazePet = new BlazePet_1_8_R3();
+//                caveSpiderPet = new CaveSpiderPet_1_8_R3();
+                chickenPet = new ChickenPet_1_8_R3();
+                cowPet = new CowPet_1_8_R3();
+                creeperPet = new CreeperPet_1_8_R3();
+//                endermanPet = new EndermanPet_1_8_R3();
+//                endermitePet = new EndermitePet_1_8_R3();
+//                ghastPet = new GhastPet_1_8_R3();
+//                guardianPet = new GuardianPet_1_8_R3();
+//                horsePet = new HorsePet_1_8_R3();
+//                ironGolemPet = new IronGolemPet_1_8_R3();
+                magmaCubePet = new MagmaCubePet_1_8_R3();
+                mushroomCowPet = new MushroomCowPet_1_8_R3();
+                ocelotPet = new OcelotPet_1_8_R3();
+                pigPet = new PigPet_1_8_R3();
+//                pigZombiePet = new PigZombiePet_1_8_R3();
+//                rabbitPet = new RabbitPet_1_8_R3();
+//                sheepPet = new SheepPet_1_8_R3();
+                silverfishPet = new SilverfishPet_1_8_R3();
+//                skeletonPet = new SkeletonPet_1_8_R3();
+                slimePet = new SlimePet_1_8_R3();
+//                snowmanPet = new SnowmanPet_1_8_R3();
+                spiderPet = new SpiderPet_1_8_R3();
+                squidPet = new SquidPet_1_8_R3();
+//                villagerPet = new VillagerPet_1_8_R3();
+//                witchPet = new WitchPet_1_8_R3();
+//                witherPet = new WitherPet_1_8_R3();
+                wolfPet = new WolfPet_1_8_R3();
+//                zombiePet = new ZombiePet_1_8_R3();
 
                 break;
             case "v1_9_R1": // 1.9 - 1.9.2
@@ -364,6 +523,8 @@ public class Nms {
                 wolfNpc = new WolfNpc_1_9_R1();
                 zombieNpc = new ZombieNpc_1_9_R1();
 
+                /* Entity */
+                entityNms = new EntityNms_1_9_R1();
                 /* Titles */
                 titleNms = new TitleNms_1_9_R1();
                 /* ActionBar */
@@ -378,7 +539,38 @@ public class Nms {
                 particleNms = new ParticleNms_1_9_R1();
                 /* TabList */
                 tabListNms = new TabListNms_1_9_R1();
-
+                
+                /* Pets */
+//                batPet = new BatPet_1_9_R1();
+//                blazePet = new BlazePet_1_9_R1();
+//                caveSpiderPet = new CaveSpiderPet_1_9_R1();
+                chickenPet = new ChickenPet_1_9_R1();
+                cowPet = new CowPet_1_9_R1();
+                creeperPet = new CreeperPet_1_9_R1();
+//                endermanPet = new EndermanPet_1_9_R1();
+//                endermitePet = new EndermitePet_1_9_R1();
+//                ghastPet = new GhastPet_1_9_R1();
+//                guardianPet = new GuardianPet_1_9_R1();
+//                horsePet = new HorsePet_1_9_R1();
+//                ironGolemPet = new IronGolemPet_1_9_R1();
+                magmaCubePet = new MagmaCubePet_1_9_R1();
+                mushroomCowPet = new MushroomCowPet_1_9_R1();
+                ocelotPet = new OcelotPet_1_9_R1();
+                pigPet = new PigPet_1_9_R1();
+//                pigZombiePet = new PigZombiePet_1_9_R1();
+//                rabbitPet = new RabbitPet_1_9_R1();
+//                sheepPet = new SheepPet_1_9_R1();
+                silverfishPet = new SilverfishPet_1_9_R1();
+//                skeletonPet = new SkeletonPet_1_9_R1();
+                slimePet = new SlimePet_1_9_R1();
+//                snowmanPet = new SnowmanPet_1_9_R1();
+                spiderPet = new SpiderPet_1_9_R1();
+                squidPet = new SquidPet_1_9_R1();
+//                villagerPet = new VillagerPet_1_9_R1();
+//                witchPet = new WitchPet_1_9_R1();
+//                witherPet = new WitherPet_1_9_R1();
+                wolfPet = new WolfPet_1_9_R1();
+//                zombiePet = new ZombiePet_1_9_R1();
 
                 break;
             case "v1_9_R2": // 1.9.4
@@ -417,6 +609,8 @@ public class Nms {
                 wolfNpc = new WolfNpc_1_9_R2();
                 zombieNpc = new ZombieNpc_1_9_R2();
 
+                /* Entity */
+                entityNms = new EntityNms_1_9_R2();
                 /* Titles */
                 titleNms = new TitleNms_1_9_R2();
                 /* ActionBar */
@@ -431,7 +625,38 @@ public class Nms {
                 particleNms = new ParticleNms_1_9_R2();
                 /* TabList */
                 tabListNms = new TabListNms_1_9_R2();
-
+                
+                /* Pets */
+//                batPet = new BatPet_1_9_R2();
+//                blazePet = new BlazePet_1_9_R2();
+//                caveSpiderPet = new CaveSpiderPet_1_9_R2();
+                chickenPet = new ChickenPet_1_9_R2();
+                cowPet = new CowPet_1_9_R2();
+                creeperPet = new CreeperPet_1_9_R2();
+//                endermanPet = new EndermanPet_1_9_R2();
+//                endermitePet = new EndermitePet_1_9_R2();
+//                ghastPet = new GhastPet_1_9_R2();
+//                guardianPet = new GuardianPet_1_9_R2();
+//                horsePet = new HorsePet_1_9_R2();
+//                ironGolemPet = new IronGolemPet_1_9_R2();
+                magmaCubePet = new MagmaCubePet_1_9_R2();
+                mushroomCowPet = new MushroomCowPet_1_9_R2();
+                ocelotPet = new OcelotPet_1_9_R2();
+                pigPet = new PigPet_1_9_R2();
+//                pigZombiePet = new PigZombiePet_1_9_R2();
+//                rabbitPet = new RabbitPet_1_9_R2();
+//                sheepPet = new SheepPet_1_9_R2();
+                silverfishPet = new SilverfishPet_1_9_R2();
+//                skeletonPet = new SkeletonPet_1_9_R2();
+                slimePet = new SlimePet_1_9_R2();
+//                snowmanPet = new SnowmanPet_1_9_R2();
+                spiderPet = new SpiderPet_1_9_R2();
+                squidPet = new SquidPet_1_9_R2();
+//                villagerPet = new VillagerPet_1_9_R2();
+//                witchPet = new WitchPet_1_9_R2();
+//                witherPet = new WitherPet_1_9_R2();
+                wolfPet = new WolfPet_1_9_R2();
+//                zombiePet = new ZombiePet_1_9_R2();
 
                 break;
             case "v1_10_R1": // 1.10 -  1.10.2
@@ -471,6 +696,8 @@ public class Nms {
                 wolfNpc = new WolfNpc_1_10_R1();
                 zombieNpc = new ZombieNpc_1_10_R1();
 
+                /* Entity */
+                entityNms = new EntityNms_1_10_R1();
                 /* Titles */
                 titleNms = new TitleNms_1_10_R1();
                 /* ActionBar */
@@ -485,7 +712,38 @@ public class Nms {
                 particleNms = new ParticleNms_1_10_R1();
                 /* TabList */
                 tabListNms = new TabListNms_1_10_R1();
-
+                
+                /* Pets */
+//                batPet = new BatPet_1_10_R1();
+//                blazePet = new BlazePet_1_10_R1();
+//                caveSpiderPet = new CaveSpiderPet_1_10_R1();
+                chickenPet = new ChickenPet_1_10_R1();
+                cowPet = new CowPet_1_10_R1();
+                creeperPet = new CreeperPet_1_10_R1();
+//                endermanPet = new EndermanPet_1_10_R1();
+//                endermitePet = new EndermitePet_1_10_R1();
+//                ghastPet = new GhastPet_1_10_R1();
+//                guardianPet = new GuardianPet_1_10_R1();
+//                horsePet = new HorsePet_1_10_R1();
+//                ironGolemPet = new IronGolemPet_1_10_R1();
+                magmaCubePet = new MagmaCubePet_1_10_R1();
+                mushroomCowPet = new MushroomCowPet_1_10_R1();
+                ocelotPet = new OcelotPet_1_10_R1();
+                pigPet = new PigPet_1_10_R1();
+//                pigZombiePet = new PigZombiePet_1_10_R1();
+//                rabbitPet = new RabbitPet_1_10_R1();
+//                sheepPet = new SheepPet_1_10_R1();
+                silverfishPet = new SilverfishPet_1_10_R1();
+//                skeletonPet = new SkeletonPet_1_10_R1();
+                slimePet = new SlimePet_1_10_R1();
+//                snowmanPet = new SnowmanPet_1_10_R1();
+                spiderPet = new SpiderPet_1_10_R1();
+                squidPet = new SquidPet_1_10_R1();
+//                villagerPet = new VillagerPet_1_10_R1();
+//                witchPet = new WitchPet_1_10_R1();
+//                witherPet = new WitherPet_1_10_R1();
+                wolfPet = new WolfPet_1_10_R1();
+//                zombiePet = new ZombiePet_1_10_R1();
 
                 break;
             case "v1_11_R1": // 1.11 - 1.11.2
@@ -535,6 +793,8 @@ public class Nms {
                 zombieHorseNpc = new ZombieHorseNpc_1_11_R1();
                 zombieHuskNpc = new ZombieHuskNpc_1_11_R1();
 
+                /* Entity */
+                entityNms = new EntityNms_1_11_R1();
                 /* Titles */
                 titleNms = new TitleNms_1_11_R1();
                 /* ActionBar */
@@ -549,7 +809,38 @@ public class Nms {
                 particleNms = new ParticleNms_1_11_R1();
                 /* TabList */
                 tabListNms = new TabListNms_1_11_R1();
-
+                
+                /* Pets */
+//                batPet = new BatPet_1_11_R1();
+//                blazePet = new BlazePet_1_11_R1();
+//                caveSpiderPet = new CaveSpiderPet_1_11_R1();
+                chickenPet = new ChickenPet_1_11_R1();
+                cowPet = new CowPet_1_11_R1();
+                creeperPet = new CreeperPet_1_11_R1();
+//                endermanPet = new EndermanPet_1_11_R1();
+//                endermitePet = new EndermitePet_1_11_R1();
+//                ghastPet = new GhastPet_1_11_R1();
+//                guardianPet = new GuardianPet_1_11_R1();
+//                horsePet = new HorsePet_1_11_R1();
+//                ironGolemPet = new IronGolemPet_1_11_R1();
+                magmaCubePet = new MagmaCubePet_1_11_R1();
+                mushroomCowPet = new MushroomCowPet_1_11_R1();
+                ocelotPet = new OcelotPet_1_11_R1();
+                pigPet = new PigPet_1_11_R1();
+//                pigZombiePet = new PigZombiePet_1_11_R1();
+//                rabbitPet = new RabbitPet_1_11_R1();
+//                sheepPet = new SheepPet_1_11_R1();
+                silverfishPet = new SilverfishPet_1_11_R1();
+//                skeletonPet = new SkeletonPet_1_11_R1();
+                slimePet = new SlimePet_1_11_R1();
+//                snowmanPet = new SnowmanPet_1_11_R1();
+                spiderPet = new SpiderPet_1_11_R1();
+                squidPet = new SquidPet_1_11_R1();
+//                villagerPet = new VillagerPet_1_11_R1();
+//                witchPet = new WitchPet_1_11_R1();
+//                witherPet = new WitherPet_1_11_R1();
+                wolfPet = new WolfPet_1_11_R1();
+//                zombiePet = new ZombiePet_1_11_R1();
 
                 break;
             case "v1_12_R1": // 1.12 - ?
@@ -599,6 +890,8 @@ public class Nms {
                 zombieHorseNpc = new ZombieHorseNpc_1_12_R1();
                 zombieHuskNpc = new ZombieHuskNpc_1_12_R1();
 
+                /* Entity */
+                entityNms = new EntityNms_1_12_R1();
                 /* Titles */
                 titleNms = new TitleNms_1_12_R1();
                 /* ActionBar */
@@ -613,7 +906,38 @@ public class Nms {
                 particleNms = new ParticleNms_1_12_R1();
                 /* TabList */
                 tabListNms = new TabListNms_1_12_R1();
-
+                
+                /* Pets */
+//                batPet = new BatPet_1_12_R1();
+//                blazePet = new BlazePet_1_12_R1();
+//                caveSpiderPet = new CaveSpiderPet_1_12_R1();
+                chickenPet = new ChickenPet_1_12_R1();
+                cowPet = new CowPet_1_12_R1();
+                creeperPet = new CreeperPet_1_12_R1();
+//                endermanPet = new EndermanPet_1_12_R1();
+//                endermitePet = new EndermitePet_1_12_R1();
+//                ghastPet = new GhastPet_1_12_R1();
+//                guardianPet = new GuardianPet_1_12_R1();
+//                horsePet = new HorsePet_1_12_R1();
+//                ironGolemPet = new IronGolemPet_1_12_R1();
+                magmaCubePet = new MagmaCubePet_1_12_R1();
+                mushroomCowPet = new MushroomCowPet_1_12_R1();
+                ocelotPet = new OcelotPet_1_12_R1();
+                pigPet = new PigPet_1_12_R1();
+//                pigZombiePet = new PigZombiePet_1_12_R1();
+//                rabbitPet = new RabbitPet_1_12_R1();
+//                sheepPet = new SheepPet_1_12_R1();
+                silverfishPet = new SilverfishPet_1_12_R1();
+//                skeletonPet = new SkeletonPet_1_12_R1();
+                slimePet = new SlimePet_1_12_R1();
+//                snowmanPet = new SnowmanPet_1_12_R1();
+                spiderPet = new SpiderPet_1_12_R1();
+                squidPet = new SquidPet_1_12_R1();
+//                villagerPet = new VillagerPet_1_12_R1();
+//                witchPet = new WitchPet_1_12_R1();
+//                witherPet = new WitherPet_1_12_R1();
+                wolfPet = new WolfPet_1_12_R1();
+//                zombiePet = new ZombiePet_1_12_R1();
 
                 break;
             default:
@@ -629,6 +953,10 @@ public class Nms {
 
     public NpcNms npc() {
         return npcNms;
+    }
+
+    public EntityNms entity() {
+        return entityNms;
     }
 
     public TitleNms title() {
@@ -848,4 +1176,172 @@ public class Nms {
     public ZombieHuskNpc getZombieHuskNpc() {
         return zombieHuskNpc;
     }
+
+    /*
+        Pets
+     */
+
+//    public BatPet getBatPet() {
+//        return batPet;
+//    }
+
+//    public BlazePet getBlazePet() {
+//        return blazePet;
+//    }
+
+//    public CaveSpiderPet getCaveSpiderPet() {
+//        return caveSpiderPet;
+//    }
+
+    public ChickenPet getChickenPet() {
+        return chickenPet;
+    }
+
+    public CowPet getCowPet() {
+        return cowPet;
+    }
+
+    public CreeperPet getCreeperPet() {
+        return creeperPet;
+    }
+
+//    public EndermanPet getEndermanPet() {
+//        return endermanPet;
+//    }
+
+//    public EndermitePet getEndermitePet() {
+//        return endermitePet;
+//    }
+
+//    public EvokerPet getEvokerPet() {
+//        return evokerPet;
+//    }
+
+//    public GhastPet getGhastPet() {
+//        return ghastPet;
+//    }
+
+//    public GuardianPet getGuardianPet() {
+//        return guardianPet;
+//    }
+
+//    public HorsePet getHorsePet() {
+//        return horsePet;
+//    }
+
+//    public IronGolemPet getIronGolemPet() {
+//        return ironGolemPet;
+//    }
+
+//    public LlamaPet getLlamaPet() {
+//        return llamaPet;
+//    }
+
+    public MagmaCubePet getMagmaCubePet() {
+        return magmaCubePet;
+    }
+
+//    public MulePet getMulePet() {
+//        return mulePet;
+//    }
+
+    public MushroomCowPet getMushroomCowPet() {
+        return mushroomCowPet;
+    }
+
+    public OcelotPet getOcelotPet() {
+        return ocelotPet;
+    }
+
+    public PigPet getPigPet() {
+        return pigPet;
+    }
+
+//    public PigZombiePet getPigZombiePet() {
+//        return pigZombiePet;
+//    }
+
+//    public PolarBearPet getPolarBearPet() {
+//        return polarBearPet;
+//    }
+
+//    public RabbitPet getRabbitPet() {
+//        return rabbitPet;
+//    }
+
+//    public SheepPet getSheepPet() {
+//        return sheepPet;
+//    }
+
+    public SilverfishPet getSilverfishPet() {
+        return silverfishPet;
+    }
+
+//    public SkeletonPet getSkeletonPet() {
+//        return skeletonPet;
+//    }
+
+//    public SkeletonHorsePet getSkeletonHorsePet() {
+//        return skeletonHorsePet;
+//    }
+
+    public SlimePet getSlimePet() {
+        return slimePet;
+    }
+
+//    public SnowmanPet getSnowmanPet() {
+//        return snowmanPet;
+//    }
+
+    public SpiderPet getSpiderPet() {
+        return spiderPet;
+    }
+
+    public SquidPet getSquidPet() {
+        return squidPet;
+    }
+
+//    public StrayPet getStrayPet() {
+//        return strayPet;
+//    }
+
+//    public VexPet getVexPet() {
+//        return vexPet;
+//    }
+
+//    public VillagerPet getVillagerPet() {
+//        return villagerPet;
+//    }
+
+//    public VindicatorPet getVindicatorPet() {
+//        return vindicatorPet;
+//    }
+
+//    public WitchPet getWitchPet() {
+//        return witchPet;
+//    }
+
+//    public WitherPet getWitherPet() {
+//        return witherPet;
+//    }
+
+//    public WitherSkeletonPet getWitherSkeletonPet() {
+//        return witherSkeletonPet;
+//    }
+
+    public WolfPet getWolfPet() {
+        return wolfPet;
+    }
+
+//    public ZombiePet getZombiePet() {
+//        return zombiePet;
+//    }
+
+//    public ZombieHorsePet getZombieHorsePet() {
+//        return zombieHorsePet;
+//    }
+
+//    public ZombieHuskPet getZombieHuskPet() {
+//        return zombieHuskPet;
+//    }
 }

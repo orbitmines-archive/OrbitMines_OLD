@@ -6,6 +6,8 @@ package com.orbitmines.api;
 public enum Data {
 
     GENERAL,
+
+    /* Perks */
     CHATCOLORS,
     DISGUISES,
     GADGETS,

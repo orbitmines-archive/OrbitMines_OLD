@@ -258,7 +258,8 @@ public class Database {
 
     public enum Table {
 
-        PLAYERS("Players", Column.UUID, Column.NAME, Column.STAFFRANK, Column.VIPRANK, Column.MONTHLYBONUS, Column.VOTES, Column.CACHEDVOTES, Column.STATS);
+        PLAYERS("Players", Column.UUID, Column.NAME, Column.STAFFRANK, Column.VIPRANK, Column.MONTHLYBONUS, Column.VOTES, Column.CACHEDVOTES, Column.STATS),
+        SERVERS("Servers", Column.NAME, Column.STATUS, Column.MAXPLAYERS);
 
         private final String table;
         private final Column[] columns;
@@ -296,7 +297,10 @@ public class Database {
         MONTHLYBONUS,
         VOTES,
         CACHEDVOTES,
-        STATS;
+        STATS,
+
+        STATUS,
+        MAXPLAYERS;
 
         @Override
         public String toString() {

@@ -1,6 +1,10 @@
 package com.orbitmines.api.spigot.handlers.scoreboard;
 
+import com.orbitmines.api.StaffRank;
+import com.orbitmines.api.VipRank;
+import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Team;
 
@@ -9,14 +13,18 @@ import org.bukkit.scoreboard.Team;
  */
 public class Scoreboard {
 
+    private String serverName;
+
     private Board board;
     private ScoreboardSet set;
     private OMPlayer omp;
 
     public Scoreboard(OMPlayer omp) {
-        omp.setScoreboard(this);
+        omp.setScoreboard(set);
         this.board = new Board(omp.getPlayer().getName());
         this.omp = omp;
+
+        serverName = OrbitMinesApi.getApi().server().getServerType().toString();
     }
 
     public Board getBoard() {
@@ -91,7 +99,60 @@ public class Scoreboard {
             team.update(board.getScoreboard());
         }
 
-        if (getSet().useRankTeams())
-            Utils.updateRankTeams(getBoard().getScoreboard());
+        if (!set.usePlayerRanks())
+            return;
+
+        Team iron = getTeam(board.getScoreboard(), "I_" + serverName, VipRank.IRON.getScoreboardPrefix());
+        Team gold = getTeam(board.getScoreboard(), "G_" + serverName, VipRank.GOLD.getScoreboardPrefix());
+        Team diamond = getTeam(board.getScoreboard(), "D_" + serverName, VipRank.DIAMOND.getScoreboardPrefix());
+        Team emerald = getTeam(board.getScoreboard(), "E_" + serverName, VipRank.EMERALD.getScoreboardPrefix());
+        Team builder = getTeam(board.getScoreboard(), "B_" + serverName, StaffRank.BUILDER.getScoreboardPrefix());
+        Team moderator = getTeam(board.getScoreboard(), "M_" + serverName, StaffRank.MODERATOR.getScoreboardPrefix());
+        Team owner = getTeam(board.getScoreboard(), "O_" + serverName, StaffRank.OWNER.getScoreboardPrefix());
+
+        for (OMPlayer omp : OMPlayer.getPlayers()) {
+            Player player = omp.getPlayer();
+
+            switch (omp.getStaffRank()) {
+
+                case NONE:
+                    switch (omp.getVipRank()) {
+
+                        case IRON:
+                            iron.addEntry(player.getName());
+                            break;
+                        case GOLD:
+                            gold.addEntry(player.getName());
+                            break;
+                        case DIAMOND:
+                            diamond.addEntry(player.getName());
+                            break;
+                        case EMERALD:
+                            emerald.addEntry(player.getName());
+                            break;
+                    }
+                    break;
+                case BUILDER:
+                    builder.addEntry(player.getName());
+                    break;
+                case MODERATOR:
+                    moderator.addEntry(player.getName());
+                    break;
+                case OWNER:
+                    owner.addEntry(player.getName());
+                    break;
+            }
+        }
+    }
+
+    private Team getTeam(org.bukkit.scoreboard.Scoreboard scoreboard, String name, String prefix) {
+        Team team = scoreboard.getTeam(name);
+        if (team != null)
+            return team;
+
+        team = scoreboard.registerNewTeam(name);
+        team.setPrefix(prefix);
+
+        return team;
     }
 }

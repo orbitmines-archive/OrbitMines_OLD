@@ -110,4 +110,8 @@ public class ChatColorData extends PlayerData {
     public boolean hasChatColorType(ChatColorType chatColorType) {
         return getChatColorTypes().contains(chatColorType);
     }
+
+    public String type() {
+        return chatColorType == null ? "" : chatColorType.getType();
+    }
 }

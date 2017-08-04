@@ -50,10 +50,13 @@ public abstract class PerkInventory extends OMInventory {
 
     @Override
     protected boolean onOpen(OMPlayer omp) {
+        //TODO IF DISABLED RETURN FALSE;
+
         if (cosmeticPerks != null)
             add(cosmeticPerksSlot, cosmeticPerks);
 
-        //TODO IF DISABLED RETURN FALSE;
+        setPerkItems(omp);
+
         return true;
     }
 

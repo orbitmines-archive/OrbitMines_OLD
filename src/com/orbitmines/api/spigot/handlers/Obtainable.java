@@ -2,6 +2,7 @@ package com.orbitmines.api.spigot.handlers;
 
 import com.orbitmines.api.Message;
 import com.orbitmines.api.VipRank;
+import com.orbitmines.api.spigot.handlers.currency.Currency;
 import org.bukkit.Material;
 
 /*

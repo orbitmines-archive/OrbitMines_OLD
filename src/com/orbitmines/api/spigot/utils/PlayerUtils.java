@@ -13,16 +13,43 @@ import java.util.List;
 public class PlayerUtils {
 
     public static GameMode getGameMode(String string) {
-        if (string.equalsIgnoreCase("a") || string.equalsIgnoreCase("2") || string.equalsIgnoreCase("adventure"))
-            return GameMode.ADVENTURE;
-        else if (string.equalsIgnoreCase("c") || string.equalsIgnoreCase("1") || string.equalsIgnoreCase("creative"))
-            return GameMode.CREATIVE;
-        else if (string.equalsIgnoreCase("spec") || string.equalsIgnoreCase("3") || string.equalsIgnoreCase("spectate"))
-            return GameMode.SPECTATOR;
-        else if (string.equalsIgnoreCase("s") || string.equalsIgnoreCase("0") || string.equalsIgnoreCase("survival"))
-            return GameMode.SURVIVAL;
-        else
-            return null;
+        switch (string) {
+
+            case "a":
+            case "2":
+            case "adventure":
+                return GameMode.ADVENTURE;
+            case "c":
+            case "1":
+            case "creative":
+                return GameMode.CREATIVE;
+            case "spec":
+            case "3":
+            case "spectate":
+                return GameMode.SPECTATOR;
+            case "s":
+            case "0":
+            case "survival":
+                return GameMode.SURVIVAL;
+            default:
+                return null;
+        }
+    }
+
+    public static String name(GameMode gameMode) {
+        switch (gameMode) {
+
+            case CREATIVE:
+                return "§d§lCreative";
+            case SURVIVAL:
+                return "§a§lSurvival";
+            case ADVENTURE:
+                return "§2§lAdventure";
+            case SPECTATOR:
+                return "§e§lSpectate";
+            default:
+                return null;
+        }
     }
 
     public static int getEmptySlots(Inventory inventory) {

@@ -3,7 +3,7 @@ package com.orbitmines.api.spigot.handlers.playerdata;
 import com.orbitmines.api.Data;
 import com.orbitmines.api.Message;
 import com.orbitmines.api.VipRank;
-import com.orbitmines.api.spigot.handlers.Currency;
+import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.Obtainable;
 import com.orbitmines.api.spigot.handlers.particle.Particle;
@@ -23,7 +23,7 @@ public class TrailData extends PlayerData {
 
     private List<Trail> trails;
     private List<TrailType> trailTypes;
-    private Obtainable specialTrailObtainable = new Obtainable(Currency.VIP_POINTS, 750);
+    private Obtainable specialTrailObtainable = new Obtainable(OrbitMinesApi.VIP_POINTS, 750);
     private boolean unlockedSpecialTrail;
     private Obtainable particleAmountObtainable = new Obtainable(VipRank.GOLD);
 

@@ -1,7 +1,7 @@
 package com.orbitmines.api.spigot.perks;
 
 import com.orbitmines.api.VipRank;
-import com.orbitmines.api.spigot.handlers.Currency;
+import com.orbitmines.api.spigot.handlers.currency.Currency;
 import com.orbitmines.api.spigot.handlers.ItemSet;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.Obtainable;
@@ -13,14 +13,14 @@ import org.bukkit.Material;
 public enum TrailType implements Perk {
     
     BASIC_TRAIL("Basic Trail", false, new Obtainable(VipRank.NONE)),
-    GROUND_TRAIL("Ground Trail", false, new Obtainable(Currency.VIP_POINTS, 600)),
-    HEAD_TRAIL("Head Trail", false, new Obtainable(Currency.VIP_POINTS, 400)),
-    BODY_TRAIL("Body Trail", false, new Obtainable(Currency.VIP_POINTS, 400)),
-    BIG_TRAIL("Big Trail", false, new Obtainable(Currency.VIP_POINTS, 650)),
-    VERTICAL_TRAIL("Vertical Trail", false, new Obtainable(Currency.VIP_POINTS, 500)),
-    CYLINDER_TRAIL("Cylinder Trail", true, new Obtainable(Currency.VIP_POINTS, 1500)),
-    ORBIT_TRAIL("Orbit Trail", true, new Obtainable(Currency.VIP_POINTS, 1750)),
-    SNAKE_TRAIL("Snake Trail", true, new Obtainable(Currency.VIP_POINTS, 1000)),
+    GROUND_TRAIL("Ground Trail", false, new Obtainable(OrbitMinesApi.VIP_POINTS, 600)),
+    HEAD_TRAIL("Head Trail", false, new Obtainable(OrbitMinesApi.VIP_POINTS, 400)),
+    BODY_TRAIL("Body Trail", false, new Obtainable(OrbitMinesApi.VIP_POINTS, 400)),
+    BIG_TRAIL("Big Trail", false, new Obtainable(OrbitMinesApi.VIP_POINTS, 650)),
+    VERTICAL_TRAIL("Vertical Trail", false, new Obtainable(OrbitMinesApi.VIP_POINTS, 500)),
+    CYLINDER_TRAIL("Cylinder Trail", true, new Obtainable(OrbitMinesApi.VIP_POINTS, 1500)),
+    ORBIT_TRAIL("Orbit Trail", true, new Obtainable(OrbitMinesApi.VIP_POINTS, 1750)),
+    SNAKE_TRAIL("Snake Trail", true, new Obtainable(OrbitMinesApi.VIP_POINTS, 1000)),
 
     FULL_CYLINDER(null, true, new Obtainable());
 

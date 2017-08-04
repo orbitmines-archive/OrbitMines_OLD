@@ -1,7 +1,7 @@
 package com.orbitmines.api.spigot.perks;
 
 import com.orbitmines.api.VipRank;
-import com.orbitmines.api.spigot.handlers.Currency;
+import com.orbitmines.api.spigot.handlers.currency.Currency;
 import com.orbitmines.api.spigot.handlers.ItemSet;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.Obtainable;
@@ -13,22 +13,22 @@ import org.bukkit.Material;
 */
 public enum ChatColor implements Perk {
 
-    DARK_RED(Color.MAROON, new ItemSet(Material.REDSTONE), new Obtainable(Currency.VIP_POINTS, 475)),
-    LIGHT_GREEN(Color.LIME, new ItemSet(Material.INK_SACK, 10), new Obtainable(Currency.VIP_POINTS, 575)),
+    DARK_RED(Color.MAROON, new ItemSet(Material.REDSTONE), new Obtainable(OrbitMinesApi.VIP_POINTS, 475)),
+    LIGHT_GREEN(Color.LIME, new ItemSet(Material.INK_SACK, 10), new Obtainable(OrbitMinesApi.VIP_POINTS, 575)),
     PURPLE(Color.PURPLE, new ItemSet(Material.INK_SACK, 5), new Obtainable(VipRank.IRON)),
-    DARK_GRAY(Color.GRAY, new ItemSet(Material.INK_SACK, 8), new Obtainable(Currency.VIP_POINTS, 250)),
-    RED(Color.RED, new ItemSet(Material.INK_SACK, 1), new Obtainable(Currency.VIP_POINTS, 650)),
+    DARK_GRAY(Color.GRAY, new ItemSet(Material.INK_SACK, 8), new Obtainable(OrbitMinesApi.VIP_POINTS, 250)),
+    RED(Color.RED, new ItemSet(Material.INK_SACK, 1), new Obtainable(OrbitMinesApi.VIP_POINTS, 650)),
     YELLOW(Color.YELLOW, new ItemSet(Material.INK_SACK, 15), new Obtainable(VipRank.GOLD)),
-    WHITE(Color.WHITE, new ItemSet(Material.INK_SACK, 11), new Obtainable(Currency.VIP_POINTS, 500)),
+    WHITE(Color.WHITE, new ItemSet(Material.INK_SACK, 11), new Obtainable(OrbitMinesApi.VIP_POINTS, 500)),
     ORANGE(Color.ORANGE, new ItemSet(Material.INK_SACK, 14), new Obtainable(VipRank.EMERALD)),
-    LIGHT_BLUE(Color.AQUA, new ItemSet(Material.INK_SACK, 12), new Obtainable(Currency.VIP_POINTS, 700)),
-    PINK(Color.FUCHSIA, new ItemSet(Material.INK_SACK, 9), new Obtainable(Currency.VIP_POINTS, 525)),
-    BLUE(Color.BLUE, new ItemSet(Material.INK_SACK, 12), new Obtainable(Currency.VIP_POINTS, 475)),
-    DARK_BLUE(Color.NAVY, new ItemSet(Material.INK_SACK, 4), new Obtainable(Currency.VIP_POINTS, 375)),
+    LIGHT_BLUE(Color.AQUA, new ItemSet(Material.INK_SACK, 12), new Obtainable(OrbitMinesApi.VIP_POINTS, 700)),
+    PINK(Color.FUCHSIA, new ItemSet(Material.INK_SACK, 9), new Obtainable(OrbitMinesApi.VIP_POINTS, 525)),
+    BLUE(Color.BLUE, new ItemSet(Material.INK_SACK, 12), new Obtainable(OrbitMinesApi.VIP_POINTS, 475)),
+    DARK_BLUE(Color.NAVY, new ItemSet(Material.INK_SACK, 4), new Obtainable(OrbitMinesApi.VIP_POINTS, 375)),
     GRAY(Color.SILVER, new ItemSet(Material.INK_SACK, 7), new Obtainable(VipRank.NONE)),
     CYAN(Color.TEAL, new ItemSet(Material.INK_SACK, 6), new Obtainable(VipRank.DIAMOND)),
-    GREEN(Color.GREEN, new ItemSet(Material.INK_SACK, 2), new Obtainable(Currency.VIP_POINTS, 475)),
-    BLACK(Color.BLACK, new ItemSet(Material.INK_SACK), new Obtainable(Currency.VIP_POINTS, 200));
+    GREEN(Color.GREEN, new ItemSet(Material.INK_SACK, 2), new Obtainable(OrbitMinesApi.VIP_POINTS, 475)),
+    BLACK(Color.BLACK, new ItemSet(Material.INK_SACK), new Obtainable(OrbitMinesApi.VIP_POINTS, 200));
 
     private final Color color;
 

@@ -29,6 +29,8 @@ public abstract class ScoreboardSet {
 
     public abstract void updateTeams();
 
+    public abstract boolean usePlayerRanks();
+
     public void clear() {
         this.title = null;
         this.scores.clear();

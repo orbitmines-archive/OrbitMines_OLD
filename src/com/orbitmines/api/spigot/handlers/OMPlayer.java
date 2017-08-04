@@ -8,7 +8,8 @@ import com.orbitmines.api.spigot.handlers.itembuilders.PotionBuilder;
 import com.orbitmines.api.spigot.handlers.playerdata.*;
 import com.orbitmines.api.spigot.handlers.scoreboard.Scoreboard;
 import com.orbitmines.api.spigot.handlers.scoreboard.ScoreboardSet;
-import com.orbitmines.api.spigot.runnables.OMRunnable;
+import com.orbitmines.api.spigot.runnable.OMRunnable;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -35,6 +36,8 @@ public abstract class OMPlayer {
 
     protected List<PlayerData> data;
 
+    private boolean opMode;
+
     /* Important Data, not stored in PlayerData */
     protected StaffRank staffRank;
     protected VipRank vipRank;
@@ -59,6 +62,7 @@ public abstract class OMPlayer {
         this.scoreboard = new Scoreboard(this);
 
         this.data = new ArrayList<>();
+        this.opMode = false;
         this.staffRank = StaffRank.NONE;
         this.vipRank = VipRank.NONE;
         this.votes = 0;
@@ -75,18 +79,18 @@ public abstract class OMPlayer {
     public abstract void vote();
 
     /* Called before the player logs in */
-    public abstract void onLogin();
+    protected abstract void onLogin();
 
     /* Called before the player logs out */
-    public abstract void onLogout();
+    protected abstract void onLogout();
 
     /* Called when a player receives knock back, example: gadgets */
-    public abstract void canReceiveVelocity();
+    public abstract boolean canReceiveVelocity();
 
     public void login() {
         onLogin();
 
-
+        player.setOp(false);
     }
 
     public void logout() {
@@ -107,7 +111,7 @@ public abstract class OMPlayer {
         String nickName = general().getNickName();
 
         ChatColorData data = chatcolors();
-        return getPrefix() + (nickName == null ? getName() : getChatPrefix() + getRankColor() + "*" + nickName + getRankColor() + "*") + "§7 » " + data.getChatColor().color().getChatColor() + data.bold() + data.cursive() + "%2$s";
+        return getPrefix() + (nickName == null ? getName() : getChatPrefix() + getRankColor() + "*" + nickName + getRankColor() + "*") + "§7 » " + data.getChatColor().color().getChatColor() + data.type() + "%2$s";
     }
 
     /* Returns [COLOR][BOLD][RANK] [COLOR][NAME] - NONE; [COLOR][NAME] */
@@ -187,6 +191,15 @@ public abstract class OMPlayer {
                 return playerData;
         }
         return null;
+    }
+
+    public boolean isOpMode() {
+        return opMode;
+    }
+
+    public void setOpMode(boolean opMode) {
+        this.opMode = opMode;
+        getPlayer().getPlayer().setOp(opMode);
     }
 
     public StaffRank getStaffRank() {
@@ -301,7 +314,7 @@ public abstract class OMPlayer {
         this.cooldowns.remove(cooldown);
         Cooldown.doubles().remove(this);
 
-        if (cooldown == Cooldowns.TELEPORTING)
+        if (cooldown == Cooldown.TELEPORTING)
             tpLocation = player.getLocation();
     }
 
@@ -338,7 +351,7 @@ public abstract class OMPlayer {
     }
 
     public boolean isEligible(VipRank... vipRanks) {
-        if (vipRanks == null || vipRanks.length == 0 || general().isOpMode() && isEligible(StaffRank.OWNER))
+        if (vipRanks == null || vipRanks.length == 0 || isOpMode() && isEligible(StaffRank.OWNER))
             return true;
 
         for (VipRank vipRank : vipRanks) {
@@ -500,6 +513,16 @@ public abstract class OMPlayer {
 
     public List<Player> getHiddenPlayers() {
         return hiddenPlayers;
+    }
+
+    public List<Player> getAllExceptHidden() {
+        List<Player> players = new ArrayList<>();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!hiddenPlayers.contains(player))
+                players.add(player);
+        }
+
+        return players;
     }
 
     public void connect(Server server) {

@@ -13,7 +13,10 @@ import java.util.Map;
 /**
  * Created by Fadi on 5-9-2016.
  */
-public abstract class Cooldown {
+public class Cooldown {
+
+    public static Cooldown TELEPORTING = new Cooldown(3000, Action.OTHER);
+    public static Cooldown NPC_INTERACT = new Cooldown(1000, Action.OTHER);
 
     private static Map<OMPlayer, Double> PREV_DOUBLE = new HashMap<>();
 
@@ -22,6 +25,14 @@ public abstract class Cooldown {
     private String itemName;
     private Action action;
 
+    public Cooldown(long cooldown, Action action) {
+        this(cooldown, null, action);
+    }
+
+    public Cooldown(long cooldown, String name, Action action) {
+        this(cooldown, name, null, action);
+    }
+
     public Cooldown(long cooldown, String name, String itemName, Action action) {
         this.cooldown = cooldown;
         this.name = name;
@@ -29,8 +40,10 @@ public abstract class Cooldown {
         this.action = action;
     }
 
-    /* Used to reduce time for certain players */
-    public abstract long getCooldown(OMPlayer omp);
+    /* Override this: Used to reduce time for certain players */
+    public long getCooldown(OMPlayer omp) {
+        return cooldown;
+    }
 
     public long getCooldown() {
         return cooldown;

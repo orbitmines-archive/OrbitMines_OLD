@@ -33,9 +33,14 @@ public enum StaffRank {
     }
 
     public String getScoreboardPrefix() {
-        if (this == NONE)
-            return "§f";
-        return color + "§l" + name + " §f";
+        switch (this) {
+            case NONE:
+                return "§f";
+            case MODERATOR:
+                return color + "§lMod §f";
+            default:
+                return color + "§l" + name + " §f";
+        }
     }
 
     public String getRankString() {

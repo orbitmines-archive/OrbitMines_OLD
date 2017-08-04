@@ -3,12 +3,14 @@ package com.orbitmines.api.spigot.handlers.npc;
 
 import com.orbitmines.api.spigot.Mob;
 import com.orbitmines.api.spigot.OrbitMinesApi;
+import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.nms.Nms;
 import com.orbitmines.api.spigot.utils.ConsoleUtils;
 import com.orbitmines.api.spigot.utils.LocationUtils;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -111,7 +113,7 @@ public class Npc {
         if (!api.getChunks().contains(c))
             api.getChunks().add(c);
 
-        if (this instanceof NPCMoving)
+        if (this instanceof NpcMoving)
             this.entity = mob.spawnMoving(getFixedLocation(), displayName);
         else
             this.entity = mob.spawn(getFixedLocation(), displayName);
@@ -133,9 +135,9 @@ public class Npc {
             entity.remove();
     }
 
-    public void click(Player player) {
+    public void click(PlayerInteractEntityEvent event, OMPlayer omp) {
         if (interactAction != null)
-            interactAction.click(player, this);
+            interactAction.click(event, omp);
     }
 
     public void checkEntity() {
@@ -159,7 +161,7 @@ public class Npc {
             entity.setFireTicks(Integer.MAX_VALUE);
 
         Location l = getFixedLocation();
-        if (!(this instanceof NPCMoving) && entity.getLocation().distance(l) >= 0.1)
+        if (!(this instanceof NpcMoving) && entity.getLocation().distance(l) >= 0.1)
             entity.teleport(l);
     }
 
@@ -208,7 +210,7 @@ public class Npc {
 
     public static abstract class InteractAction {
 
-        public abstract void click(Player player, Npc clicked);
+        public abstract void click(PlayerInteractEntityEvent event, OMPlayer omp);
 
     }
 }

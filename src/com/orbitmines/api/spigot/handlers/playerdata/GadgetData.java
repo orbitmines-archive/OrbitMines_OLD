@@ -2,6 +2,7 @@ package com.orbitmines.api.spigot.handlers.playerdata;
 
 import com.orbitmines.api.Data;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
+import com.orbitmines.api.spigot.handlers.firework.FireworkSettings;
 import com.orbitmines.api.spigot.perks.Gadget;
 
 import java.util.ArrayList;
@@ -13,6 +14,9 @@ import java.util.List;
 public class GadgetData extends PlayerData {
 
     private List<Gadget> gadgets;
+
+    private FireworkSettings fireworkSettings;
+    private int fireworkPasses;
 
     private boolean stackerEnabled;
 
@@ -64,11 +68,32 @@ public class GadgetData extends PlayerData {
         return getGadgets().contains(gadget);
     }
 
+    public FireworkSettings getFireworkSettings() {
+        return fireworkSettings;
+    }
+
+    public int getFireworkPasses() {
+        return fireworkPasses;
+    }
+
+    public void addFireworkPasses(int fireworkPasses){
+        this.fireworkPasses += fireworkPasses;
+    }
+
+    public void removeFireworkPass(){
+        this.fireworkPasses--;
+    }
+
     public boolean hasStackerEnabled() {
         return stackerEnabled;
     }
 
     public void setStackerEnabled(boolean stackerEnabled) {
         this.stackerEnabled = stackerEnabled;
+    }
+
+    public Gadget getGadgetEnabled() {
+
+        //TODO
     }
 }

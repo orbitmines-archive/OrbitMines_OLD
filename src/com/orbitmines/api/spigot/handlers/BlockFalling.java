@@ -41,9 +41,10 @@ public class BlockFalling {
         this.drop = drop;
     }
 
-    public void spawn() {
+    public FallingBlock spawn() {
         fallingBlock = location.getWorld().spawnFallingBlock(location, new MaterialData(item.getMaterial(), (byte) item.getDurability()));
         fallingBlock.setDropItem(hasDrop());
+        return fallingBlock;
     }
 
     public void randomVelocity() {
