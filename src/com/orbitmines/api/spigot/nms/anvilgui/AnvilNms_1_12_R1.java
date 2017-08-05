@@ -37,13 +37,13 @@ public class AnvilNms_1_12_R1 implements AnvilNms {
 
     private AnvilClickEventHandler handler;
 
-    private HashMap<AnvilSlot, ItemStack> items = new HashMap<AnvilSlot, ItemStack>();
+    private HashMap<AnvilSlot, ItemStack> items = new HashMap<>();
 
     private Inventory inv;
 
     private Listener listener;
 
-    public AnvilNms_1_12_R1(Player player, final AnvilClickEventHandler handler) {
+    public AnvilNms_1_12_R1(Player player, AnvilClickEventHandler handler, AnvilCloseEvent closeEvent) {
         this.player = player;
         this.handler = handler;
 
@@ -83,12 +83,15 @@ public class AnvilNms_1_12_R1 implements AnvilNms {
 
             @EventHandler
             public void onInventoryClose(InventoryCloseEvent event) {
-                if (event.getPlayer() instanceof Player) {=
+                if (event.getPlayer() instanceof Player) {
                     Inventory inv = event.getInventory();
 
                     if (inv.equals(AnvilNms_1_12_R1.this.inv)) {
                         inv.clear();
                         destroy();
+
+                        if (closeEvent != null)
+                            closeEvent.onClose();
                     }
                 }
             }
@@ -97,11 +100,14 @@ public class AnvilNms_1_12_R1 implements AnvilNms {
             public void onPlayerQuit(PlayerQuitEvent event) {
                 if (event.getPlayer().equals(getPlayer())) {
                     destroy();
+
+                    if (closeEvent != null)
+                        closeEvent.onClose();
                 }
             }
         };
 
-        Bukkit.getPluginManager().registerEvents(listener, OrbitMinesApi.getInstance());
+        Bukkit.getPluginManager().registerEvents(listener, OrbitMinesApi.getApi());
     }
 
     public Player getPlayer() {

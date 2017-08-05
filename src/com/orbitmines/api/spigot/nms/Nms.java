@@ -968,23 +968,27 @@ public class Nms {
     }
 
     public AnvilNms anvilGui(Player player, AnvilNms.AnvilClickEventHandler handler) {
+        return anvilGui(player, handler, null);
+    }
+
+    public AnvilNms anvilGui(Player player, AnvilNms.AnvilClickEventHandler handler, AnvilNms.AnvilCloseEvent closeEvent) {
         switch (version) {
             case "v1_8_R1": // 1.8 - 1.8.1
-                return new AnvilNms_1_8_R1(player, handler);
+                return new AnvilNms_1_8_R1(player, handler, closeEvent);
             case "v1_8_R2": // 1.8.3
-                return new AnvilNms_1_8_R2(player, handler);
+                return new AnvilNms_1_8_R2(player, handler, closeEvent);
             case "v1_8_R3": // 1.8.7 - 1.8.9
-                return new AnvilNms_1_8_R3(player, handler);
+                return new AnvilNms_1_8_R3(player, handler, closeEvent);
             case "v1_9_R1": // 1.9 - 1.9.2
-                return new AnvilNms_1_9_R1(player, handler);
+                return new AnvilNms_1_9_R1(player, handler, closeEvent);
             case "v1_9_R2": // 1.9.4
-                return new AnvilNms_1_9_R2(player, handler);
+                return new AnvilNms_1_9_R2(player, handler, closeEvent);
             case "v1_10_R1": // 1.10 - 1.10.2
-                return new AnvilNms_1_10_R1(player, handler);
+                return new AnvilNms_1_10_R1(player, handler, closeEvent);
             case "v1_11_R1": // 1.11 - 1.11.2
-                return new AnvilNms_1_11_R1(player, handler);
+                return new AnvilNms_1_11_R1(player, handler, closeEvent);
             case "v1_12_R1": // 1.12 - ?
-                return new AnvilNms_1_12_R1(player, handler);
+                return new AnvilNms_1_12_R1(player, handler, closeEvent);
         }
         return null;
     }

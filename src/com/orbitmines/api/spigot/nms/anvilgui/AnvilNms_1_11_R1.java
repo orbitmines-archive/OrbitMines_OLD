@@ -43,7 +43,7 @@ public class AnvilNms_1_11_R1 implements AnvilNms {
 
     private Listener listener;
 
-    public AnvilNms_1_11_R1(Player player, final AnvilClickEventHandler handler) {
+    public AnvilNms_1_11_R1(Player player, AnvilClickEventHandler handler, AnvilCloseEvent closeEvent) {
         this.player = player;
         this.handler = handler;
 
@@ -89,6 +89,9 @@ public class AnvilNms_1_11_R1 implements AnvilNms {
                     if (inv.equals(AnvilNms_1_11_R1.this.inv)) {
                         inv.clear();
                         destroy();
+
+                        if (closeEvent != null)
+                            closeEvent.onClose();
                     }
                 }
             }
@@ -97,11 +100,14 @@ public class AnvilNms_1_11_R1 implements AnvilNms {
             public void onPlayerQuit(PlayerQuitEvent event) {
                 if (event.getPlayer().equals(getPlayer())) {
                     destroy();
+
+                    if (closeEvent != null)
+                        closeEvent.onClose();
                 }
             }
         };
 
-        Bukkit.getPluginManager().registerEvents(listener, OrbitMinesApi.getInstance());
+        Bukkit.getPluginManager().registerEvents(listener, OrbitMinesApi.getApi());
     }
 
     public Player getPlayer() {

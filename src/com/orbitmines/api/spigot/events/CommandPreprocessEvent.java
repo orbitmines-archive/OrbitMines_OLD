@@ -22,7 +22,7 @@ public class CommandPreprocessEvent implements Listener {
         Command command = Command.getCommand(a[0]);
 
         if (command == null) {
-            if (omp.general().isOpMode())
+            if (omp.isOpMode())
                 return;
 
             e.setCancelled(true);

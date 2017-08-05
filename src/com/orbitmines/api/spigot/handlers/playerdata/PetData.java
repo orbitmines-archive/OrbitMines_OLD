@@ -33,7 +33,8 @@ public class PetData extends PlayerData {
 
     @Override
     public void onLogout() {
-
+        if (petEnabled != null)
+            disablePet();
     }
 
     @Override
@@ -74,8 +75,16 @@ public class PetData extends PlayerData {
         return pet;
     }
 
+    public void setPet(Entity pet) {
+        this.pet = pet;
+    }
+
     public Pet getPetEnabled() {
         return petEnabled;
+    }
+
+    public void setPetEnabled(Pet petEnabled) {
+        this.petEnabled = petEnabled;
     }
 
     public boolean hasPetEnabled() {

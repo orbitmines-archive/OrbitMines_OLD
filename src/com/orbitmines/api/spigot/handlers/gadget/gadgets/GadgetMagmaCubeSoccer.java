@@ -46,6 +46,11 @@ public class GadgetMagmaCubeSoccer extends GadgetHandler implements Listener {
     }
 
     @Override
+    public void onLogout(OMPlayer omp) {
+        clear(omp);
+    }
+
+    @Override
     public void onInteract(PlayerInteractEvent event, OMPlayer omp) {
         Player p = omp.getPlayer();
 
@@ -77,6 +82,14 @@ public class GadgetMagmaCubeSoccer extends GadgetHandler implements Listener {
         return mc;
     }
 
+    public void clear(OMPlayer omp) {
+        if (!entities.containsKey(omp))
+            return;
+
+        entities.get(omp).remove();
+        entities.remove(omp);
+    }
+
     @EventHandler
     public void onAnimation(PlayerAnimationEvent event) {
         Player p = event.getPlayer();
@@ -96,7 +109,9 @@ public class GadgetMagmaCubeSoccer extends GadgetHandler implements Listener {
             return;
 
         event.setCancelled(true);
-        omp.gadgets().disableSoccerMagmaCube();
         omp.updateInventory();
+
+        clear(omp);
+        omp.sendMessage(new Message("§7Je §cMagmaCube Ball§7 staat nu §c§lUIT§7.", "§c§lDISABLED§7 your §cMagmaCube Ball§7!"));
     }
 }

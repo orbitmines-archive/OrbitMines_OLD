@@ -2,6 +2,7 @@ package com.orbitmines.api.spigot.handlers.gadget.gadgets;
 
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.gadget.GadgetHandler;
+import com.orbitmines.api.spigot.handlers.gadget.petride.PetHandler;
 import com.orbitmines.api.spigot.handlers.playerdata.PetData;
 import com.orbitmines.api.spigot.perks.Gadget;
 import org.bukkit.entity.Player;
@@ -16,14 +17,21 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class GadgetPetRide extends GadgetHandler implements Listener {
 
     public GadgetPetRide() {
-        super(Gadget.PET_RIDE);
+        super(Gadget.PET_RIDE, 1);
 
         api.getServer().getPluginManager().registerEvents(this, api);
     }
 
     @Override
     public void onRun() {
-        //TODO PET INVENTORY
+        for (PetHandler petHandler : PetHandler.getHandlers()) {
+            petHandler.run();
+        }
+    }
+
+    @Override
+    public void onLogout(OMPlayer omp) {
+        /* We clear the PetHandler in GadgetData, we want the player to still be able to use another gadget if a pet 'ability' is active */
     }
 
     @Override
@@ -43,6 +51,14 @@ public class GadgetPetRide extends GadgetHandler implements Listener {
 
         event.setCancelled(true);
         event.getRightClicked().addPassenger(p);
+
+        p.getInventory().clear();
+
+        PetHandler handler = data.getPetEnabled().getHandler();
+        for (int slot : handler.getItems().keySet()) {
+            p.getInventory().setItem(slot, handler.get(slot).getItem(omp, data));
+        }
+
         omp.updateInventory();
     }
 }

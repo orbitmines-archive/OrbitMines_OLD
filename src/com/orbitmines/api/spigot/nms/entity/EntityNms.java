@@ -1,10 +1,12 @@
 package com.orbitmines.api.spigot.nms.entity;
 
+import com.orbitmines.api.spigot.Mob;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+
+import java.util.Collection;
 
 /**
  * Created by Fadi on 30-4-2016.
@@ -13,19 +15,34 @@ public interface EntityNms {
 
     void setInvisible(Player player, boolean bl);
 
-    void destoryEntity(Player player, Entity entity);
+    void destroyEntity(Player player, Entity entity);
 
-    void setSpeed(Entity entity, double d);
+    void setAttribute(Entity entity, Attribute attribute, double d);
 
-    double getSpeed(Entity entity);
+    double getAttribute(Entity entity, Attribute attribute);
 
-    void disguiseAsBlock(Player player, int Id, Player... players);
+    void destroyEntityFor(Collection<? extends Player> players, Entity entity);
 
-    Entity disguiseAsMob(Player player, EntityType type, boolean baby, String displayName, Player... players);
+    void disguiseAsBlock(Player player, int Id, Collection<? extends Player> players);
 
-    Entity disguiseAsMob(Player player, EntityType type, boolean baby, Player... players);
+    Entity disguiseAsMob(Player player, Mob mob, boolean baby, String displayName, Collection<? extends Player> players);
 
     void mountUpdate(Entity vehicle);
 
     void navigate(LivingEntity le, Location location, double v);
+
+    enum Attribute {
+
+        MAX_HEALTH,
+        FOLLOW_RANGE,
+        KNOCKBACK_RESISTANCE,
+        MOVEMENT_SPEED,
+        FLYING_SPEED,
+        ATTACK_DAMAGE,
+        ATTACK_SPEED,
+        ARMOR,
+        ARMOR_TOUGHNESS,
+        LUCK;
+
+    }
 }

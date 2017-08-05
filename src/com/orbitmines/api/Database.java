@@ -11,6 +11,8 @@ import java.util.Map;
 */
 public class Database {
 
+    public static String NAME = "OrbitMines";
+
     private static Database database;
 
     private Connection connection;

@@ -92,7 +92,15 @@ public class PetInventory extends PerkInventory {
 
                         data.setPetName(pet, petName);
                         data.spawnPet(pet);
+                    }, new AnvilNms.AnvilCloseEvent() {
+
+                        @Override
+                        public void onClose() {
+                            p.getInventory().setItem(13, null);
+                        }
                     }).open();
+
+                    p.getInventory().setItem(13, new ItemBuilder(Material.NAME_TAG, 1, 0, "§f§oClick the §6§oRight§f§o Egg to rename your Pet!").build());
                 }
             });
             add(41, new ItemInstance(new ItemBuilder(Material.BARRIER, 1, 0, omp.getMessage(new Message("§4§nZet Pet UIT", "§4§nDisable Pet"))).build()) {
@@ -111,5 +119,10 @@ public class PetInventory extends PerkInventory {
     @Override
     protected OMInventory returnInventory() {
         return new PetInventory();
+    }
+
+    @Override
+    protected boolean isDisabled() {
+        return !api.isPetEnabled();
     }
 }

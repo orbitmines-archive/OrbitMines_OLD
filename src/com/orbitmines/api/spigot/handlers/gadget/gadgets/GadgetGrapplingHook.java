@@ -30,6 +30,11 @@ public class GadgetGrapplingHook extends GadgetHandler implements Listener {
     }
 
     @Override
+    public void onLogout(OMPlayer omp) {
+
+    }
+
+    @Override
     public void onInteract(PlayerInteractEvent event, OMPlayer omp) {
         event.setCancelled(false);
     }
@@ -48,8 +53,7 @@ public class GadgetGrapplingHook extends GadgetHandler implements Listener {
             if (ItemUtils.isNull(item))
                 return;
 
-            //TODO
-            if (p.getInventory().first(item) == api.getServerPlugin().getGadgetSlot()) {
+            if (p.getInventory().first(item) == api.gadgets().getGadgetSlot()) {
                 Location l1 = projectile.getLocation();
                 Location l2 = p.getLocation();
 

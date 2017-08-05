@@ -105,6 +105,11 @@ public class HatInventory extends PerkInventory {
         return new HatInventory();
     }
 
+    @Override
+    protected boolean isDisabled() {
+        return !api.isHatEnabled();
+    }
+
     private Hat[] getHatsForPage(int pageNumber) {
         Hat[] hats = Hat.values();
         Hat[] pageHats = new Hat[HATS_PER_PAGE];

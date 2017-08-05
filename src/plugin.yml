@@ -1,0 +1,7 @@
+name: OrbitMinesApi
+author: O_o_Fadi_o_O
+version: 1.0.0
+description: OrbitMinesApi by O_o_Fadi_o_O
+main: com.orbitmines.api.spigot.OrbitMinesApi
+commands:
+softdepend: [WorldEdit]

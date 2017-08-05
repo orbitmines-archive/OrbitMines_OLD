@@ -16,7 +16,7 @@ public class SignEvent implements Listener {
     public void onChange(SignChangeEvent event) {
         OMPlayer omp = OMPlayer.getPlayer(event.getPlayer());
 
-        if (!omp.isEligible(StaffRank.OWNER) || !omp.general().isOpMode())
+        if (!omp.isEligible(StaffRank.OWNER) || !omp.isOpMode())
             return;
 
         for (int i = 0; i < 4; i++) {

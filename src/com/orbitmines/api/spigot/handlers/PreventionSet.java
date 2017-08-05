@@ -2,6 +2,7 @@ package com.orbitmines.api.spigot.handlers;
 
 import com.orbitmines.api.spigot.OrbitMinesApi;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,9 +21,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /*
 * OrbitMines - @author Fadi Shawki - 4-8-2017
@@ -31,19 +30,23 @@ public class PreventionSet {
 
     private OrbitMinesApi api;
 
-    private List<Listener> listeners;
+    private Map<Prevention, Listener> listeners;
+    private Map<Prevention, List<World>> worlds;
 
-    public PreventionSet(Prevention... preventions) {
+    public PreventionSet() {
         api = OrbitMinesApi.getApi();
 
-        listeners = new ArrayList<>();
+        listeners = new HashMap<>();
+        worlds = new HashMap<>();
+    }
 
+    public void prevent(World world, Prevention... preventions) {
         for (Prevention prevention : preventions) {
-            prevent(prevention);
+            prevent(world, prevention);
         }
     }
 
-    public void prevent(Prevention prevention) {
+    public void prevent(World world, Prevention prevention) {
         Listener listener = null;
 
         switch (prevention) {
@@ -77,14 +80,20 @@ public class PreventionSet {
                 break;
         }
 
-        listeners.add(listener);
+        listeners.put(prevention, listener);
+
+        if (!worlds.containsKey(prevention))
+            worlds.put(prevention, new ArrayList<>());
+
+        worlds.get(prevention).add(world);
 
         api.getServer().getPluginManager().registerEvents(listener, api);
     }
 
     public void unregister() {
-        for (Listener listener : listeners) {
-            HandlerList.unregisterAll(listener);
+        for (Prevention prevention : listeners.keySet()) {
+            HandlerList.unregisterAll(listeners.get(prevention));
+            worlds.remove(prevention);
         }
     }
 
@@ -106,6 +115,9 @@ public class PreventionSet {
 
         @EventHandler
         public void preventFood(FoodLevelChangeEvent event) {
+            if (!worlds.get(Prevention.FOOD_CHANGE).contains(event.getEntity().getWorld()))
+                return;
+
             event.setCancelled(true);
         }
     }
@@ -114,8 +126,12 @@ public class PreventionSet {
 
         @EventHandler
         public void preventPvP(EntityDamageByEntityEvent event) {
-            if (event.getEntity() instanceof Player && event.getDamager() instanceof Player)
+            if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
+                if (!worlds.get(Prevention.PVP).contains(event.getEntity().getWorld()))
+                    return;
+
                 event.setCancelled(true);
+            }
         }
     }
 
@@ -123,8 +139,12 @@ public class PreventionSet {
 
         @EventHandler
         public void preventMobSpawn(CreatureSpawnEvent event) {
-            if (!(event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM))
+            if (!(event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM)) {
+                if (!worlds.get(Prevention.MOB_SPAWN).contains(event.getEntity().getWorld()))
+                    return;
+
                 event.setCancelled(true);
+            }
         }
     }
 
@@ -132,6 +152,9 @@ public class PreventionSet {
 
         @EventHandler
         public void preventWeatherChange(WeatherChangeEvent event) {
+            if (!worlds.get(Prevention.WEATHER_CHANGE).contains(event.getWorld()))
+                return;
+
             event.setCancelled(true);
         }
     }
@@ -143,8 +166,12 @@ public class PreventionSet {
             if (!(event.getEntity() instanceof Player))
                 return;
 
-            if (event.getCause() == EntityDamageEvent.DamageCause.FALL)
+            if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                if (!worlds.get(Prevention.FALL_DAMAGE).contains(event.getEntity().getWorld()))
+                    return;
+
                 event.setCancelled(true);
+            }
         }
     }
 
@@ -152,6 +179,9 @@ public class PreventionSet {
 
         @EventHandler
         public void preventBlockPlace(BlockPlaceEvent event) {
+            if (!worlds.get(Prevention.BLOCK_PLACE).contains(event.getPlayer().getWorld()))
+                return;
+
             OMPlayer omp = OMPlayer.getPlayer(event.getPlayer());
 
             if (!omp.isOpMode())
@@ -163,6 +193,9 @@ public class PreventionSet {
 
         @EventHandler
         public void preventBlockBreak(BlockBreakEvent event) {
+            if (!worlds.get(Prevention.BLOCK_BREAK).contains(event.getPlayer().getWorld()))
+                return;
+
             OMPlayer omp = OMPlayer.getPlayer(event.getPlayer());
 
             if (!omp.isOpMode())
@@ -181,6 +214,9 @@ public class PreventionSet {
 
             Block block = event.getClickedBlock();
 
+            if (!worlds.get(Prevention.BLOCK_INTERACTING).contains(block.getWorld()))
+                return;
+
             if (notClickable.contains(block.getType()))
                 event.setCancelled(true);
         }
@@ -191,6 +227,9 @@ public class PreventionSet {
         @EventHandler
         public void preventMonsterEggUsage(PlayerInteractEntityEvent event) {
             Player player = event.getPlayer();
+
+            if (!worlds.get(Prevention.MONSTER_EGG_USAGE).contains(player.getWorld()))
+                return;
 
             ItemStack item = player.getInventory().getItemInMainHand();
 
@@ -205,6 +244,9 @@ public class PreventionSet {
         public void preventMonsterEggUsage(PlayerInteractAtEntityEvent event) {
             Player player = event.getPlayer();
 
+            if (!worlds.get(Prevention.MONSTER_EGG_USAGE).contains(player.getWorld()))
+                return;
+
             ItemStack item = player.getInventory().getItemInMainHand();
 
             if (item == null || item.getType() != Material.MONSTER_EGG && item.getType() != Material.EGG)
@@ -217,6 +259,9 @@ public class PreventionSet {
         @EventHandler
         public void preventMonsterEggUsage(PlayerInteractEvent event) {
             Player player = event.getPlayer();
+
+            if (!worlds.get(Prevention.MONSTER_EGG_USAGE).contains(player.getWorld()))
+                return;
 
             ItemStack item = player.getInventory().getItemInMainHand();
 

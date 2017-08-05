@@ -76,4 +76,9 @@ public class TrailInventory extends PerkInventory {
     protected OMInventory returnInventory() {
         return new TrailInventory();
     }
+
+    @Override
+    protected boolean isDisabled() {
+        return !api.isTrailEnabled();
+    }
 }

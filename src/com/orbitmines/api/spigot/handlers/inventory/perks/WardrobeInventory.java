@@ -92,6 +92,11 @@ public class WardrobeInventory extends PerkInventory {
         return new WardrobeInventory();
     }
 
+    @Override
+    protected boolean isDisabled() {
+        return !api.isWardrobeEnabled();
+    }
+
     public static void discoItem(OMPlayer omp, WardrobeInventory inventory) {
         WardrobeData data = omp.wardrobe();
         Wardrobe wardrobe = Wardrobe.random(Arrays.asList(Wardrobe.COLORS));

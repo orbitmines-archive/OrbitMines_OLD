@@ -293,7 +293,7 @@ public class NpcArmorStand {
     }
 
     public void hideFor(Collection<? extends Player> players) {
-        api.getNms().entity()..destroyEntityFor(players, armorStand);
+        api.getNms().entity().destroyEntityFor(players, armorStand);
     }
 
     public void update() {

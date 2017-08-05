@@ -7,8 +7,6 @@ import com.orbitmines.api.spigot.handlers.gadget.GadgetHandler;
 import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
 import com.orbitmines.api.spigot.handlers.playerdata.GadgetData;
 import com.orbitmines.api.spigot.perks.Gadget;
-import com.orbitmines.api.spigot.utils.ItemUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +22,11 @@ public class GadgetFireworkGun extends GadgetHandler {
 
     @Override
     public void onRun() {
+
+    }
+
+    @Override
+    public void onLogout(OMPlayer omp) {
 
     }
 
@@ -49,8 +52,7 @@ public class GadgetFireworkGun extends GadgetHandler {
 
             data.removeFireworkPass();
 
-            //TODO
-            p.getInventory().setItem(api.getServerPlugin().getGadgetSlot(), getItem(omp));
+            p.getInventory().setItem(api.gadgets().getGadgetSlot(), getItem(omp));
         } else {
             omp.sendMessage(new Message("§7Je hebt geen §6§lFirework Passes§7 meer!", "§7You don't have any §6§lFirework Passes§7."));
         }

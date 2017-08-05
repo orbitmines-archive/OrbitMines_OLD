@@ -92,4 +92,9 @@ public class ChatColorInventory extends PerkInventory {
     protected OMInventory returnInventory() {
         return new ChatColorInventory();
     }
+
+    @Override
+    protected boolean isDisabled() {
+        return false;
+    }
 }

@@ -6,6 +6,7 @@ import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.gadget.GadgetHandler;
 import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
 import com.orbitmines.api.spigot.handlers.particle.Particle;
+import com.orbitmines.api.spigot.nms.entity.EntityNms;
 import com.orbitmines.api.spigot.perks.Gadget;
 import com.orbitmines.api.spigot.utils.RandomUtils;
 import org.bukkit.Location;
@@ -75,6 +76,11 @@ public class GadgetSnowmanAttack extends GadgetHandler implements Listener {
     }
 
     @Override
+    public void onLogout(OMPlayer omp) {
+        //TODO REMEMBER COOLDOWN
+    }
+
+    @Override
     public void onInteract(PlayerInteractEvent event, OMPlayer omp) {
         event.setCancelled(true);
         omp.updateInventory();
@@ -112,7 +118,7 @@ public class GadgetSnowmanAttack extends GadgetHandler implements Listener {
             if (i != 0)
                 snowmen[i - 1].addPassenger(snowmen[i]);
             else
-                api.getNms().entity().setSpeed(snowmen[i], api.getNms().entity().getSpeed(snowmen[i]) * 2);
+                api.getNms().entity().setAttribute(snowmen[i], EntityNms.Attribute.MOVEMENT_SPEED, api.getNms().entity().getAttribute(snowmen[i], EntityNms.Attribute.MOVEMENT_SPEED) * 2);
         }
 
         BukkitTask task = new BukkitRunnable() {

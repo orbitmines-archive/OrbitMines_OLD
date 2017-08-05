@@ -35,6 +35,11 @@ public class GadgetSwapTeleporter extends GadgetHandler {
     }
 
     @Override
+    public void onLogout(OMPlayer omp) {
+
+    }
+
+    @Override
     public void onRun() {
         for (OMPlayer omp : entities.keySet()) {
             Entity en = entities.get(omp);

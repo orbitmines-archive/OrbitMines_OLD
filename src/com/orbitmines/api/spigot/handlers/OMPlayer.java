@@ -17,6 +17,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scoreboard.DisplaySlot;
 
 import java.util.*;
 
@@ -78,7 +79,7 @@ public abstract class OMPlayer {
     /* Called when a players votes */
     public abstract void vote();
 
-    /* Called before the player logs in */
+    /* Called after the player logs in */
     protected abstract void onLogin();
 
     /* Called before the player logs out */
@@ -88,14 +89,21 @@ public abstract class OMPlayer {
     public abstract boolean canReceiveVelocity();
 
     public void login() {
-        onLogin();
-
         player.setOp(false);
+
+        //TODO
+
+        onLogin();
     }
 
     public void logout() {
         onLogout();
 
+        player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
+
+        //TODO
+
+        players.remove(this);
     }
 
     /* Getters & Setters */

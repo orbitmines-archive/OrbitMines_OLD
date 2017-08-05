@@ -31,6 +31,11 @@ public class GadgetStacker extends GadgetHandler implements Listener {
     }
 
     @Override
+    public void onLogout(OMPlayer omp) {
+
+    }
+
+    @Override
     public void onInteract(PlayerInteractEvent event, OMPlayer omp) {
         event.setCancelled(true);
         omp.updateInventory();
@@ -51,7 +56,7 @@ public class GadgetStacker extends GadgetHandler implements Listener {
 
         GadgetData dataD = ompD.gadgets();
 
-        if (dataD.getGadgetEnabled() != getGadget() || pD.getInventory().getHeldItemSlot() != api.server().getGadgetSlot())
+        if (dataD.getGadgetEnabled() != getGadget() || pD.getInventory().getHeldItemSlot() != api.gadgets().getGadgetSlot())
             return;
 
         GadgetData dataE = ompE.gadgets();

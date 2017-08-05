@@ -46,11 +46,16 @@ public abstract class PerkInventory extends OMInventory {
 
     protected abstract void setPerkItems(OMPlayer omp);
 
+    protected abstract boolean isDisabled();
+
     protected abstract OMInventory returnInventory();
 
     @Override
     protected boolean onOpen(OMPlayer omp) {
-        //TODO IF DISABLED RETURN FALSE;
+        if (isDisabled()) {
+            omp.sendMessage(new Message("§7Dat kan niet op deze server!", "§7You cannot do that on this server!"));
+            return false;
+        }
 
         if (cosmeticPerks != null)
             add(cosmeticPerksSlot, cosmeticPerks);

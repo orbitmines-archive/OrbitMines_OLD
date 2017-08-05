@@ -10,6 +10,7 @@ import com.orbitmines.api.spigot.handlers.firework.FireworkSettings;
 import com.orbitmines.api.spigot.handlers.inventory.OMInventory;
 import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
 import com.orbitmines.api.spigot.handlers.playerdata.GadgetData;
+import com.orbitmines.api.spigot.perks.Gadget;
 import com.orbitmines.api.spigot.perks.Perk;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -80,7 +81,7 @@ public class FireworkInventory extends PerkInventory {
         add(49, new ItemInstance(new ItemBuilder(Material.ANVIL, 1, 0, omp.getMessage(new Message("§e§nMaak Firework", "§e§nCreate Firework"))).build()) {
             @Override
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
-                data.giveFireworkGun();
+                data.enableGadget(Gadget.FIREWORK_GUN);
             }
         });
 
@@ -110,6 +111,11 @@ public class FireworkInventory extends PerkInventory {
     @Override
     protected OMInventory returnInventory() {
         return new FireworkInventory();
+    }
+
+    @Override
+    protected boolean isDisabled() {
+        return !api.isGadgetEnabled();
     }
 
     private ItemStack getItemStack(Color color, String name) {

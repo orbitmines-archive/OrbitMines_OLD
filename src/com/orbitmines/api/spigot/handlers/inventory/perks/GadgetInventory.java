@@ -4,9 +4,7 @@ import com.orbitmines.api.Message;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.inventory.OMInventory;
 import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
-import com.orbitmines.api.spigot.handlers.playerdata.DisguiseData;
 import com.orbitmines.api.spigot.handlers.playerdata.GadgetData;
-import com.orbitmines.api.spigot.perks.Disguise;
 import com.orbitmines.api.spigot.perks.Gadget;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -53,7 +51,7 @@ public class GadgetInventory extends PerkInventory {
             slot++;
         }
 
-        if (data.isGadgetEnabled)
+        if (data.hasGadgetEnabled())
             add(50, new ItemInstance(new ItemBuilder(Material.BARRIER, 1, 0, omp.getMessage(new Message("§4§nZet Gadget UIT", "§4§nDisable Gadget"))).build()) {
                 @Override
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
@@ -69,5 +67,10 @@ public class GadgetInventory extends PerkInventory {
     @Override
     protected OMInventory returnInventory() {
         return new GadgetInventory();
+    }
+
+    @Override
+    protected boolean isDisabled() {
+        return !api.isGadgetEnabled();
     }
 }

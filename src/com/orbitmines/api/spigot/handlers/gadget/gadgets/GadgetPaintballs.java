@@ -5,6 +5,7 @@ import com.orbitmines.api.spigot.handlers.gadget.GadgetHandler;
 import com.orbitmines.api.spigot.perks.Gadget;
 import com.orbitmines.api.spigot.utils.LocationUtils;
 import com.orbitmines.api.spigot.utils.RandomUtils;
+import com.orbitmines.api.spigot.utils.WorldUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,8 +27,6 @@ import java.util.List;
 */
 public class GadgetPaintballs extends GadgetHandler implements Listener {
 
-    private final List<Material> cannotTransform = Arrays.asList(Material.LONG_GRASS, Material.YELLOW_FLOWER, Material.RED_ROSE, Material.DOUBLE_PLANT, Material.WOOD_STEP, Material.WOOD_STAIRS, Material.COBBLESTONE_STAIRS, Material.TRAP_DOOR, Material.IRON_TRAPDOOR, Material.IRON_TRAPDOOR, Material.SKULL, Material.WATER_LILY, Material.SIGN_POST, Material.WALL_SIGN, Material.TORCH, Material.FENCE, Material.WATER, Material.STATIONARY_WATER);
-
     private List<Entity> entities;
 
     public GadgetPaintballs() {
@@ -40,6 +39,11 @@ public class GadgetPaintballs extends GadgetHandler implements Listener {
 
     @Override
     public void onRun() {
+
+    }
+
+    @Override
+    public void onLogout(OMPlayer omp) {
 
     }
 
@@ -62,7 +66,7 @@ public class GadgetPaintballs extends GadgetHandler implements Listener {
         for (Location location : new ArrayList<>(locations)) {
             Block b = location.getBlock();
 
-            if (b.isEmpty() || cannotTransform.contains(b.getType()))
+            if (b.isEmpty() || WorldUtils.CANNOT_TRANSFORM.contains(b.getType()))
                 locations.remove(location);
         }
 

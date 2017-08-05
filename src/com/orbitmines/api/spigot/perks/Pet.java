@@ -7,6 +7,7 @@ import com.orbitmines.api.spigot.handlers.ItemSet;
 import com.orbitmines.api.spigot.handlers.MobItemSet;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.Obtainable;
+import com.orbitmines.api.spigot.handlers.gadget.petride.PetHandler;
 import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ public enum Pet implements Perk {
     private final MobItemSet item;
 
     private final Obtainable obtainable;
+
+    private PetHandler petHandler;
 
     Pet(Mob mob, Color color, Obtainable obtainable) {
         this.mob = mob;
@@ -78,5 +81,13 @@ public enum Pet implements Perk {
 
     public static List<Entity> getEntities() {
         return entities;
+    }
+
+    public PetHandler getHandler() {
+        return petHandler;
+    }
+
+    public void setHandler(PetHandler petHandler) {
+        this.petHandler = petHandler;
     }
 }

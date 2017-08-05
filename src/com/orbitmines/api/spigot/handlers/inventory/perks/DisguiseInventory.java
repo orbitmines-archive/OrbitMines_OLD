@@ -43,7 +43,7 @@ public class DisguiseInventory extends PerkInventory {
                         }
                     } else {
                         omp.getPlayer().closeInventory();
-                        data.disguiseAsMob(disguise.mob());
+                        data.disguiseAsMob(disguise.mob(), omp.getName());
                     }
                 }
             });
@@ -67,5 +67,10 @@ public class DisguiseInventory extends PerkInventory {
     @Override
     protected OMInventory returnInventory() {
         return new DisguiseInventory();
+    }
+
+    @Override
+    protected boolean isDisabled() {
+        return !api.isDisguiseEnabled();
     }
 }

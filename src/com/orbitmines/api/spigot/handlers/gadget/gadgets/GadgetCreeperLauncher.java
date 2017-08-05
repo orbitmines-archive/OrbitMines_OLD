@@ -41,6 +41,11 @@ public class GadgetCreeperLauncher extends GadgetHandler implements Listener {
     }
 
     @Override
+    public void onLogout(OMPlayer omp) {
+
+    }
+
+    @Override
     public void onInteract(PlayerInteractEvent event, OMPlayer omp) {
         event.setCancelled(true);
         omp.updateInventory();
@@ -64,6 +69,8 @@ public class GadgetCreeperLauncher extends GadgetHandler implements Listener {
 
         if (!(event.getEntity() instanceof Creeper) || !entities.contains(event.getEntity()))
             return;
+
+        entities.remove(event.getEntity());
 
         for (Entity en : event.getEntity().getNearbyEntities(3, 3, 3)) {
             if (!(en instanceof Player))

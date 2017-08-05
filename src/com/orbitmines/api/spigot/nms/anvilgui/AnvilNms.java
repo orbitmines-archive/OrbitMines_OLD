@@ -38,7 +38,7 @@ public interface AnvilNms {
         }
     }
 
-    public class AnvilClickEvent {
+    class AnvilClickEvent {
         private AnvilSlot slot;
 
         private String name;
@@ -76,7 +76,13 @@ public interface AnvilNms {
         }
     }
 
-    public interface AnvilClickEventHandler {
-        public void onAnvilClick(AnvilClickEvent event);
+    interface AnvilClickEventHandler {
+        void onAnvilClick(AnvilClickEvent event);
+    }
+
+    abstract class AnvilCloseEvent {
+
+        public abstract void onClose();
+
     }
 }

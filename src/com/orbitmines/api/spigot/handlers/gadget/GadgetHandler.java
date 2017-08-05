@@ -41,6 +41,8 @@ public abstract class GadgetHandler implements Listener {
 
     protected abstract void onRun();
 
+    public abstract void onLogout(OMPlayer omp);
+
     public abstract void onInteract(PlayerInteractEvent event, OMPlayer omp);
 
     public void run() {

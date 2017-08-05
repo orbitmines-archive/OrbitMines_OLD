@@ -4,7 +4,6 @@ import com.orbitmines.api.Data;
 import com.orbitmines.api.spigot.Mob;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.perks.Disguise;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -42,7 +41,8 @@ public class DisguiseData extends PlayerData {
 
     @Override
     public void onLogout() {
-
+        if (isDisguised())
+            undisguise();
     }
 
     @Override
@@ -98,20 +98,20 @@ public class DisguiseData extends PlayerData {
     }
 
     public void showPlayers() {
-        showPlayers(Bukkit.getOnlinePlayers());
+        showPlayers(getPlayer().getPlayer().getWorld().getPlayers());
     }
 
     public void showPlayers(Collection<? extends Player> players){
         for(Player player : players){
-            this.omp.getPlayer().showPlayer(player);
-
             OMPlayer omplayer = OMPlayer.getPlayer(player);
+            this.omp.showPlayers(omplayer);
+
             DisguiseData data = omplayer.disguises();
             if(data.isDisguised()){
                 if(data.getDisguisedAs() != null)
-                    data.disguiseAsMob(data.getDisguisedAs(), isDisguisedBaby(), data.getDisguise().getCustomName(), getPlayer());
+                    data.disguiseAsMob(data.getDisguisedAs(), data.getDisguise().getCustomName(), data.isDisguisedBaby(), getPlayer().getPlayer());
                 else
-                    data.disguiseAsBlock(data.getDisguiseBlockId(), getPlayer());
+                    data.disguiseAsBlock(data.getDisguiseBlockId(), getPlayer().getPlayer());
             }
         }
     }
@@ -164,7 +164,7 @@ public class DisguiseData extends PlayerData {
     }
 
     public void disguiseAsMob(Mob mob, String displayName, boolean baby, Collection<? extends Player> players) {
-        disguise = api.getNms().entity().disguiseAsMob(omp.getPlayer(), mob, baby, displayName, players);
+        disguise = api.getNms().entity().disguiseAsMob(omp.getPlayer(), mob.getType(), baby, displayName, players);
 
         disguised = true;
         disguisedAs = mob;

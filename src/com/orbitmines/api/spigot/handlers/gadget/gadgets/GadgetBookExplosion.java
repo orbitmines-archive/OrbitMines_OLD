@@ -45,6 +45,11 @@ public class GadgetBookExplosion extends GadgetHandler implements Listener {
     }
 
     @Override
+    public void onLogout(OMPlayer omp) {
+
+    }
+
+    @Override
     public void onInteract(PlayerInteractEvent event, OMPlayer omp) {
         event.setCancelled(true);
         omp.updateInventory();

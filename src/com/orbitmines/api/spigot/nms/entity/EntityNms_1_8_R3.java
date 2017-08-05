@@ -1,12 +1,17 @@
 package com.orbitmines.api.spigot.nms.entity;
 
+import com.orbitmines.api.spigot.Mob;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+
+import java.util.Collection;
 
 /**
  * Created by Fadi on 11-5-2016.
@@ -19,23 +24,50 @@ public class EntityNms_1_8_R3 implements EntityNms {
     }
 
     @Override
-    public void destoryEntity(Player player, Entity entity) {
+    public void destroyEntity(Player player, Entity entity) {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(((CraftEntity) entity).getHandle().getId()));
     }
 
     @Override
-    public void setSpeed(Entity entity, double d) {
-        AttributeInstance currentSpeed = ((CraftLivingEntity) entity).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
-        currentSpeed.setValue(d);
+    public void setAttribute(Entity entity, Attribute attribute, double d) {
+        AttributeInstance instance = ((CraftLivingEntity) entity).getHandle().getAttributeInstance(getAttribute(attribute));
+        instance.setValue(d);
     }
 
     @Override
-    public double getSpeed(Entity entity) {
-        return ((CraftLivingEntity) entity).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).b();
+    public double getAttribute(Entity entity, Attribute attribute) {
+        return ((CraftLivingEntity) entity).getHandle().getAttributeInstance(getAttribute(attribute)).b();
+    }
+
+    private IAttribute getAttribute(Attribute attribute) {
+        switch (attribute) {
+
+            case MAX_HEALTH:
+                return GenericAttributes.maxHealth;
+            case FOLLOW_RANGE:
+                return GenericAttributes.FOLLOW_RANGE;
+            case KNOCKBACK_RESISTANCE:
+                return GenericAttributes.c;
+            case MOVEMENT_SPEED:
+                return GenericAttributes.MOVEMENT_SPEED;
+            case ATTACK_DAMAGE:
+                return GenericAttributes.ATTACK_DAMAGE;
+            default:
+                return null;
+        }
     }
 
     @Override
-    public void disguiseAsBlock(Player player, int Id, Player... players) {
+    public void destroyEntityFor(Collection<? extends Player> players, Entity entity) {
+        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(((CraftEntity) entity).getHandle().getId());
+
+        for (Player player : players) {
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+        }
+    }
+
+    @Override
+    public void disguiseAsBlock(Player player, int Id, Collection<? extends Player> players) {
         EntityFallingBlock disguise = new EntityFallingBlock(((CraftPlayer) player).getHandle().world, player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), new BlockLog1().getBlockData());
         disguise.locX = player.getLocation().getX();
         disguise.locY = player.getLocation().getY();
@@ -44,38 +76,33 @@ public class EntityNms_1_8_R3 implements EntityNms {
         disguise.pitch = player.getLocation().getPitch();
         disguise.d(((CraftPlayer) player).getHandle().getId());
 
+        PacketPlayOutEntityDestroy packetPlayOutEntityDestroy = new PacketPlayOutEntityDestroy((((CraftPlayer) player).getHandle().getId()));
+        PacketPlayOutSpawnEntity packetPlayOutSpawnEntity = new PacketPlayOutSpawnEntity(disguise, 70, Id);
+
         for (Player p : players) {
             if (player == p)
                 continue;
 
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy((((CraftPlayer) player).getHandle().getId())));
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(new PacketPlayOutSpawnEntity(disguise, 70, Id));
+            EntityPlayer entityPlayer = ((CraftPlayer) p).getHandle();
+            entityPlayer.playerConnection.sendPacket(packetPlayOutEntityDestroy);
+            entityPlayer.playerConnection.sendPacket(packetPlayOutSpawnEntity);
         }
     }
 
     @Override
-    public Entity disguiseAsMob(Player player, EntityType type, boolean baby, Player... players) {
-        return disguiseAsMob(player, type, baby, null, players);
-    }
-
-    @Override
-    public Entity disguiseAsMob(Player player, EntityType type, boolean baby, String displayName, Player... players) {
+    public Entity disguiseAsMob(Player player, Mob mob, boolean baby, String displayName, Collection<? extends Player> players) {
         EntityLiving disguise = null;
         World world = ((CraftPlayer) player).getHandle().world;
 
-        switch (type) {
+        switch (mob) {
+
+            case ARMOR_STAND:
+                disguise = new EntityArmorStand(world);
             case BAT:
                 disguise = new EntityBat(world);
                 break;
             case BLAZE:
                 disguise = new EntityBlaze(world);
-                break;
-            case ARMOR_STAND:
-                disguise = new EntityArmorStand(world);
-                break;
-            case ARROW:
-                break;
-            case BOAT:
                 break;
             case CAVE_SPIDER:
                 disguise = new EntityCaveSpider(world);
@@ -83,42 +110,20 @@ public class EntityNms_1_8_R3 implements EntityNms {
             case CHICKEN:
                 disguise = new EntityChicken(world);
                 break;
-            case COMPLEX_PART:
-                break;
             case COW:
                 disguise = new EntityCow(world);
                 break;
             case CREEPER:
                 disguise = new EntityCreeper(world);
                 break;
-            case DROPPED_ITEM:
-                break;
-            case EGG:
+            case ENDER_DRAGON:
+                disguise = new EntityEnderDragon(world);
                 break;
             case ENDERMAN:
                 disguise = new EntityEnderman(world);
                 break;
             case ENDERMITE:
                 disguise = new EntityEndermite(world);
-                break;
-            case ENDER_CRYSTAL:
-                break;
-            case ENDER_DRAGON:
-                disguise = new EntityEnderDragon(world);
-                break;
-            case ENDER_PEARL:
-                break;
-            case ENDER_SIGNAL:
-                break;
-            case EXPERIENCE_ORB:
-                break;
-            case FALLING_BLOCK:
-                break;
-            case FIREBALL:
-                break;
-            case FIREWORK:
-                break;
-            case FISHING_HOOK:
                 break;
             case GHAST:
                 disguise = new EntityGhast(world);
@@ -135,28 +140,8 @@ public class EntityNms_1_8_R3 implements EntityNms {
             case IRON_GOLEM:
                 disguise = new EntityIronGolem(world);
                 break;
-            case ITEM_FRAME:
-                break;
-            case LEASH_HITCH:
-                break;
-            case LIGHTNING:
-                break;
             case MAGMA_CUBE:
                 disguise = new EntityMagmaCube(world);
-                break;
-            case MINECART:
-                break;
-            case MINECART_CHEST:
-                break;
-            case MINECART_COMMAND:
-                break;
-            case MINECART_FURNACE:
-                break;
-            case MINECART_HOPPER:
-                break;
-            case MINECART_MOB_SPAWNER:
-                break;
-            case MINECART_TNT:
                 break;
             case MUSHROOM_COW:
                 disguise = new EntityMushroomCow(world);
@@ -164,17 +149,11 @@ public class EntityNms_1_8_R3 implements EntityNms {
             case OCELOT:
                 disguise = new EntityOcelot(world);
                 break;
-            case PAINTING:
-                break;
             case PIG:
                 disguise = new EntityPig(world);
                 break;
             case PIG_ZOMBIE:
                 disguise = new EntityPigZombie(world);
-                break;
-            case PLAYER:
-                break;
-            case PRIMED_TNT:
                 break;
             case RABBIT:
                 disguise = new EntityRabbit(world);
@@ -191,29 +170,17 @@ public class EntityNms_1_8_R3 implements EntityNms {
             case SLIME:
                 disguise = new EntitySlime(world);
                 break;
-            case SMALL_FIREBALL:
-                break;
-            case SNOWBALL:
-                break;
             case SNOWMAN:
                 disguise = new EntitySnowman(world);
                 break;
             case SPIDER:
                 disguise = new EntitySpider(world);
                 break;
-            case SPLASH_POTION:
-                break;
             case SQUID:
                 disguise = new EntitySquid(world);
                 break;
-            case THROWN_EXP_BOTTLE:
-                break;
-            case UNKNOWN:
-                break;
             case VILLAGER:
                 disguise = new EntityVillager(world);
-                break;
-            case WEATHER:
                 break;
             case WITCH:
                 disguise = new EntityWitch(world);
@@ -221,15 +188,11 @@ public class EntityNms_1_8_R3 implements EntityNms {
             case WITHER:
                 disguise = new EntityWither(world);
                 break;
-            case WITHER_SKULL:
-                break;
             case WOLF:
                 disguise = new EntityWolf(world);
                 break;
             case ZOMBIE:
                 disguise = new EntityZombie(world);
-                break;
-            default:
                 break;
         }
 
@@ -246,12 +209,16 @@ public class EntityNms_1_8_R3 implements EntityNms {
         if (baby && disguise.getBukkitEntity() instanceof Ageable)
             ((Ageable) disguise.getBukkitEntity()).setBaby();
 
+        PacketPlayOutEntityDestroy packetPlayOutEntityDestroy = new PacketPlayOutEntityDestroy((((CraftPlayer) player).getHandle().getId()));
+        PacketPlayOutSpawnEntityLiving packetPlayOutSpawnEntityLiving = new PacketPlayOutSpawnEntityLiving(disguise);
+
         for (Player p : players) {
             if (player == p)
                 continue;
 
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy((((CraftPlayer) player).getHandle().getId())));
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(new PacketPlayOutSpawnEntityLiving(disguise));
+            EntityPlayer entityPlayer = ((CraftPlayer) p).getHandle();
+            entityPlayer.playerConnection.sendPacket(packetPlayOutEntityDestroy);
+            entityPlayer.playerConnection.sendPacket(packetPlayOutSpawnEntityLiving);
         }
 
         if (displayName != null) {
