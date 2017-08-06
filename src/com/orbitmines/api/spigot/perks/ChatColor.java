@@ -1,11 +1,11 @@
 package com.orbitmines.api.spigot.perks;
 
 import com.orbitmines.api.VipRank;
-import com.orbitmines.api.spigot.handlers.currency.Currency;
+import com.orbitmines.api.spigot.Color;
+import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.handlers.ItemSet;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.Obtainable;
-import com.orbitmines.api.spigot.Color;
 import org.bukkit.Material;
 
 /*

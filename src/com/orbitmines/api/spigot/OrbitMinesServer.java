@@ -14,8 +14,14 @@ public interface OrbitMinesServer {
     /* Server Type */
     Server getServerType();
 
+    /* Displayed in OMPlayer#msgJoin */
+    String getDevelopedBy();
+
     /* Return null if player should stay at their place */
     Location getSpawnLocation();
+
+    /* Messages displayed when voting */
+    String[] getVoteMessages(OMPlayer omp);
 
     void registerEvents();
 

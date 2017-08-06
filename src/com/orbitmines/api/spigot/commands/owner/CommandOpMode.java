@@ -23,7 +23,7 @@ public class CommandOpMode extends StaffCommand {
 
     @Override
     public void onDispatch(OMPlayer omp, String[] a) {
-        omp.general().setOpMode(!omp.general().isOpMode());
-        omp.sendMessage(new Message("§7Je §4§lOP Mode§7 staat nu " + omp.statusString(omp.general().isOpMode()), "§7Your §4§lOP Mode§7 has been " + omp.statusString(omp.general().isOpMode())));
+        omp.setOpMode(!omp.isOpMode());
+        omp.sendMessage(new Message("§7Je §4§lOP Mode§7 staat nu " + omp.statusString(omp.isOpMode()), "§7Your §4§lOP Mode§7 has been " + omp.statusString(omp.isOpMode())));
     }
 }

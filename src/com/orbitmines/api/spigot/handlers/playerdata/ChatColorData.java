@@ -17,8 +17,8 @@ public class ChatColorData extends PlayerData {
 
     private ChatColor chatColor;
     private List<ChatColor> chatColors;
-    private List<ChatColorType> chatColorTypes;
     private ChatColorType chatColorType;
+    private List<ChatColorType> chatColorTypes;
 
     public ChatColorData(OMPlayer omp) {
         super(Data.CHATCOLORS, omp);
@@ -41,12 +41,48 @@ public class ChatColorData extends PlayerData {
 
     @Override
     public String serialize() {
-        return null;
+        String chatColorsString = null;
+        if (chatColors.size() != 0){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (ChatColor chatColor : chatColors) {
+                stringBuilder.append(chatColor.toString());
+                stringBuilder.append("\\=");
+            }
+            chatColorsString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
+        }
+
+        String chatColorTypesString = null;
+        if (chatColors.size() != 0){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (ChatColorType chatColorType : chatColorTypes) {
+                stringBuilder.append(chatColorType.toString());
+                stringBuilder.append("\\=");
+            }
+            chatColorTypesString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
+        }
+
+        return chatColor.toString() + "-" + chatColorsString + "-" + chatColorType.toString() + "-" + chatColorTypesString;
     }
 
     @Override
     public void parse(String string) {
+        String[] data = string.split("-");
 
+        chatColor = ChatColor.valueOf(data[0]);
+
+        if (!data[1].equals("null")) {
+            for (String chatColor : data[1].split("=")) {
+                chatColors.add(ChatColor.valueOf(chatColor));
+            }
+        }
+
+        chatColorType = ChatColorType.valueOf(data[2]);
+
+        if (!data[3].equals("null")) {
+            for (String chatColorType : data[3].split("=")) {
+                chatColorTypes.add(ChatColorType.valueOf(chatColorType));
+            }
+        }
     }
 
     public ChatColor getChatColor() {
@@ -72,6 +108,8 @@ public class ChatColorData extends PlayerData {
 
     public void addChatColor(ChatColor chatColor) {
         chatColors.add(chatColor);
+
+        omp.updateStats();
     }
 
     public boolean hasChatColor(ChatColor chatColor) {
@@ -105,6 +143,8 @@ public class ChatColorData extends PlayerData {
 
     public void addChatColorType(ChatColorType chatColorType) {
         chatColorTypes.add(chatColorType);
+
+        omp.updateStats();
     }
 
     public boolean hasChatColorType(ChatColorType chatColorType) {

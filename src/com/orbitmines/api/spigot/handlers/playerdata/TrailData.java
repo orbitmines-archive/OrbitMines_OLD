@@ -45,6 +45,8 @@ public class TrailData extends PlayerData {
         trailTypes = new ArrayList<>();
         unlockedSpecialTrail = false;
 
+        trailType = TrailType.BASIC_TRAIL;
+        particleAmount = 1;
         special = false;
     }
 
@@ -60,12 +62,51 @@ public class TrailData extends PlayerData {
 
     @Override
     public String serialize() {
-        return null;
+        String trailsString = null;
+        if (trails.size() != 0){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Trail trail : trails) {
+                stringBuilder.append(trail.toString());
+                stringBuilder.append("\\=");
+            }
+            trailsString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
+        }
+        String trailTypesString = null;
+        if (trails.size() != 0){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (TrailType trailType : trailTypes) {
+                stringBuilder.append(trailType.toString());
+                stringBuilder.append("\\=");
+            }
+            trailTypesString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
+        }
+
+        return trailsString + "-" + trailTypesString + "-" + unlockedSpecialTrail + "-" + (trail == null ? "null" : trail.toString()) + "-" + trailType.toString() + "-" + particleAmount + "-" + special;
     }
 
     @Override
     public void parse(String string) {
+        String[] data = string.split("-");
 
+        if (!data[0].equals("null")) {
+            for (String trail : data[0].split("=")) {
+                trails.add(Trail.valueOf(trail));
+            }
+        }
+
+        if (!data[1].equals("null")) {
+            for (String trailType : data[1].split("=")) {
+                trailTypes.add(TrailType.valueOf(trailType));
+            }
+        }
+
+        if (!data[2].equals("null")) {
+            trail = Trail.valueOf(data[2]);
+        }
+
+        trailType = TrailType.valueOf(data[3]);
+        particleAmount = Integer.parseInt(data[4]);
+        special = Boolean.parseBoolean(data[5]);
     }
 
     public List<Trail> getTrails() {
@@ -80,6 +121,8 @@ public class TrailData extends PlayerData {
 
     public void addTrail(Trail trail) {
         this.trails.add(trail);
+
+        omp.updateStats();
     }
 
     public boolean hasTrail() {
@@ -102,6 +145,8 @@ public class TrailData extends PlayerData {
 
     public void addTrailType(TrailType trailType) {
         getTrailTypes().add(trailType);
+
+        omp.updateStats();
     }
 
     public boolean hasTrailType(TrailType trailType){
@@ -122,6 +167,8 @@ public class TrailData extends PlayerData {
 
     public void setUnlockedSpecialTrail(boolean unlockedSpecialTrail) {
         this.unlockedSpecialTrail = unlockedSpecialTrail;
+
+        omp.updateStats();
     }
 
     public Trail getTrail() {

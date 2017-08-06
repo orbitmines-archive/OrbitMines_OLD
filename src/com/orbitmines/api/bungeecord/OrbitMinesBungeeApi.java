@@ -7,8 +7,14 @@ import net.md_5.bungee.api.plugin.Plugin;
 */
 public class OrbitMinesBungeeApi extends Plugin {
 
+    private static OrbitMinesBungeeApi api;
+
     @Override
     public void onEnable() {
+        api = this;
+    }
 
+    public static OrbitMinesBungeeApi getApi() {
+        return api;
     }
 }

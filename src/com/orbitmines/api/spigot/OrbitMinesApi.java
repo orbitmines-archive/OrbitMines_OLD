@@ -16,9 +16,12 @@ import com.orbitmines.api.spigot.events.npc.NpcDamageEvent;
 import com.orbitmines.api.spigot.events.npc.NpcInteractAtEntityEvent;
 import com.orbitmines.api.spigot.events.npc.NpcInteractEntityEvent;
 import com.orbitmines.api.spigot.handlers.ConfigHandler;
+import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.currency.Currency;
 import com.orbitmines.api.spigot.handlers.currency.CurrencyTokens;
 import com.orbitmines.api.spigot.handlers.currency.CurrencyVipPoints;
+import com.orbitmines.api.spigot.handlers.playerdata.GeneralData;
+import com.orbitmines.api.spigot.handlers.playerdata.PlayerData;
 import com.orbitmines.api.spigot.handlers.podium.PodiumPlayer;
 import com.orbitmines.api.spigot.nms.Nms;
 import com.orbitmines.api.spigot.runnable.DatabaseRunnable;
@@ -82,7 +85,12 @@ public class OrbitMinesApi extends JavaPlugin {
         chunks = new ArrayList<>();
 
         dataToRead = new ArrayList<>();
-        dataToRead.add(Data.GENERAL);
+        enableData(Data.GENERAL, new Data.Register() {
+            @Override
+            public PlayerData getData(OMPlayer omp) {
+                return new GeneralData(omp);
+            }
+        });
 
         /* Setup Bungee messaging */
         Messenger messenger = getServer().getMessenger();
@@ -167,8 +175,9 @@ public class OrbitMinesApi extends JavaPlugin {
         server.registerRunnables();
     }
 
-    public void enableData(Data data) {
+    public void enableData(Data data, Data.Register register) {
         this.dataToRead.add(data);
+        data.register(register);
     }
 
     public List<Data> getDataToRead() {

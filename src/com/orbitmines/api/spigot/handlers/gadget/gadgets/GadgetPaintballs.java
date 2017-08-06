@@ -4,7 +4,7 @@ import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.gadget.GadgetHandler;
 import com.orbitmines.api.spigot.perks.Gadget;
 import com.orbitmines.api.spigot.utils.LocationUtils;
-import com.orbitmines.api.spigot.utils.RandomUtils;
+import com.orbitmines.api.utils.RandomUtils;
 import com.orbitmines.api.spigot.utils.WorldUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;

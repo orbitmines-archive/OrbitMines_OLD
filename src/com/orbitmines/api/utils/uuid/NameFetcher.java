@@ -1,4 +1,4 @@
-package com.orbitmines.api.spigot.utils.uuid;
+package com.orbitmines.api.utils.uuid;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

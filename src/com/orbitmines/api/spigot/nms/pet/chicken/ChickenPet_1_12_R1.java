@@ -4,7 +4,6 @@ import com.orbitmines.api.spigot.Mob;
 import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.nms.npc.NpcNms_1_12_R1;
 import com.orbitmines.api.spigot.nms.pet.Pet_1_12_R1;
-import com.orbitmines.api.spigot.nms.pet.spider.ChickenPet;
 import net.minecraft.server.v1_12_R1.EntityHuman;
 import net.minecraft.server.v1_12_R1.EntityChicken;
 import net.minecraft.server.v1_12_R1.PathfinderGoalSelector;

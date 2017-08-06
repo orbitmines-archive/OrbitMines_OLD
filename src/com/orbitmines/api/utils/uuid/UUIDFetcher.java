@@ -1,4 +1,4 @@
-package com.orbitmines.api.spigot.utils.uuid;
+package com.orbitmines.api.utils.uuid;
 
 import com.google.common.collect.ImmutableList;
 import org.json.simple.JSONArray;

@@ -80,6 +80,7 @@ import com.orbitmines.api.spigot.nms.pet.magmacube.*;
 import com.orbitmines.api.spigot.nms.pet.mushroomcow.*;
 import com.orbitmines.api.spigot.nms.pet.ocelot.*;
 import com.orbitmines.api.spigot.nms.pet.pig.*;
+import com.orbitmines.api.spigot.nms.pet.sheep.*;
 import com.orbitmines.api.spigot.nms.pet.silverfish.*;
 import com.orbitmines.api.spigot.nms.pet.slime.*;
 import com.orbitmines.api.spigot.nms.pet.spider.*;
@@ -183,7 +184,7 @@ public class Nms {
 //    private PigZombiePet pigZombiePet;
 //    private PolarBearPet polarBearPet;
 //    private RabbitPet rabbitPet;
-//    private SheepPet sheepPet;
+    private SheepPet sheepPet;
     private SilverfishPet silverfishPet;
 //    private SkeletonPet skeletonPet;
 //    private SkeletonHorsePet skeletonHorsePet;
@@ -301,7 +302,7 @@ public class Nms {
                 pigPet = new PigPet_1_8_R1();
 //                pigZombiePet = new PigZombiePet_1_8_R1();
 //                rabbitPet = new RabbitPet_1_8_R1();
-//                sheepPet = new SheepPet_1_8_R1();
+                sheepPet = new SheepPet_1_8_R1();
                 silverfishPet = new SilverfishPet_1_8_R1();
 //                skeletonPet = new SkeletonPet_1_8_R1();
                 slimePet = new SlimePet_1_8_R1();
@@ -387,7 +388,7 @@ public class Nms {
                 pigPet = new PigPet_1_8_R2();
 //                pigZombiePet = new PigZombiePet_1_8_R2();
 //                rabbitPet = new RabbitPet_1_8_R2();
-//                sheepPet = new SheepPet_1_8_R2();
+                sheepPet = new SheepPet_1_8_R2();
                 silverfishPet = new SilverfishPet_1_8_R2();
 //                skeletonPet = new SkeletonPet_1_8_R2();
                 slimePet = new SlimePet_1_8_R2();
@@ -473,7 +474,7 @@ public class Nms {
                 pigPet = new PigPet_1_8_R3();
 //                pigZombiePet = new PigZombiePet_1_8_R3();
 //                rabbitPet = new RabbitPet_1_8_R3();
-//                sheepPet = new SheepPet_1_8_R3();
+                sheepPet = new SheepPet_1_8_R3();
                 silverfishPet = new SilverfishPet_1_8_R3();
 //                skeletonPet = new SkeletonPet_1_8_R3();
                 slimePet = new SlimePet_1_8_R3();
@@ -559,7 +560,7 @@ public class Nms {
                 pigPet = new PigPet_1_9_R1();
 //                pigZombiePet = new PigZombiePet_1_9_R1();
 //                rabbitPet = new RabbitPet_1_9_R1();
-//                sheepPet = new SheepPet_1_9_R1();
+                sheepPet = new SheepPet_1_9_R1();
                 silverfishPet = new SilverfishPet_1_9_R1();
 //                skeletonPet = new SkeletonPet_1_9_R1();
                 slimePet = new SlimePet_1_9_R1();
@@ -645,7 +646,7 @@ public class Nms {
                 pigPet = new PigPet_1_9_R2();
 //                pigZombiePet = new PigZombiePet_1_9_R2();
 //                rabbitPet = new RabbitPet_1_9_R2();
-//                sheepPet = new SheepPet_1_9_R2();
+                sheepPet = new SheepPet_1_9_R2();
                 silverfishPet = new SilverfishPet_1_9_R2();
 //                skeletonPet = new SkeletonPet_1_9_R2();
                 slimePet = new SlimePet_1_9_R2();
@@ -732,7 +733,7 @@ public class Nms {
                 pigPet = new PigPet_1_10_R1();
 //                pigZombiePet = new PigZombiePet_1_10_R1();
 //                rabbitPet = new RabbitPet_1_10_R1();
-//                sheepPet = new SheepPet_1_10_R1();
+                sheepPet = new SheepPet_1_10_R1();
                 silverfishPet = new SilverfishPet_1_10_R1();
 //                skeletonPet = new SkeletonPet_1_10_R1();
                 slimePet = new SlimePet_1_10_R1();
@@ -829,7 +830,7 @@ public class Nms {
                 pigPet = new PigPet_1_11_R1();
 //                pigZombiePet = new PigZombiePet_1_11_R1();
 //                rabbitPet = new RabbitPet_1_11_R1();
-//                sheepPet = new SheepPet_1_11_R1();
+                sheepPet = new SheepPet_1_11_R1();
                 silverfishPet = new SilverfishPet_1_11_R1();
 //                skeletonPet = new SkeletonPet_1_11_R1();
                 slimePet = new SlimePet_1_11_R1();
@@ -926,7 +927,7 @@ public class Nms {
                 pigPet = new PigPet_1_12_R1();
 //                pigZombiePet = new PigZombiePet_1_12_R1();
 //                rabbitPet = new RabbitPet_1_12_R1();
-//                sheepPet = new SheepPet_1_12_R1();
+                sheepPet = new SheepPet_1_12_R1();
                 silverfishPet = new SilverfishPet_1_12_R1();
 //                skeletonPet = new SkeletonPet_1_12_R1();
                 slimePet = new SlimePet_1_12_R1();
@@ -1273,9 +1274,9 @@ public class Nms {
 //        return rabbitPet;
 //    }
 
-//    public SheepPet getSheepPet() {
-//        return sheepPet;
-//    }
+    public SheepPet getSheepPet() {
+        return sheepPet;
+    }
 
     public SilverfishPet getSilverfishPet() {
         return silverfishPet;

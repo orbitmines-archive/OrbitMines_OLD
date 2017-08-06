@@ -7,6 +7,7 @@ import com.orbitmines.api.spigot.handlers.gadget.gadgets.*;
 import com.orbitmines.api.spigot.handlers.gadget.petride.PetHandler;
 import com.orbitmines.api.spigot.handlers.playerdata.GadgetData;
 import com.orbitmines.api.spigot.handlers.playerdata.PetData;
+import com.orbitmines.api.spigot.handlers.playerdata.PlayerData;
 import com.orbitmines.api.spigot.perks.Gadget;
 import com.orbitmines.api.spigot.runnable.OMRunnable;
 import org.bukkit.event.EventHandler;
@@ -22,7 +23,12 @@ public abstract class GadgetEnabler extends Enabler implements Listener {
 
     @Override
     public void onEnable() {
-        api.enableData(Data.GADGETS);
+        api.enableData(Data.GADGETS, new Data.Register() {
+            @Override
+            public PlayerData getData(OMPlayer omp) {
+                return new GadgetData(omp);
+            }
+        });
 
         api.getServer().getPluginManager().registerEvents(this, api);
 

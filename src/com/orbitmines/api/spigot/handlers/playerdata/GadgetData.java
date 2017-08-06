@@ -6,6 +6,7 @@ import com.orbitmines.api.spigot.Color;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.firework.FireworkSettings;
 import com.orbitmines.api.spigot.perks.Gadget;
+import com.orbitmines.api.spigot.utils.Serializer;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -33,12 +34,14 @@ public class GadgetData extends PlayerData {
         /* Load Defaults */
         stackerEnabled = true;
         gadgets = new ArrayList<>();
+        gadgetEnabled = Gadget.STACKER;
         fireworkSettings = new FireworkSettings(Color.AQUA, Color.BLUE, Color.SILVER, Color.BLUE, false, false, FireworkEffect.Type.BALL);
     }
 
     @Override
     public void onLogin() {
-
+        if (gadgetEnabled != null)
+            omp.getPlayer().getInventory().setItem(api.gadgets().getGadgetSlot(), gadgetEnabled.getHandler().getItem(omp));
     }
 
     @Override
@@ -56,14 +59,37 @@ public class GadgetData extends PlayerData {
 
     @Override
     public String serialize() {
-        return stackerEnabled + "";
+        String gadgetsString = null;
+        if (gadgets.size() != 0){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Gadget gadget : gadgets) {
+                stringBuilder.append(gadget.toString());
+                stringBuilder.append("\\=");
+            }
+            gadgetsString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
+        }
+
+        return gadgetEnabled.toString() + "-" + gadgetsString + "-" + Serializer.serialize(fireworkSettings) + "-" + fireworkPasses + "-" + stackerEnabled;
     }
 
     @Override
     public void parse(String string) {
         String[] data = string.split("-");
 
-        stackerEnabled = Boolean.parseBoolean(data[0]);
+        if (!data[0].equals("null"))
+            gadgetEnabled = Gadget.valueOf(data[0]);
+
+        if (!data[1].equals("null")) {
+            for (String gadget : data[1].split("=")) {
+                gadgets.add(Gadget.valueOf(gadget));
+            }
+        }
+
+        fireworkSettings = Serializer.parseFireworkSettings(data[2]);
+
+        fireworkPasses = Integer.parseInt(data[3]);
+
+        stackerEnabled = Boolean.parseBoolean(data[4]);
     }
 
     public List<Gadget> getGadgets() {
@@ -78,6 +104,8 @@ public class GadgetData extends PlayerData {
 
     public void addGadget(Gadget gadget) {
         this.gadgets.add(gadget);
+
+        omp.updateStats();
     }
 
     public boolean hasGadget(Gadget gadget){
@@ -92,6 +120,7 @@ public class GadgetData extends PlayerData {
         return fireworkPasses;
     }
 
+    /* We don't update this in the database, only when a player logs out, it does not matter if this is not saved */
     public void addFireworkPasses(int fireworkPasses){
         this.fireworkPasses += fireworkPasses;
     }

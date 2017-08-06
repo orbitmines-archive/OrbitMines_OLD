@@ -8,7 +8,12 @@ import com.orbitmines.api.spigot.handlers.MobItemSet;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.Obtainable;
 import com.orbitmines.api.spigot.handlers.gadget.petride.PetHandler;
-import org.bukkit.entity.Entity;
+import com.orbitmines.api.spigot.nms.Nms;
+import com.orbitmines.api.spigot.nms.entity.EntityNms;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,5 +94,77 @@ public enum Pet implements Perk {
 
     public void setHandler(PetHandler petHandler) {
         this.petHandler = petHandler;
+    }
+
+    public Entity spawn(OMPlayer omp) {
+        Location location = omp.getPlayer().getLocation();
+        String displayName = omp.pets().getPetName(this);
+
+        Entity entity = null;
+        Nms nms = OrbitMinesApi.getApi().getNms();
+        switch (this) {
+            case CHICKEN:
+                entity = nms.getChickenPet().spawn(location, displayName);
+                break;
+            case COW:
+                entity = nms.getCowPet().spawn(location, displayName);
+                break;
+            case CREEPER:
+                entity = nms.getCreeperPet().spawn(location, displayName);
+                break;
+            case HORSE:
+                Horse horse = (Horse) location.getWorld().spawnEntity(location, EntityType.HORSE);
+                horse.setAdult();
+                horse.setTamed(true);
+                horse.setRemoveWhenFarAway(false);
+                horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
+                horse.setColor(Horse.Color.BROWN);
+                horse.setStyle(Horse.Style.WHITE);
+
+                nms.entity().setAttribute(horse, EntityNms.Attribute.MOVEMENT_SPEED, 0.25);
+
+                horse.setCustomName(displayName);
+                horse.setCustomNameVisible(true);
+                entity = horse;
+                break;
+            case MAGMA_CUBE:
+                entity = nms.getMagmaCubePet().spawn(location, displayName);
+                break;
+            case MUSHROOM_COW:
+                entity = nms.getMushroomCowPet().spawn(location, displayName);
+                break;
+            case OCELOT:
+                entity = nms.getOcelotPet().spawn(location, displayName);
+                break;
+            case PIG:
+                entity = nms.getPigPet().spawn(location, displayName);
+                break;
+            case SHEEP:
+                entity = nms.getSheepPet().spawn(location, displayName);
+                break;
+            case SILVERFISH:
+                entity = nms.getSilverfishPet().spawn(location, displayName);
+                break;
+            case SLIME:
+                entity = nms.getSlimePet().spawn(location, displayName);
+                break;
+            case SPIDER:
+                entity = nms.getSpiderPet().spawn(location, displayName);
+                break;
+            case SQUID:
+                entity = nms.getSquidPet().spawn(location, displayName);
+                break;
+            case WOLF:
+                entity = nms.getWolfPet().spawn(location, displayName);
+                break;
+        }
+
+        if (entity instanceof Ageable) {
+            ((Ageable) entity).setAdult();
+        } else if (entity instanceof Slime) {
+            ((Slime) entity).setSize(2);
+        }
+
+        return entity;
     }
 }

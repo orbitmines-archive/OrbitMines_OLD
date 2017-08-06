@@ -2,8 +2,6 @@ package com.orbitmines.api.spigot.handlers.npc;
 
 import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
-import com.zombiehorde.bukkit.ZombieHordePlugin;
-import com.zombiehorde.bukkit.util.nms.EntityNms;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -16,10 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Fadi on 16-5-2016.
@@ -52,6 +47,8 @@ public class FloatingItem {
     }
 
     public FloatingItem(Location location, PickUpAction pickUpAction, ClickAction clickAction) {
+        api = OrbitMinesApi.getApi();
+
         floatingItems.add(this);
 
         this.location = location;
@@ -256,11 +253,11 @@ public class FloatingItem {
         }
 
         public void hideFor(Player player) {
-            EntityNms.destroyEntityFor(player, item);
+            hideFor(Collections.singletonList(player));
         }
 
         public void hideFor(Collection<? extends Player> players) {
-            EntityNms.destroyEntityFor(players, item);
+            OrbitMinesApi.getApi().getNms().entity().destroyEntityFor(players, item);
         }
 
         public void updateItemStack() {

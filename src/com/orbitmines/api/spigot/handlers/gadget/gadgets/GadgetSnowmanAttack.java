@@ -8,7 +8,7 @@ import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
 import com.orbitmines.api.spigot.handlers.particle.Particle;
 import com.orbitmines.api.spigot.nms.entity.EntityNms;
 import com.orbitmines.api.spigot.perks.Gadget;
-import com.orbitmines.api.spigot.utils.RandomUtils;
+import com.orbitmines.api.utils.RandomUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;

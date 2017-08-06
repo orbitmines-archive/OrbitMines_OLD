@@ -2,7 +2,7 @@ package com.orbitmines.api.spigot.handlers.firework;
 
 import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.utils.ColorUtils;
-import com.orbitmines.api.spigot.utils.RandomUtils;
+import com.orbitmines.api.utils.RandomUtils;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;

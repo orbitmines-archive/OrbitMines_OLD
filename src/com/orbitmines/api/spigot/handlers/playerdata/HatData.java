@@ -45,12 +45,29 @@ public class HatData extends PlayerData {
 
     @Override
     public String serialize() {
-        return null;
+        String hatsString = null;
+        if (hats.size() != 0){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Hat hat : hats) {
+                stringBuilder.append(hat.toString());
+                stringBuilder.append("\\=");
+            }
+            hatsString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
+        }
+        return hatsString + "-" + hatsBlockTrail;
     }
 
     @Override
     public void parse(String string) {
+        String[] data = string.split("-");
 
+        if (!data[0].equals("null")) {
+            for (String hat : data[0].split("=")) {
+                hats.add(Hat.valueOf(hat));
+            }
+        }
+
+        hatsBlockTrail = Boolean.parseBoolean(data[1]);
     }
 
     public List<Hat> getHats() {
@@ -65,6 +82,8 @@ public class HatData extends PlayerData {
 
     public void addHat(Hat hat) {
         this.hats.add(hat);
+
+        omp.updateStats();
     }
 
     public boolean hasHat(){

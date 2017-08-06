@@ -25,7 +25,7 @@ public abstract class PlayerData {
         this.omp = omp;
     }
 
-    /* Called when player is logging in */
+    /* Called when player is logging in, does not trigger the first login */
     public abstract void onLogin();
 
     /* Called when player is logging out */

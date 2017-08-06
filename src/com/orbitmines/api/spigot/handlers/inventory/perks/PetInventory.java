@@ -4,17 +4,13 @@ import com.orbitmines.api.Message;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.inventory.OMInventory;
 import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
-import com.orbitmines.api.spigot.handlers.playerdata.DisguiseData;
 import com.orbitmines.api.spigot.handlers.playerdata.PetData;
 import com.orbitmines.api.spigot.nms.anvilgui.AnvilNms;
-import com.orbitmines.api.spigot.perks.Disguise;
 import com.orbitmines.api.spigot.perks.Pet;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-
-import java.util.Arrays;
 
 /*
 * OrbitMines - @author Fadi Shawki - 30-7-2017
@@ -86,7 +82,7 @@ public class PetInventory extends PerkInventory {
                         Pet pet = data.getPetEnabled();
 
                         if (data.hasPetEnabled())
-                            omp.disablePet();
+                            data.disablePet();
 
                         omp.sendMessage(new Message("§7Je hebt de naam van " + data.getPetName(pet) + "§7 veranderd in §f" + petName + "§7!", "§7Changed " + data.getPetName(pet) + "§7's name to §f" + petName + "§7!"));
 

@@ -5,7 +5,6 @@ import com.orbitmines.api.StaffRank;
 import com.orbitmines.api.spigot.Mob;
 import com.orbitmines.api.spigot.commands.StaffCommand;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
-import com.orbitmines.api.spigot.perks.Disguise;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -37,7 +36,7 @@ public class CommandDisguise extends StaffCommand {
             } else {
                 try {
                     Mob mob = Mob.valueOf(a[1].toUpperCase());
-                    omp.disguiseAsMob(mob, false, Bukkit.getOnlinePlayers().toArray(new Player[Bukkit.getOnlinePlayers().size()]));
+                    omp.disguises().disguiseAsMob(mob);
                     omp.sendMessage(new Message("§7Vermomd als: §6" + mob.getName() + "§7.", "§7Disguised as: §6" + mob.getName() + "§7."));
                 } catch (IllegalArgumentException ex) {
                     p.sendMessage("§7" + omp.getMessage(new Message("Ongeldige", "Invalid")) + " Disguise.");
@@ -47,7 +46,7 @@ public class CommandDisguise extends StaffCommand {
             if (a[1].equalsIgnoreCase("block")) {
                 try {
                     int id = Integer.parseInt(a[2]);
-                    omp.disguiseAsBlock(id, Bukkit.getOnlinePlayers().toArray(new Player[Bukkit.getOnlinePlayers().size()]));
+                    omp.disguises().disguiseAsBlock(id);
 
                     omp.sendMessage(new Message("§7Vermomd als: §6" + Material.getMaterial(id).toString() + "§7.", "§7Disguised as: §6" + Material.getMaterial(id).toString() + "§7."));
                 } catch (IllegalArgumentException ex) {
@@ -64,7 +63,7 @@ public class CommandDisguise extends StaffCommand {
                 if (p2 != null) {
                     try {
                         Mob mob = Mob.valueOf(a[3].toUpperCase());
-                        omp2.disguiseAsMob(mob, false, Bukkit.getOnlinePlayers().toArray(new Player[Bukkit.getOnlinePlayers().size()]));
+                        omp2.disguises().disguiseAsMob(mob);
                         omp.sendMessage(new Message("§7Je hebt " + omp2.getName() + " §7vermomd als: §6" + mob.getName() + "§7.", "§7Disguised " + omp2.getName() + " §7as: §6" + mob.getName() + "§7."));
                         omp2.sendMessage(new Message("§7Vermomd als: §6" + mob.getName() + "§7.", "§7Disguised as: §6" + mob.getName() + "§7."));
                     } catch (IllegalArgumentException ex) {
@@ -87,12 +86,12 @@ public class CommandDisguise extends StaffCommand {
                                 amount++;
                                 Player player = (Player) en;
                                 OMPlayer omplayer = OMPlayer.getPlayer(player);
-                                omplayer.disguiseAsMob(mob, false, Bukkit.getOnlinePlayers().toArray(new Player[Bukkit.getOnlinePlayers().size()]));
+                                omplayer.disguises().disguiseAsMob(mob);
                                 omplayer.sendMessage(message);
                             }
                         }
 
-                        omp.disguiseAsMob(mob, false, Bukkit.getOnlinePlayers().toArray(new Player[Bukkit.getOnlinePlayers().size()]));
+                        omp.disguises().disguiseAsMob(mob);
                         omp.sendMessage(new Message("§7Spelers in de buurt vermomd (§6" + amount + "§7) §7als: §6" + mob.getName() + "§7.", "§7Disguised near players (§6" + amount + "§7) §7as: §6" + mob.getName() + "§7."));
                         omp.sendMessage(message);
 
@@ -116,7 +115,7 @@ public class CommandDisguise extends StaffCommand {
                             int id = Integer.parseInt(a[4]);
                             String material = Material.getMaterial(id).toString();
 
-                            omp2.disguiseAsBlock(id, Bukkit.getOnlinePlayers().toArray(new Player[Bukkit.getOnlinePlayers().size()]));
+                            omp2.disguises().disguiseAsBlock(id);
                             omp.sendMessage(new Message("§7Je hebt " + omp2.getName() + " §7vermomd als: §6Block§7. (§6" + material + "§7)", "§7Disguised " + omp2.getName() + " §7as: §6Block§7. (§6" + material + "§7)"));
                             omp2.sendMessage(new Message("§7Vermomd als: §aBlock§7. (§6" + material + "§7)", "§7Disguised as: §aBlock§7. (§6" + material + "§7)"));
                         } catch (NumberFormatException ex) {
@@ -145,12 +144,12 @@ public class CommandDisguise extends StaffCommand {
                                     amount++;
                                     Player player = (Player) en;
                                     OMPlayer omplayer = OMPlayer.getPlayer(player);
-                                    omplayer.disguiseAsBlock(id, Bukkit.getOnlinePlayers().toArray(new Player[Bukkit.getOnlinePlayers().size()]));
+                                    omplayer.disguises().disguiseAsBlock(id);
                                     omplayer.sendMessage(message);
                                 }
                             }
 
-                            omp.disguiseAsBlock(id, Bukkit.getOnlinePlayers().toArray(new Player[Bukkit.getOnlinePlayers().size()]));
+                            omp.disguises().disguiseAsBlock(id);
                             omp.sendMessage(new Message("§7Spelers in de buurt vermomd (§a" + amount + "§7) §7als: §aBlock§7. (§a" + material + "§7)", "§7Disguised near players (§a" + amount + "§7) §7as: §aBlock§7. (§a" + material + "§7)"));
                             omp.sendMessage(message);
                         } catch (NumberFormatException ex) {

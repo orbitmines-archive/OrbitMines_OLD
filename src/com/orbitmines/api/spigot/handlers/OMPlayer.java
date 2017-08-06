@@ -19,6 +19,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.DisplaySlot;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 /*
@@ -36,6 +39,7 @@ public abstract class OMPlayer {
     protected OMInventory lastInventory;
 
     protected List<PlayerData> data;
+    private Map<Data, String> cachedData;
 
     private boolean opMode;
 
@@ -63,6 +67,7 @@ public abstract class OMPlayer {
         this.scoreboard = new Scoreboard(this);
 
         this.data = new ArrayList<>();
+        this.cachedData = new HashMap<>();
         this.opMode = false;
         this.staffRank = StaffRank.NONE;
         this.vipRank = VipRank.NONE;
@@ -76,8 +81,8 @@ public abstract class OMPlayer {
     /* Called on player chat */
     public abstract String getPrefix();
 
-    /* Called when a players votes */
-    public abstract void vote();
+    /* Called before a players votes, or when the players logs in and receives previous votes, this handles just the rewards */
+    public abstract void onVote(int votes);
 
     /* Called after the player logs in */
     protected abstract void onLogin();
@@ -90,8 +95,48 @@ public abstract class OMPlayer {
 
     public void login() {
         player.setOp(false);
+        player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
 
-        //TODO
+        /* On Bungeecord join we check if the player exists in the database. We don't need to do that here */
+
+        Map<Database.Column, String> values = Database.get().getValues(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()),
+                Database.Column.STAFFRANK, Database.Column.VIPRANK, Database.Column.MONTHLYBONUS, Database.Column.STATS);
+
+        staffRank = StaffRank.valueOf(values.get(Database.Column.STAFFRANK));
+        vipRank = VipRank.valueOf(values.get(Database.Column.VIPRANK));
+
+        receivedMonthlyBonus = Boolean.parseBoolean(values.get(Database.Column.MONTHLYBONUS));
+
+        updateVotes();
+        //TODO UPDATE NAME IN BUNGEECORD ON JOIN IF CHANGED
+
+        /* DATA~STATS~DATA~STATS */
+        String[] stats = values.get(Database.Column.STATS).split("~");
+
+        if (!stats.equals("null")) {
+            for (int i = 0; i < stats.length; i += 2) {
+                cachedData.put(Data.valueOf(stats[i]), stats[i + 1]);
+            }
+        } else {
+            /* New Player */
+        }
+
+        for (Data data : api.getDataToRead()) {
+            PlayerData playerData = data.getData(this);
+
+            if (cachedData.containsKey(data)) {
+                playerData.parse(cachedData.get(data));
+                cachedData.remove(data);
+            }
+
+            this.data.add(playerData);
+        }
+
+        defaultTabList();
+
+        for (PlayerData playerData : data) {
+            playerData.onLogin();
+        }
 
         onLogin();
     }
@@ -101,9 +146,53 @@ public abstract class OMPlayer {
 
         player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
 
-        //TODO
+        updateStats();
 
         players.remove(this);
+    }
+
+    public void vote(int votes) {
+        onVote(votes);
+
+        Player p = getPlayer();
+        p.playSound(p.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 5, 1);
+        p.sendMessage("");
+        sendMessage(new Message("§7Dank je, §b§l" + player.getName() + " §7voor je §b§lVote§7!", "§7Thank you, §b§l" + player.getName() + " §7for your §b§lVote§7!"));
+        sendMessage(new Message("§7Beloningen voor de " + api.server().getServerType().getName() + "§7 Server:", "§7Reward on the " + api.server().getServerType().getName() + "§7 Server:"));
+        p.sendMessage("");
+
+        String amount = votes == 1 ? "" : votes + "x ";
+        for (String message : api.server().getVoteMessages(this)) {
+            p.sendMessage("§7  - " + amount + message);
+        }
+        p.sendMessage("");
+        sendMessage(new Message("§7Jouw votes deze maand: §b§l" + votes + "§7.", "§7Your total Votes this Month: §b§l" + votes + "§7."));
+
+        broadcastMessage(new Message("§b§l" + player.getName() + "§7 heeft gevoten met §b§l/vote§7.", "§b§l" + player.getName() + "§7 has voted with §b§l/vote§7."));
+    }
+
+    public void defaultTabList() {
+        setTabList("§6§lOrbitMines§4§lNetwork", "§7Website: §6www.orbitmines.com §8| §7Twitter: §b@OrbitMines §8| §7" + getMessage(new Message("Winkel", "Shop")) + ": §3shop.orbitmines.com");
+    }
+
+    public void updateStats() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (Data data : cachedData.keySet()) {
+            stringBuilder.append(data.toString());
+            stringBuilder.append("~");
+            stringBuilder.append(cachedData.get(data));
+            stringBuilder.append("~");
+        }
+
+        for (PlayerData playerData : data) {
+            stringBuilder.append(playerData.getType().toString());
+            stringBuilder.append("~");
+            stringBuilder.append(playerData.serialize());
+            stringBuilder.append("~");
+        }
+
+        Database.get().update(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()), new Database.Set(Database.Column.STATS, stringBuilder.toString().substring(0, stringBuilder.length() - 1)));
     }
 
     /* Getters & Setters */
@@ -220,7 +309,7 @@ public abstract class OMPlayer {
         Title t = new Title("", getMessage(new Message("§7Je bent nu een " + staffRank.getRankString() + "§7!", "§7You are now " + staffRank.getRankString() + " " + (staffRank == StaffRank.OWNER ? "an" : "a") + "§7!")), 20, 80, 20);
         t.send(player);
 
-        Database.get().update(Database.Table.PLAYERS, new Database.Where(Database.Column.NAME, player.getName()), new Database.Set(Database.Column.STAFFRANK, staffRank.toString()));
+        Database.get().update(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()), new Database.Set(Database.Column.STAFFRANK, staffRank.toString()));
     }
 
     public VipRank getVipRank() {
@@ -233,19 +322,17 @@ public abstract class OMPlayer {
         Title t = new Title("", getMessage(new Message("§7Je bent nu een " + vipRank.getRankString() + "§7!", "§7You are now " + vipRank.getRankString() + " " + (vipRank == VipRank.EMERALD || vipRank == VipRank.IRON ? "an" : "a") + "§7!")), 20, 80, 20);
         t.send(player);
 
-        Database.get().update(Database.Table.PLAYERS, new Database.Where(Database.Column.NAME, player.getName()), new Database.Set(Database.Column.VIPRANK, vipRank.toString()));
+        Database.get().update(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()), new Database.Set(Database.Column.VIPRANK, vipRank.toString()));
     }
 
     public int getVotes() {
         return votes;
     }
 
-    public void setVotes(int votes) {
-        this.votes = votes;
-    }
-
     public void addVote() {
         this.votes += 1;
+
+        Database.get().update(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()), new Database.Set(Database.Column.VOTES, votes + ""));
     }
 
     public boolean hasReceivedMonthlyBonus() {
@@ -254,6 +341,8 @@ public abstract class OMPlayer {
 
     public void setReceivedMonthlyBonus(boolean receivedMonthlyBonus) {
         this.receivedMonthlyBonus = receivedMonthlyBonus;
+
+        Database.get().update(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()), new Database.Set(Database.Column.MONTHLYBONUS, receivedMonthlyBonus + ""));
     }
 
     public Location getTpLocation() {
@@ -344,7 +433,51 @@ public abstract class OMPlayer {
     /* Others */
 
     public void updateVotes() {
-        this.votes = Database.get().getInt(Database.Table.PLAYERS, Database.Column.VOTES, new Database.Where(Database.Column.NAME, player.getName()));
+        Map<Database.Column, String> values = Database.get().getValues(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()),
+                Database.Column.VOTES, Database.Column.CACHEDVOTES);
+
+        this.votes = Integer.parseInt(values.get(Database.Column.VOTES));
+
+        /* SERVER~10|SERVER~10 */
+        String cachedVotesString = values.get(Database.Column.CACHEDVOTES);
+        if (!cachedVotesString.equals("null")) {
+            Map<Server, Integer> cachedVotes = new HashMap<>();
+
+            for (String voteData : cachedVotesString.split("\\|")) {
+                String[] data = voteData.split("~");
+
+                cachedVotes.put(Server.valueOf(data[0]), Integer.parseInt(data[1]));
+            }
+
+            Server server = api.server().getServerType();
+            if (cachedVotes.containsKey(server)) {
+                vote(cachedVotes.get(server));
+
+                cachedVotes.remove(server);
+            }
+
+            updateCachedVotes(cachedVotes);
+        }
+    }
+
+    private void updateCachedVotes(Map<Server, Integer> cachedVotes) {
+        String value;
+
+        if (cachedVotes != null && cachedVotes.size() != 0) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Server server : cachedVotes.keySet()) {
+                stringBuilder.append(server.toString());
+                stringBuilder.append("~");
+                stringBuilder.append(cachedVotes.get(server));
+                stringBuilder.append("|");
+            }
+
+            value = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
+        } else {
+            value = "null";
+        }
+
+        Database.get().update(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()), new Database.Set(Database.Column.CACHEDVOTES, value));
     }
 
     public boolean isEligible(StaffRank... staffRanks) {
@@ -383,7 +516,7 @@ public abstract class OMPlayer {
         return message.lang(general().getLanguage());
     }
 
-    public String statusString(boolean bl){
+    public String statusString(boolean bl) {
         return bl ? getMessage(new Message("§a§lAAN", "§a§lENABLED")) : getMessage(new Message("§c§lUIT", "§c§lDISABLED"));
     }
 
@@ -417,6 +550,63 @@ public abstract class OMPlayer {
 
         sendMessage(new Message("§7Je moet een " + vipRank.getRankString() + " VIP§7 zijn om dit te doen!", "§7You have to be " + (vipRank == VipRank.IRON || vipRank == VipRank.EMERALD ? "an" : "a") + " " + vipRank.getRankString() + " VIP§7 to do this!"));
         p.playSound(p.getLocation(), Sound.BLOCK_LAVA_POP, 5, 1);
+    }
+
+    protected void broadcastQuitMessage() {
+        if (general().isSilent()) {
+            Message message = new Message(" §c« " + getName() + "§c is weggegaan. §6[Silent Mode]", " §c« " + getName() + "§c left. §6[Silent Mode]");
+            for (OMPlayer omp : players) {
+                if (!omp.isEligible(StaffRank.MODERATOR))
+                    continue;
+
+                omp.sendMessage(message);
+            }
+        } else {
+            broadcastMessage(new Message(" §c« " + getName() + "§c is weggegaan.", " §c« " + getName() + "§c left."));
+        }
+    }
+
+    protected void broadcastJoinMessage() {
+        if (general().isSilent()) {
+            Message message = new Message(" §a» " + getName() + "§a is gejoind. §6[Silent Mode]", " §a» " + getName() + "§a joined. §6[Silent Mode]");
+            for (OMPlayer omp : players) {
+                if (!omp.isEligible(StaffRank.MODERATOR))
+                    continue;
+
+                omp.sendMessage(message);
+            }
+        } else {
+            broadcastMessage(new Message(" §a» " + getName() + "§a is gejoind.", " §a» " + getName() + "§a joined."));
+        }
+    }
+
+    protected void msgJoinTitle() {
+        Title t = new Title("§6§lOrbitMines§4§lNetwork", api.server().getServerType().getName(), 20, 40, 20);
+        t.send(getPlayer());
+    }
+
+    protected void msgJoin() {
+        new BukkitRunnable() {
+            public void run() {
+                Player p = getPlayer();
+                p.sendMessage("§7§m----------------------------------------");
+                p.sendMessage(" §6§lOrbitMines§4§lNetwork §7- " + api.server().getServerType().getName());
+                p.sendMessage(" ");
+                p.sendMessage(" §7§lWebsite: §6www.orbitmines.com");
+                p.sendMessage(" §7§l" + getMessage(new Message("Winkel", "Shop")) + ": §3shop.orbitmines.com");
+                p.sendMessage(" §7§l" + getMessage(new Message("Voten", "Vote")) + ": §b/vote");
+                p.sendMessage(" ");
+
+                //TODO
+//                ComponentMessage cm = new ComponentMessage();
+//                cm.addPart(" §7§l" + Messages.WORD_SPAWN_BUILT_BY.get(omPlayer) +  ": ");
+//                cm.addPart("§e§l[" + Messages.WORD_VIEW.get(omPlayer) + "]", HoverEvent.Action.SHOW_TEXT, api.getServerPlugin() == null ? "" : api.getServerPlugin().getSpawnBuilders());
+//                cm.send(p);
+
+                p.sendMessage(" §7§l" + getMessage(new Message("Gemaakt door", "Developed by")) + ": " + api.server().getDevelopedBy());
+                p.sendMessage("§7§m----------------------------------------");
+            }
+        }.runTaskLater(api, 20);
     }
 
     public void clearInventory() {
@@ -534,7 +724,37 @@ public abstract class OMPlayer {
     }
 
     public void connect(Server server) {
+        switch (server.getStatus()) {
 
+            case ONLINE:
+                sendMessage(new Message("§7Verbinden met " + server.getColor() + server.getName() + "§7...", "§7Connecting to " + server.getColor() + server.getName() + "§7..."));
+                forceConnect(server);
+                break;
+            case OFFLINE:
+                sendMessage(new Message("§7De " + server.getColor() + server.getName() + "§7 Server is §4§lOffline§7!", "§7The " + server.getColor() + server.getName() + "§7 Server is §4§lOffline§7!"));
+                break;
+            case MAINTENANCE:
+                if (isEligible(StaffRank.MODERATOR)) {
+                    sendMessage(new Message(server.getColor() + server.getName() + " is in §d§lMaintenance Mode§7! Verbinden forceren...", server.getColor() + server.getName() + " is in §d§lMaintenance Mode§7! Forcing connection..."));
+                    forceConnect(server);
+                } else {
+                    sendMessage(new Message(server.getColor() + server.getName() + " is in §d§lMaintenance Mode§7!", server.getColor() + server.getName() + " is in §d§lMaintenance Mode§7!"));
+                }
+                break;
+        }
+    }
+
+    private void forceConnect(Server server) {
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        DataOutputStream out = new DataOutputStream(b);
+
+        try {
+            out.writeUTF("Connect");
+            out.writeUTF(server.toString().toLowerCase());
+        } catch (IOException e) {
+        }
+
+        getPlayer().sendPluginMessage(api, "BungeeCord", b.toByteArray());
     }
 
     public static OMPlayer getPlayer(Player player) {

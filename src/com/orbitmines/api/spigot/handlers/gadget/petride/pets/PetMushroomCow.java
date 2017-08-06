@@ -9,7 +9,7 @@ import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
 import com.orbitmines.api.spigot.handlers.playerdata.PetData;
 import com.orbitmines.api.spigot.nms.entity.EntityNms;
 import com.orbitmines.api.spigot.perks.Pet;
-import com.orbitmines.api.spigot.utils.RandomUtils;
+import com.orbitmines.api.utils.RandomUtils;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;

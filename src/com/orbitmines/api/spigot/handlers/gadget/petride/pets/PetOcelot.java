@@ -10,7 +10,7 @@ import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
 import com.orbitmines.api.spigot.handlers.particle.Particle;
 import com.orbitmines.api.spigot.handlers.playerdata.PetData;
 import com.orbitmines.api.spigot.perks.Pet;
-import com.orbitmines.api.spigot.utils.RandomUtils;
+import com.orbitmines.api.utils.RandomUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;

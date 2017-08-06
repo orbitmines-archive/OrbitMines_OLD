@@ -5,7 +5,7 @@ import com.orbitmines.api.StaffRank;
 import com.orbitmines.api.spigot.commands.StaffCommand;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.chat.ComponentMessage;
-import com.orbitmines.api.spigot.utils.uuid.UUIDUtils;
+import com.orbitmines.api.utils.uuid.UUIDUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.entity.Player;

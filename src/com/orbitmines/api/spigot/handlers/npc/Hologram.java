@@ -1,7 +1,6 @@
 package com.orbitmines.api.spigot.handlers.npc;
 
 import com.orbitmines.api.spigot.OrbitMinesApi;
-import com.sun.org.apache.xpath.internal.operations.Or;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -192,9 +191,7 @@ public class Hologram {
     }
 
     public void hideFor(Player player) {
-        for (ArmorStand armorStand : armorStands) {
-            api.getNms().entity().destroyEntityFor(player, armorStand);
-        }
+        hideFor(Collections.singletonList(player));
     }
 
     public void hideFor(Collection<? extends Player> players) {

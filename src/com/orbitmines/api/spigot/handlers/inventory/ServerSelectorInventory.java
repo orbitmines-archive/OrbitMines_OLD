@@ -33,7 +33,7 @@ public class ServerSelectorInventory extends OMInventory {
         int slot = 0;
         for (Server server : Server.values()) {
             Server.Status status = server.getStatus();
-            boolean thisServer = server == api.getServerType();
+            boolean thisServer = server == api.server().getServerType();
 
             ItemBuilder itemBuilder = new ItemBuilder(getMaterial(server), 1, 0, server.getColor() + server.getName() + " ");
             List<String> lore = new ArrayList<>();

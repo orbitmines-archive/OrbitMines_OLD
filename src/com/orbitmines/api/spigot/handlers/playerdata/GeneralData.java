@@ -43,12 +43,18 @@ public class GeneralData extends PlayerData {
 
     @Override
     public String serialize() {
-        return null;
+        return language.toString() + "-" + silent + "-" + vipPoints + "-" + orbitMinesTokens + "-" + nickName.replaceAll("§", "&");
     }
 
     @Override
     public void parse(String string) {
+        String[] data = string.split("-");
 
+        language = Language.valueOf(data[0]);
+        silent = Boolean.parseBoolean(data[1]);
+        vipPoints = Integer.parseInt(data[2]);
+        orbitMinesTokens = Integer.parseInt(data[3]);
+        nickName = data[4].replaceAll("&", "§");
     }
 
     public Language getLanguage() {
@@ -65,12 +71,16 @@ public class GeneralData extends PlayerData {
         out.writeUTF(omp.getPlayer().getName());
 
         omp.getPlayer().sendPluginMessage(api, "OrbitMinesApi", out.toByteArray());
+
+        omp.defaultTabList();
+        omp.updateStats();
     }
 
     public boolean isSilent() {
         return silent;
     }
 
+    /* Updated from bungeecord, so we don't update it here */
     public void setSilent(boolean silent) {
         this.silent = silent;
     }
@@ -79,18 +89,18 @@ public class GeneralData extends PlayerData {
         return vipPoints;
     }
 
-    public void setVipPoints(int vipPoints) {
-        this.vipPoints = vipPoints;
-    }
-
     public void addVipPoints(int vipPoints) {
         this.vipPoints += vipPoints;
 
         new Title("", "§b+" + vipPoints + " VIP Points", 20, 40, 20).send(omp.getPlayer());
+
+        omp.updateStats();
     }
 
     public void removeVipPoints(int vipPoints) {
         this.vipPoints -= vipPoints;
+
+        omp.updateStats();
     }
 
     public boolean hasVipPoints(int vipPoints) {
@@ -101,16 +111,16 @@ public class GeneralData extends PlayerData {
         return orbitMinesTokens;
     }
 
-    public void setTokens(int orbitMinesTokens) {
-        this.orbitMinesTokens = orbitMinesTokens;
-    }
-
     public void addTokens(int orbitMinesTokens) {
         this.orbitMinesTokens += orbitMinesTokens;
+
+        omp.updateStats();
     }
 
     public void removeTokens(int orbitMinesTokens) {
         this.orbitMinesTokens -= orbitMinesTokens;
+
+        omp.updateStats();
     }
 
     public boolean hasTokens(int orbitMinesTokens) {

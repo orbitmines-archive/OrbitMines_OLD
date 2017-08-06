@@ -45,12 +45,30 @@ public class WardrobeData extends PlayerData {
 
     @Override
     public String serialize() {
-        return null;
+        String wardrobeString = null;
+        if (wardrobe.size() != 0){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Wardrobe wardrobe : this.wardrobe) {
+                stringBuilder.append(wardrobe.toString());
+                stringBuilder.append("\\=");
+            }
+            wardrobeString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
+        }
+
+        return wardrobeString + "-" + wardrobeDisco;
     }
 
     @Override
     public void parse(String string) {
+        String[] data = string.split("-");
 
+        if (!data[0].equals("null")) {
+            for (String wardrobe : data[0].split("=")) {
+                this.wardrobe.add(Wardrobe.valueOf(wardrobe));
+            }
+        }
+
+        wardrobeDisco = Boolean.parseBoolean(data[1]);
     }
 
     public List<Wardrobe> getWardrobe() {
@@ -59,6 +77,8 @@ public class WardrobeData extends PlayerData {
 
     public void addWardrobe(Wardrobe wardrobe) {
         this.wardrobe.add(wardrobe);
+
+        omp.updateStats();
     }
 
     public List<Wardrobe> getDiscoWardrobe() {

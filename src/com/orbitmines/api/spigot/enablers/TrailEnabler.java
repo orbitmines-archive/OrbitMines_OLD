@@ -3,6 +3,7 @@ package com.orbitmines.api.spigot.enablers;
 import com.orbitmines.api.Data;
 import com.orbitmines.api.spigot.handlers.Cooldown;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
+import com.orbitmines.api.spigot.handlers.playerdata.PlayerData;
 import com.orbitmines.api.spigot.handlers.playerdata.TrailData;
 import com.orbitmines.api.spigot.perks.Trail;
 import com.orbitmines.api.spigot.perks.TrailType;
@@ -19,7 +20,12 @@ public class TrailEnabler extends Enabler implements Listener {
 
     @Override
     public void onEnable() {
-        api.enableData(Data.TRAILS);
+        api.enableData(Data.TRAILS, new Data.Register() {
+            @Override
+            public PlayerData getData(OMPlayer omp) {
+                return new TrailData(omp);
+            }
+        });
 
         api.getServer().getPluginManager().registerEvents(this, api);
 

@@ -1,8 +1,10 @@
 package com.orbitmines.api.spigot.utils;
 
+import com.orbitmines.api.spigot.Color;
 import com.orbitmines.api.spigot.handlers.firework.FireworkSettings;
 import com.orbitmines.api.spigot.handlers.kit.Kit;
 import org.bukkit.Bukkit;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -37,12 +39,13 @@ public class Serializer {
     }
 
     /* FireworkSettings */
-    public String serialize(FireworkSettings settings) {
+    public static String serialize(FireworkSettings settings) {
         return settings.getColor1().toString() + "|" + settings.getColor2().toString() + "|" + settings.getFade1().toString() + "|" + settings.getFade2().toString() + "|" + settings.hasFlicker() + "|" + settings.hasTrail() + "|" + settings.getType().toString();
     }
 
-    public static Location parseFireworkSettings(String string) {
-        //TODO
+    public static FireworkSettings parseFireworkSettings(String string) {
+        String[] data = string.split("|");
+        return new FireworkSettings(Color.valueOf(data[0]), Color.valueOf(data[1]), Color.valueOf(data[2]), Color.valueOf(data[3]), Boolean.parseBoolean(data[4]), Boolean.parseBoolean(data[5]), FireworkEffect.Type.valueOf(data[6]));
     }
 
     /* Kit */

@@ -3,6 +3,7 @@ package com.orbitmines.api.spigot.enablers;
 import com.orbitmines.api.Data;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.playerdata.DisguiseData;
+import com.orbitmines.api.spigot.handlers.playerdata.PlayerData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -15,7 +16,12 @@ public class DisguiseEnabler extends Enabler implements Listener {
 
     @Override
     public void onEnable() {
-        api.enableData(Data.DISGUISES);
+        api.enableData(Data.DISGUISES, new Data.Register() {
+            @Override
+            public PlayerData getData(OMPlayer omp) {
+                return new DisguiseData(omp);
+            }
+        });
 
         api.getServer().getPluginManager().registerEvents(this, api);
     }

@@ -1,6 +1,6 @@
 package com.orbitmines.api.spigot.handlers.kit;
 
-import com.orbitmines.api.spigot.utils.RandomUtils;
+import com.orbitmines.api.utils.RandomUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

@@ -3,6 +3,7 @@ package com.orbitmines.api.spigot.enablers;
 import com.orbitmines.api.Data;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.playerdata.HatData;
+import com.orbitmines.api.spigot.handlers.playerdata.PlayerData;
 import com.orbitmines.api.spigot.utils.WorldUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,7 +22,12 @@ public class HatEnabler extends Enabler implements Listener {
 
     @Override
     public void onEnable() {
-        api.enableData(Data.HATS);
+        api.enableData(Data.HATS, new Data.Register() {
+            @Override
+            public PlayerData getData(OMPlayer omp) {
+                return new HatData(omp);
+            }
+        });
 
         api.getServer().getPluginManager().registerEvents(this, api);
     }

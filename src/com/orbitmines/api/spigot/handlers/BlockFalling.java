@@ -1,6 +1,6 @@
 package com.orbitmines.api.spigot.handlers;
 
-import com.orbitmines.api.spigot.utils.RandomUtils;
+import com.orbitmines.api.utils.RandomUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.material.MaterialData;

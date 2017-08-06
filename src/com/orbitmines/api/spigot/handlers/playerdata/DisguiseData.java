@@ -47,12 +47,27 @@ public class DisguiseData extends PlayerData {
 
     @Override
     public String serialize() {
-        return null;
+        String disguisesString = null;
+        if (disguises.size() != 0){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Disguise disguise : disguises) {
+                stringBuilder.append(disguise.toString());
+                stringBuilder.append("\\=");
+            }
+            disguisesString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
+        }
+        return disguisesString;
     }
 
     @Override
     public void parse(String string) {
+        String[] data = string.split("-");
 
+        if (!data[0].equals("null")) {
+            for (String disguise : data[0].split("=")) {
+                disguises.add(Disguise.valueOf(disguise));
+            }
+        }
     }
 
     public List<Disguise> getDisguises() {
@@ -67,6 +82,8 @@ public class DisguiseData extends PlayerData {
 
     public void addDisguise(Disguise disguise) {
         disguises.add(disguise);
+
+        omp.updateStats();
     }
 
     public boolean hasDisguise(Disguise disguise){
@@ -164,7 +181,7 @@ public class DisguiseData extends PlayerData {
     }
 
     public void disguiseAsMob(Mob mob, String displayName, boolean baby, Collection<? extends Player> players) {
-        disguise = api.getNms().entity().disguiseAsMob(omp.getPlayer(), mob.getType(), baby, displayName, players);
+        disguise = api.getNms().entity().disguiseAsMob(omp.getPlayer(), mob, baby, displayName, players);
 
         disguised = true;
         disguisedAs = mob;

@@ -4,8 +4,11 @@ import com.orbitmines.api.Message;
 import com.orbitmines.api.VipRank;
 import com.orbitmines.api.spigot.Color;
 import com.orbitmines.api.spigot.Mob;
-import com.orbitmines.api.spigot.handlers.*;
-import com.orbitmines.api.spigot.handlers.currency.Currency;
+import com.orbitmines.api.spigot.OrbitMinesApi;
+import com.orbitmines.api.spigot.handlers.ItemSet;
+import com.orbitmines.api.spigot.handlers.MobItemSet;
+import com.orbitmines.api.spigot.handlers.OMPlayer;
+import com.orbitmines.api.spigot.handlers.Obtainable;
 import org.bukkit.Material;
 
 /*

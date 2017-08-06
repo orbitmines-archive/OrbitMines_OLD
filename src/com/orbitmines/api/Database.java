@@ -81,6 +81,30 @@ public class Database {
         }
     }
 
+    public Map<Column, String> getValues(Table table, Where where, Column... columns) {
+        Map<Column, String> values = new HashMap<>();
+
+        String query = "SELECT `" + colums(columns) + "` FROM `" + table.toString() + "` WHERE " + where.toString();
+
+        try {
+            checkConnection();
+
+            ResultSet rs = connection.prepareStatement(query).executeQuery();
+
+            while (rs.next()) {
+                for (Column column : columns) {
+                    values.put(column, rs.getString(column.toString()));
+                }
+            }
+
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return values;
+    }
+
     public int getInt(Table table, Column column, Where where) {
         int integer = 0;
 
@@ -199,6 +223,15 @@ public class Database {
         StringBuilder stringBuilder = new StringBuilder();
         for (String value : values) {
             stringBuilder.append(value);
+            stringBuilder.append("`,`");
+        }
+        return stringBuilder.toString().substring(0, stringBuilder.length() - 2);
+    }
+
+    public String colums(Column... columns) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Column column : columns) {
+            stringBuilder.append(column.toString());
             stringBuilder.append("`,`");
         }
         return stringBuilder.toString().substring(0, stringBuilder.length() - 2);

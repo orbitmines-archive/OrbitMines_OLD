@@ -1,5 +1,8 @@
 package com.orbitmines.api.spigot;
 
+import com.orbitmines.api.spigot.nms.Nms;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 /*
@@ -80,5 +83,119 @@ public enum Mob {
 
     public short getEggId() {
         return type.getTypeId();
+    }
+
+    public Entity spawn(Location location){
+        return spawn(location, null);
+    }
+
+    public Entity spawn(Location location, String displayName){
+        return spawn(location, displayName, false, false);
+    }
+
+    public Entity spawnMoving(Location location){
+        return spawn(location, null);
+    }
+
+    public Entity spawnMoving(Location location, String displayName){
+        return spawn(location, displayName, true, false);
+    }
+
+    public Entity spawnNoAttack(Location location){
+        return spawn(location, null);
+    }
+
+    public Entity spawnNoAttack(Location location, String displayName){
+        return spawn(location, displayName, true, true);
+    }
+
+    public Entity spawn(Location location, String displayName, boolean moving, boolean noAttack){
+        Nms nms = OrbitMinesApi.getApi().getNms();
+        switch(this){
+            case BAT:
+                return nms.getBatNpc().spawn(location, displayName, moving, noAttack);
+            case BLAZE:
+                return nms.getBlazeNpc().spawn(location, displayName, moving, noAttack);
+            case CAVE_SPIDER:
+                return nms.getCaveSpiderNpc().spawn(location, displayName, moving, noAttack);
+            case CHICKEN:
+                return nms.getChickenNpc().spawn(location, displayName, moving, noAttack);
+            case COW:
+                return nms.getCowNpc().spawn(location, displayName, moving, noAttack);
+            case CREEPER:
+                return nms.getCreeperNpc().spawn(location, displayName, moving, noAttack);
+            case ENDERMAN:
+                return nms.getEndermanNpc().spawn(location, displayName, moving, noAttack);
+            case ENDERMITE:
+                return nms.getEndermiteNpc().spawn(location, displayName, moving, noAttack);
+            case EVOKER:
+                return nms.getEvokerNpc().spawn(location, displayName, moving, noAttack);
+            case GHAST:
+                return nms.getGhastNpc().spawn(location, displayName, moving, noAttack);
+            case GUARDIAN:
+                return nms.getGuardianNpc().spawn(location, displayName, moving, noAttack);
+            case HORSE:
+                return nms.getHorseNpc().spawn(location, displayName, moving, noAttack);
+            case IRON_GOLEM:
+                return nms.getIronGolemNpc().spawn(location, displayName, moving, noAttack);
+            case LLAMA:
+                return nms.getLlamaNpc().spawn(location, displayName, moving, noAttack);
+            case MAGMA_CUBE:
+                return nms.getMagmaCubeNpc().spawn(location, displayName, moving, noAttack);
+            case MULE:
+                return nms.getMuleNpc().spawn(location, displayName, moving, noAttack);
+            case MUSHROOM_COW:
+                return nms.getMushroomCowNpc().spawn(location, displayName, moving, noAttack);
+            case OCELOT:
+                return nms.getOcelotNpc().spawn(location, displayName, moving, noAttack);
+            case PIG:
+                return nms.getPigNpc().spawn(location, displayName, moving, noAttack);
+            case PIG_ZOMBIE:
+                return nms.getPigZombieNpc().spawn(location, displayName, moving, noAttack);
+            case POLAR_BEAR:
+                return nms.getPolarBearNpc().spawn(location, displayName, moving, noAttack);
+            case RABBIT:
+                return nms.getRabbitNpc().spawn(location, displayName, moving, noAttack);
+            case SHEEP:
+                return nms.getSheepNpc().spawn(location, displayName, moving, noAttack);
+            case SILVERFISH:
+                return nms.getSilverfishNpc().spawn(location, displayName, moving, noAttack);
+            case SKELETON:
+                return nms.getSkeletonNpc().spawn(location, displayName, moving, noAttack);
+            case SKELETON_HORSE:
+                return nms.getSkeletonHorseNpc().spawn(location, displayName, moving, noAttack);
+            case SLIME:
+                return nms.getSlimeNpc().spawn(location, displayName, moving, noAttack);
+            case SNOWMAN:
+                return nms.getSnowmanNpc().spawn(location, displayName, moving, noAttack);
+            case SPIDER:
+                return nms.getSpiderNpc().spawn(location, displayName, moving, noAttack);
+            case SQUID:
+                return nms.getSquidNpc().spawn(location, displayName, moving, noAttack);
+            case STRAY:
+                return nms.getStrayNpc().spawn(location, displayName, moving, noAttack);
+            case VEX:
+                return nms.getVexNpc().spawn(location, displayName, moving, noAttack);
+            case VILLAGER:
+                return nms.getVillagerNpc().spawn(location, displayName, moving, noAttack);
+            case VINDICATOR:
+                return nms.getVindicatorNpc().spawn(location, displayName, moving, noAttack);
+            case WITCH:
+                return nms.getWitchNpc().spawn(location, displayName, moving, noAttack);
+            case WITHER:
+                return nms.getWitherNpc().spawn(location, displayName, moving, noAttack);
+            case WITHER_SKELETON:
+                return nms.getWitherSkeletonNpc().spawn(location, displayName, moving, noAttack);
+            case WOLF:
+                return nms.getWolfNpc().spawn(location, displayName, moving, noAttack);
+            case ZOMBIE:
+                return nms.getZombieNpc().spawn(location, displayName, moving, noAttack);
+            case ZOMBIE_HORSE:
+                return nms.getZombieHorseNpc().spawn(location, displayName, moving, noAttack);
+            case HUSK:
+                return nms.getZombieHuskNpc().spawn(location, displayName, moving, noAttack);
+            default:
+                return null;
+        }
     }
 }

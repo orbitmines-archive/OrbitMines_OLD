@@ -3,13 +3,13 @@ package com.orbitmines.api.spigot.enablers;
 import com.orbitmines.api.Data;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.playerdata.PetData;
+import com.orbitmines.api.spigot.handlers.playerdata.PlayerData;
 import com.orbitmines.api.spigot.nms.entity.EntityNms;
 import com.orbitmines.api.spigot.perks.Pet;
 import com.orbitmines.api.spigot.runnable.OMRunnable;
 import com.orbitmines.api.spigot.runnable.PlayerRunnable;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -24,7 +24,12 @@ public class PetEnabler extends Enabler implements Listener {
 
     @Override
     public void onEnable() {
-        api.enableData(Data.PETS);
+        api.enableData(Data.PETS, new Data.Register() {
+            @Override
+            public PlayerData getData(OMPlayer omp) {
+                return new PetData(omp);
+            }
+        });
 
         api.getServer().getPluginManager().registerEvents(this, api);
 

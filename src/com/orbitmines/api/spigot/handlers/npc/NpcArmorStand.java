@@ -12,10 +12,7 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Fadi on 5-9-2016.
@@ -289,7 +286,7 @@ public class NpcArmorStand {
     }
 
     public void hideFor(Player player) {
-        api.getNms().entity().destroyEntityFor(player, armorStand);
+        hideFor(Collections.singletonList(player));
     }
 
     public void hideFor(Collection<? extends Player> players) {
