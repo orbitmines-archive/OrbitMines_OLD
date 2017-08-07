@@ -82,7 +82,7 @@ public class PlayerChatEvent implements Listener {
             Command command = Command.getCommand(a[0]);
 
             if (command == null) {
-                //TODO CHECK SPIGOT COMMANDS
+                //TODO CHECK SPIGOT COMMANDS.
 
                 event.setCancelled(true);
                 omp.msgUnknownCommand(a[0]);
