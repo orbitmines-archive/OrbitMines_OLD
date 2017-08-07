@@ -1,7 +1,9 @@
 package com.orbitmines.api.spigot;
 
+import com.orbitmines.api.BungeeDatabaseType;
 import com.orbitmines.api.Data;
 import com.orbitmines.api.Database;
+import com.orbitmines.api.spigot.commands.Command;
 import com.orbitmines.api.spigot.commands.CommandServers;
 import com.orbitmines.api.spigot.commands.CommandTopVoters;
 import com.orbitmines.api.spigot.commands.moderator.*;
@@ -143,6 +145,7 @@ public class OrbitMinesApi extends JavaPlugin {
 
         registerCommands();
         server.registerCommands();
+        updateCommandsForBungee();
 
         chatColorEnabler = new ChatColorEnabler();
         chatColorEnabler.onEnable();
@@ -229,7 +232,6 @@ public class OrbitMinesApi extends JavaPlugin {
         /* moderator */
         new CommandFly();
         new CommandInvSee();
-        new CommandLookUp();
         new CommandSilent();
         new CommandTeleport();
 
@@ -266,6 +268,28 @@ public class OrbitMinesApi extends JavaPlugin {
         new ScoreboardRunnable();
         new ServerCountRunnable();
         new TopVoterRunnable();
+    }
+
+    /* Updates a list of commands in the database which allows tab completion for commands */
+    private void updateCommandsForBungee() {
+       String dataType = BungeeDatabaseType.COMMANDS.toString() + "_" + server().getServerType().toString();
+
+       StringBuilder stringBuilder = new StringBuilder();
+       for (Command command : Command.getCommands()) {
+           for (String cmd : command.getAlias()) {
+               stringBuilder.append(cmd);
+               stringBuilder.append("|");
+           }
+       }
+
+       String commandList = stringBuilder.toString().substring(0, stringBuilder.length() -1);
+
+       if (Database.get().contains(Database.Table.BUNGEE, Database.Column.TYPE, new Database.Where(Database.Column.TYPE, dataType)))
+           Database.get().update(Database.Table.BUNGEE, new Database.Where(Database.Column.TYPE, dataType), new Database.Set(Database.Column.DATA, commandList));
+       else
+           Database.get().insert(Database.Table.BUNGEE, Database.get().values(dataType, commandList));
+
+        //TODO MESSAGE TO BUNGEE TO UPDATE
     }
 
     public ChatColorEnabler chatcolors() {

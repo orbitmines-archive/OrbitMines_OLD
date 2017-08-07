@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="OrbitMinesApi">
+    <output-path>$PROJECT_DIR$/out/artifacts/OrbitMinesApi</output-path>
+    <root id="archive" name="OrbitMinesApi.jar">
+      <element id="module-output" name="OrbitMines" />
+    </root>
+  </artifact>
+</component>

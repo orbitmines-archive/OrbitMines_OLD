@@ -9,7 +9,7 @@ import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
 import com.orbitmines.api.spigot.handlers.playerdata.PetData;
 import com.orbitmines.api.spigot.nms.entity.EntityNms;
 import com.orbitmines.api.spigot.perks.Pet;
-import com.orbitmines.api.utils.RandomUtils;
+import com.orbitmines.api.spigot.utils.WorldUtils;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
@@ -116,7 +116,7 @@ public class PetMushroomCow extends PetHandler implements Listener {
         for (Entity entity : entities) {
             for (int i = 0; i <= 5; i++) {
                 Item iEn = entity.getWorld().dropItem(entity.getLocation(), new ItemBuilder(Material.RED_MUSHROOM, 1, 0, System.currentTimeMillis() + i + "").build());
-                iEn.setVelocity(entity.getLocation().getDirection().multiply(-0.75).add(RandomUtils.randomVelocity()));
+                iEn.setVelocity(entity.getLocation().getDirection().multiply(-0.75).add(WorldUtils.randomVelocity()));
 
                 new BukkitRunnable() {
                     @Override

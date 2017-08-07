@@ -1,9 +1,9 @@
 package com.orbitmines.api.utils.uuid;
 
 import com.google.common.collect.ImmutableList;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.json.fang.JSONArray;
+import org.json.fang.JSONObject;
+import org.json.fang.parser.JSONParser;
 
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -62,7 +62,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         URL url = new URL(PROFILE_URL);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Content-Type", "application/org.json");
         connection.setUseCaches(false);
         connection.setDoInput(true);
         connection.setDoOutput(true);

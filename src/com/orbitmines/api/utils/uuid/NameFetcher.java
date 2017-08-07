@@ -1,8 +1,8 @@
 package com.orbitmines.api.utils.uuid;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.json.fang.JSONArray;
+import org.json.fang.JSONObject;
+import org.json.fang.parser.JSONParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +14,6 @@ import java.util.*;
 import java.util.concurrent.Callable;
 
 public class NameFetcher implements Callable<Map<UUID, List<String>>> {
-
     private static Map<UUID, List<String>> cache = new HashMap<>();
 
     public NameFetcher(UUID uuid) {

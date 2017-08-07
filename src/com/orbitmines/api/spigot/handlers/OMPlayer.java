@@ -1,5 +1,7 @@
 package com.orbitmines.api.spigot.handlers;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import com.orbitmines.api.*;
 import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.handlers.chat.Title;
@@ -46,6 +48,8 @@ public abstract class OMPlayer {
     /* Important Data, not stored in PlayerData */
     protected StaffRank staffRank;
     protected VipRank vipRank;
+    protected Language language;
+    protected boolean silent;
     protected int votes;
     protected boolean receivedMonthlyBonus;
 
@@ -71,6 +75,8 @@ public abstract class OMPlayer {
         this.opMode = false;
         this.staffRank = StaffRank.NONE;
         this.vipRank = VipRank.NONE;
+        this.language = Language.DUTCH;
+        this.silent = false;
         this.votes = 0;
         this.receivedMonthlyBonus = false;
 
@@ -97,14 +103,16 @@ public abstract class OMPlayer {
         player.setOp(false);
         player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
 
-        /* On Bungeecord join we check if the player exists in the database. We don't need to do that here */
+        if (!Database.get().contains(Database.Table.PLAYERS, Database.Column.UUID, new Database.Where(Database.Column.UUID, getUUID().toString())))
+            Database.get().insert(Database.Table.PLAYERS, Database.get().values(getUUID().toString(), player.getName(), StaffRank.NONE.toString(), VipRank.NONE.toString(), Language.DUTCH.toString(), "" + false, "" + false, "null"));
 
         Map<Database.Column, String> values = Database.get().getValues(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()),
-                Database.Column.STAFFRANK, Database.Column.VIPRANK, Database.Column.MONTHLYBONUS, Database.Column.STATS);
+                Database.Column.STAFFRANK, Database.Column.VIPRANK, Database.Column.LANGUAGE, Database.Column.SILENT, Database.Column.MONTHLYBONUS, Database.Column.STATS);
 
         staffRank = StaffRank.valueOf(values.get(Database.Column.STAFFRANK));
         vipRank = VipRank.valueOf(values.get(Database.Column.VIPRANK));
-
+        language = Language.valueOf(values.get(Database.Column.LANGUAGE));
+        silent = Boolean.parseBoolean(values.get(Database.Column.SILENT));
         receivedMonthlyBonus = Boolean.parseBoolean(values.get(Database.Column.MONTHLYBONUS));
 
         updateVotes();
@@ -325,6 +333,34 @@ public abstract class OMPlayer {
         Database.get().update(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()), new Database.Set(Database.Column.VIPRANK, vipRank.toString()));
     }
 
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+
+        /* Also update on Bungeecord */
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("SetLanguage");
+        out.writeUTF(language.toString());
+        out.writeUTF(player.getName());
+
+        player.sendPluginMessage(api, "OrbitMinesApi", out.toByteArray());
+
+        defaultTabList();
+        updateStats();
+    }
+
+    public boolean isSilent() {
+        return silent;
+    }
+
+    /* Updated from bungeecord, so we don't update it here */
+    public void setSilent(boolean silent) {
+        this.silent = silent;
+    }
+
     public int getVotes() {
         return votes;
     }
@@ -429,9 +465,7 @@ public abstract class OMPlayer {
         }
     }
 
-
     /* Others */
-
     public void updateVotes() {
         Map<Database.Column, String> values = Database.get().getValues(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()),
                 Database.Column.VOTES, Database.Column.CACHEDVOTES);
@@ -503,7 +537,7 @@ public abstract class OMPlayer {
     }
 
     public void sendMessage(Message message) {
-        player.sendMessage(message.lang(general().getLanguage()));
+        player.sendMessage(message.lang(language));
     }
 
     public void broadcastMessage(Message message) {
@@ -513,7 +547,7 @@ public abstract class OMPlayer {
     }
 
     public String getMessage(Message message) {
-        return message.lang(general().getLanguage());
+        return message.lang(language);
     }
 
     public String statusString(boolean bl) {
@@ -553,7 +587,7 @@ public abstract class OMPlayer {
     }
 
     protected void broadcastQuitMessage() {
-        if (general().isSilent()) {
+        if (silent) {
             Message message = new Message(" §c« " + getName() + "§c is weggegaan. §6[Silent Mode]", " §c« " + getName() + "§c left. §6[Silent Mode]");
             for (OMPlayer omp : players) {
                 if (!omp.isEligible(StaffRank.MODERATOR))
@@ -567,7 +601,7 @@ public abstract class OMPlayer {
     }
 
     protected void broadcastJoinMessage() {
-        if (general().isSilent()) {
+        if (silent) {
             Message message = new Message(" §a» " + getName() + "§a is gejoind. §6[Silent Mode]", " §a» " + getName() + "§a joined. §6[Silent Mode]");
             for (OMPlayer omp : players) {
                 if (!omp.isEligible(StaffRank.MODERATOR))
@@ -734,7 +768,7 @@ public abstract class OMPlayer {
                 sendMessage(new Message("§7De " + server.getColor() + server.getName() + "§7 Server is §4§lOffline§7!", "§7The " + server.getColor() + server.getName() + "§7 Server is §4§lOffline§7!"));
                 break;
             case MAINTENANCE:
-                if (isEligible(StaffRank.MODERATOR)) {
+                if (isEligible(StaffRank.OWNER)) {
                     sendMessage(new Message(server.getColor() + server.getName() + " is in §d§lMaintenance Mode§7! Verbinden forceren...", server.getColor() + server.getName() + " is in §d§lMaintenance Mode§7! Forcing connection..."));
                     forceConnect(server);
                 } else {

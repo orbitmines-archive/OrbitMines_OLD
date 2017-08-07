@@ -8,7 +8,7 @@ import com.orbitmines.api.spigot.handlers.gadget.petride.PetHandler;
 import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
 import com.orbitmines.api.spigot.handlers.playerdata.PetData;
 import com.orbitmines.api.spigot.perks.Pet;
-import com.orbitmines.api.utils.RandomUtils;
+import com.orbitmines.api.spigot.utils.WorldUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Ageable;
@@ -72,7 +72,7 @@ public class PetWolf extends PetHandler implements Listener {
 
                     entities.add(iEn);
 
-                    iEn.setVelocity(RandomUtils.randomVelocity());
+                    iEn.setVelocity(WorldUtils.randomVelocity());
 
                     new BukkitRunnable() {
 

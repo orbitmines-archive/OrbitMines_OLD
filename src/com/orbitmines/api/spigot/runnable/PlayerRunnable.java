@@ -15,7 +15,7 @@ import java.util.List;
 */
 public abstract class PlayerRunnable {
 
-    /* Works just like OMRunnable, but with uses all players now */
+    /* Works just like BungeeRunnable, but with uses all players now */
 
     private HashMap<Long, List<PlayerRunnable>> playerRunnables = new HashMap<>();
 
@@ -31,6 +31,14 @@ public abstract class PlayerRunnable {
     }
 
     public abstract void run(OMPlayer omp);
+
+    public OMRunnable.TimeUnit getTimeUnit() {
+        return time.getTimeUnit();
+    }
+
+    public int getAmount() {
+        return time.getAmount();
+    }
 
     public void cancel() {
         if (task != null && playerRunnables.get(time.getTicks()).size() > 1) {
@@ -54,8 +62,9 @@ public abstract class PlayerRunnable {
         this.task = new BukkitRunnable() {
             @Override
             public void run() {
+                List<PlayerRunnable> runnables = playerRunnables.get(time.getTicks());
                 for (OMPlayer omp : OMPlayer.getPlayers()) {
-                    for (PlayerRunnable runnable : playerRunnables.get(time.getTicks())) {
+                    for (PlayerRunnable runnable : runnables) {
                         runnable.run(omp);
                     }
                 }

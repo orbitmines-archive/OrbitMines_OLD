@@ -5,7 +5,7 @@ import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.gadget.GadgetHandler;
 import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
 import com.orbitmines.api.spigot.perks.Gadget;
-import com.orbitmines.api.utils.RandomUtils;
+import com.orbitmines.api.spigot.utils.WorldUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -65,7 +65,7 @@ public class GadgetBookExplosion extends GadgetHandler implements Listener {
             itemBuilder.setDisplayName("Gadget-" + i + System.currentTimeMillis());
 
             Item paper = p.getWorld().dropItem(p.getLocation(), itemBuilder.build());
-            paper.setVelocity(RandomUtils.randomVelocity());
+            paper.setVelocity(WorldUtils.randomVelocity());
 
             entities.add(paper);
 

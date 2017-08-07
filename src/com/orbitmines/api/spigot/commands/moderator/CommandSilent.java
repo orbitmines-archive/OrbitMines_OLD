@@ -22,6 +22,6 @@ public class CommandSilent extends StaffCommand {
 
     @Override
     public void onDispatch(OMPlayer omp, String[] a) {
-        omp.general().setSilent(!omp.general().isSilent());
+        omp.setSilent(!omp.isSilent());
     }
 }

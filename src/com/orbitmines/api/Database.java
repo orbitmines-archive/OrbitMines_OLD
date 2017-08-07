@@ -3,7 +3,9 @@ package com.orbitmines.api;
 import com.orbitmines.api.spigot.utils.ConsoleUtils;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -32,10 +34,34 @@ public class Database {
         this.password = password;
 
         openConnection();
+
+        setupTables();
     }
 
     public Connection getConnection() {
         return connection;
+    }
+
+    private void setupTables() {
+        String query = "";
+
+        for (Table table : Table.values()) {
+            String tableQuery = "CREATE TABLE IF NOT EXISTS `" + table.toString() + "` (";
+            for (Column column : table.getColumns()) {
+                tableQuery += "`" + column.toString() + "` " + column.getType().toString(column.getChars()) + ", ";
+            }
+            query += tableQuery.substring(0, tableQuery.length() -2) + ");";
+        }
+
+        try {
+            checkConnection();
+
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public boolean contains(Table table, Column column, Where where) {
@@ -95,6 +121,36 @@ public class Database {
                 for (Column column : columns) {
                     values.put(column, rs.getString(column.toString()));
                 }
+            }
+
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return values;
+    }
+
+    public List<Map<Column, String>> getEntries(Table table) {
+        return getEntries(table, table.getColumns());
+    }
+
+    public List<Map<Column, String>> getEntries(Table table, Column... columns) {
+        List<Map<Column, String>> values = new ArrayList<>();
+
+        String query = "SELECT `" + colums(columns) + "` FROM `" + table.toString() + "`";
+
+        try {
+            checkConnection();
+
+            ResultSet rs = connection.prepareStatement(query).executeQuery();
+
+            while (rs.next()) {
+                Map<Column, String> entry = new HashMap<>();
+                for (Column column : columns) {
+                    entry.put(column, rs.getString(column.toString()));
+                }
+                values.add(entry);
             }
 
             rs.close();
@@ -293,24 +349,21 @@ public class Database {
 
     public enum Table {
 
-        PLAYERS("Players", Column.UUID, Column.NAME, Column.STAFFRANK, Column.VIPRANK, Column.MONTHLYBONUS, Column.VOTES, Column.CACHEDVOTES, Column.STATS),
-        SERVERS("Servers", Column.NAME, Column.STATUS, Column.MAXPLAYERS);
+        PLAYERS(Column.UUID, Column.NAME, Column.STAFFRANK, Column.VIPRANK, Column.LANGUAGE, Column.SILENT, Column.MONTHLYBONUS, Column.VOTES, Column.CACHEDVOTES, Column.STATS),
+        SERVERS(Column.NAME, Column.STATUS, Column.MAXPLAYERS),
+        BUNGEE(Column.TYPE, Column.DATA),
+        IPS(Column.UUID, Column.LASTIP, Column.LASTLOGIN, Column.HISTORY),
+        BANS(Column.BANNED, Column.ACTIVE, Column.BANNEDBY, Column.BANNEDON, Column.BANNEDUNTIL, Column.REASON),
+        REPORTS(Column.REPORTED, Column.REPORTEDBY, Column.REPORTEDON, Column.SERVER, Column.REASON);
 
-        private final String table;
         private final Column[] columns;
 
-        Table(String table, Column... columns) {
-            this.table = table;
+        Table(Column... columns) {
             this.columns = columns;
         }
 
         public Column[] getColumns() {
             return columns;
-        }
-
-        @Override
-        public String toString() {
-            return table;
         }
 
         public String columns() {
@@ -325,21 +378,68 @@ public class Database {
 
     public enum Column {
 
-        UUID,
-        NAME,
-        STAFFRANK,
-        VIPRANK,
-        MONTHLYBONUS,
-        VOTES,
-        CACHEDVOTES,
-        STATS,
+        UUID(Type.VARCHAR, 36),
+        NAME(Type.VARCHAR, 16),
+        STAFFRANK(Type.VARCHAR, 30),
+        VIPRANK(Type.VARCHAR, 30),
+        LANGUAGE(Type.VARCHAR, 30),
+        SILENT(Type.VARCHAR, 4),
+        MONTHLYBONUS(Type.VARCHAR, 4),
+        VOTES(Type.INTEGER, 10),
+        CACHEDVOTES(Type.VARCHAR, 500),
+        STATS(Type.VARCHAR, 30000),
 
-        STATUS,
-        MAXPLAYERS;
+        STATUS(Type.VARCHAR, 30),
+        MAXPLAYERS(Type.INTEGER, 10),
+
+        TYPE(Type.VARCHAR, 30),
+        DATA(Type.VARCHAR, 1000),
+
+        LASTIP(Type.VARCHAR, 30),
+        LASTLOGIN(Type.VARCHAR, 30),
+        HISTORY(Type.VARCHAR, 500),
+
+        BANNED(Type.VARCHAR, 30),
+        ACTIVE(Type.VARCHAR, 4),
+        BANNEDBY(Type.VARCHAR, 36),
+        BANNEDON(Type.VARCHAR, 30),
+        BANNEDUNTIL(Type.VARCHAR, 30),
+        REASON(Type.VARCHAR, 100),
+
+        REPORTED(Type.VARCHAR, 36),
+        REPORTEDBY(Type.VARCHAR, 36),
+        REPORTEDON(Type.VARCHAR, 30),
+        SERVER(Type.VARCHAR, 30);
+
+        private final Type type;
+        private final int chars;
+
+        Column(Type type, int chars) {
+            this.type = type;
+            this.chars = chars;
+        }
+
+        public Type getType() {
+            return type;
+        }
+
+        public int getChars() {
+            return chars;
+        }
 
         @Override
         public String toString() {
             return super.toString();
+        }
+
+        public enum Type {
+
+            VARCHAR,
+            INTEGER;
+
+            public String toString(int chars) {
+                return super.toString() + "(" + chars + ")";
+            }
         }
     }
 }

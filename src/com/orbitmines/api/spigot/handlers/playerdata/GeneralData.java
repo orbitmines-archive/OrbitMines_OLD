@@ -1,9 +1,6 @@
 package com.orbitmines.api.spigot.handlers.playerdata;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.orbitmines.api.Data;
-import com.orbitmines.api.Language;
 import com.orbitmines.api.Message;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.chat.Title;
@@ -14,10 +11,6 @@ import org.bukkit.Sound;
 */
 public class GeneralData extends PlayerData {
 
-    private Language language;
-
-    private boolean silent;
-
     private int vipPoints;
     private int orbitMinesTokens;
 
@@ -27,8 +20,6 @@ public class GeneralData extends PlayerData {
         super(Data.GENERAL, omp);
 
         /* Load Defaults */
-        language = Language.DUTCH;
-        silent = false;
     }
 
     @Override
@@ -43,46 +34,16 @@ public class GeneralData extends PlayerData {
 
     @Override
     public String serialize() {
-        return language.toString() + "-" + silent + "-" + vipPoints + "-" + orbitMinesTokens + "-" + nickName.replaceAll("§", "&");
+        return vipPoints + "-" + orbitMinesTokens + "-" + nickName.replaceAll("§", "&");
     }
 
     @Override
     public void parse(String string) {
         String[] data = string.split("-");
 
-        language = Language.valueOf(data[0]);
-        silent = Boolean.parseBoolean(data[1]);
-        vipPoints = Integer.parseInt(data[2]);
-        orbitMinesTokens = Integer.parseInt(data[3]);
-        nickName = data[4].replaceAll("&", "§");
-    }
-
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
-
-        /* Also update on Bungeecord */
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("SetLanguage");
-        out.writeUTF(language.toString());
-        out.writeUTF(omp.getPlayer().getName());
-
-        omp.getPlayer().sendPluginMessage(api, "OrbitMinesApi", out.toByteArray());
-
-        omp.defaultTabList();
-        omp.updateStats();
-    }
-
-    public boolean isSilent() {
-        return silent;
-    }
-
-    /* Updated from bungeecord, so we don't update it here */
-    public void setSilent(boolean silent) {
-        this.silent = silent;
+        vipPoints = Integer.parseInt(data[0]);
+        orbitMinesTokens = Integer.parseInt(data[1]);
+        nickName = data[2].replaceAll("&", "§");
     }
 
     public int getVipPoints() {
