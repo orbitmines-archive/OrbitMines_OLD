@@ -23,4 +23,8 @@ public class ScrollerList<T> implements Cloneable {
 
         return list.get(index);
     }
+
+    public T get() {
+        return list.get(index);
+    }
 }

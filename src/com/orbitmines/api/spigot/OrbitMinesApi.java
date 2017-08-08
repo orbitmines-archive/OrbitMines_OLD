@@ -1,13 +1,13 @@
 package com.orbitmines.api.spigot;
 
-import com.orbitmines.api.BungeeDatabaseType;
-import com.orbitmines.api.Data;
-import com.orbitmines.api.Database;
-import com.orbitmines.api.PluginMessageType;
+import com.orbitmines.api.*;
 import com.orbitmines.api.spigot.commands.Command;
 import com.orbitmines.api.spigot.commands.CommandServers;
 import com.orbitmines.api.spigot.commands.CommandTopVoters;
-import com.orbitmines.api.spigot.commands.moderator.*;
+import com.orbitmines.api.spigot.commands.moderator.CommandFly;
+import com.orbitmines.api.spigot.commands.moderator.CommandInvSee;
+import com.orbitmines.api.spigot.commands.moderator.CommandSilent;
+import com.orbitmines.api.spigot.commands.moderator.CommandTeleport;
 import com.orbitmines.api.spigot.commands.owner.*;
 import com.orbitmines.api.spigot.commands.perks.*;
 import com.orbitmines.api.spigot.commands.vip.CommandAfk;
@@ -20,21 +20,17 @@ import com.orbitmines.api.spigot.events.npc.NpcInteractAtEntityEvent;
 import com.orbitmines.api.spigot.events.npc.NpcInteractEntityEvent;
 import com.orbitmines.api.spigot.handlers.ConfigHandler;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
-import com.orbitmines.api.spigot.handlers.worlds.WorldLoader;
 import com.orbitmines.api.spigot.handlers.currency.Currency;
 import com.orbitmines.api.spigot.handlers.currency.CurrencyTokens;
 import com.orbitmines.api.spigot.handlers.currency.CurrencyVipPoints;
 import com.orbitmines.api.spigot.handlers.playerdata.GeneralData;
 import com.orbitmines.api.spigot.handlers.playerdata.PlayerData;
 import com.orbitmines.api.spigot.handlers.podium.PodiumPlayer;
+import com.orbitmines.api.spigot.handlers.worlds.WorldLoader;
 import com.orbitmines.api.spigot.nms.Nms;
 import com.orbitmines.api.spigot.runnable.DatabaseRunnable;
-import com.orbitmines.api.spigot.runnable.runnables.NpcMovingRunnable;
-import com.orbitmines.api.spigot.runnable.runnables.PodiumRunnable;
-import com.orbitmines.api.spigot.runnable.runnables.ServerCountRunnable;
-import com.orbitmines.api.spigot.runnable.runnables.TopVoterRunnable;
+import com.orbitmines.api.spigot.runnable.runnables.*;
 import com.orbitmines.api.spigot.runnable.runnables.player.ActionBarCooldownRunnable;
-import com.orbitmines.api.spigot.runnable.runnables.player.ScoreboardRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -67,6 +63,8 @@ public class OrbitMinesApi extends JavaPlugin {
     private List<Chunk> chunks;
 
     private List<Data> dataToRead;
+
+    private ScrollerList<String> scoreboardTitles;
 
     private ChatColorEnabler chatColorEnabler;
     private DisguiseEnabler disguiseEnabler;
@@ -147,7 +145,7 @@ public class OrbitMinesApi extends JavaPlugin {
     public void setup(OrbitMinesServer server) {
         this.server = server;
 
-        worldLoader = server.registerWorldLoader();
+        worldLoader = new WorldLoader(server.cleanUpPlayerData());
 
         registerEvents();
         server.registerEvents();
@@ -187,6 +185,8 @@ public class OrbitMinesApi extends JavaPlugin {
         if (wardrobeEnabler != null)
             wardrobeEnabler.onEnable();
 
+        scoreboardTitles = new ScrollerList<>(server.getScoreboardTitles());
+
         registerRunnables();
         server.registerRunnables();
     }
@@ -206,6 +206,10 @@ public class OrbitMinesApi extends JavaPlugin {
 
     public List<Chunk> getChunks() {
         return chunks;
+    }
+
+    public ScrollerList<String> getScoreboardTitles() {
+        return scoreboardTitles;
     }
 
     private void registerEvents() {

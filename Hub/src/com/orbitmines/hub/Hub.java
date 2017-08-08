@@ -7,12 +7,14 @@ import com.orbitmines.api.spigot.OrbitMinesServer;
 import com.orbitmines.api.spigot.enablers.*;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.PreventionSet;
-import com.orbitmines.api.spigot.handlers.worlds.WorldLoader;
 import com.orbitmines.api.spigot.handlers.worlds.voidgenerator.WorldCreatorVoid;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Arrays;
+import java.util.List;
 
 /*
 * OrbitMines - @author Fadi Shawki - 2-8-2017
@@ -33,7 +35,7 @@ public class Hub extends JavaPlugin implements OrbitMinesServer {
 
         api.setup(this);
 
-        lobby = api.getWorldLoader().loadWorld("Hub", true, WorldCreatorVoid.class);
+        lobby = api.getWorldLoader().fromZip("Hub", true, WorldCreatorVoid.class);
         lobby.setGameRuleValue("doDaylightCycle", "false");
         lobby.setTime(20000);
 
@@ -57,6 +59,10 @@ public class Hub extends JavaPlugin implements OrbitMinesServer {
         return instance;
     }
 
+    public OrbitMinesApi getApi() {
+        return api;
+    }
+
     @Override
     public Server getServerType() {
         return Server.HUB;
@@ -78,8 +84,13 @@ public class Hub extends JavaPlugin implements OrbitMinesServer {
     }
 
     @Override
-    public WorldLoader registerWorldLoader() {
-        return new WorldLoader(true);
+    public boolean cleanUpPlayerData() {
+        return true;
+    }
+
+    @Override
+    public List<String> getScoreboardTitles() {
+        return Arrays.asList("§6§lOrbitMines§4§lNetwork", "§e§lO§6§lrbitMines§4§lNetwork", "§e§lOr§6§lbitMines§4§lNetwork", "§e§lOrb§6§litMines§4§lNetwork", "§e§lOrbi§6§ltMines§4§lNetwork", "§e§lOrbit§6§lMines§4§lNetwork", "§e§lOrbitM§6§lines§4§lNetwork", "§e§lOrbitMi§6§lnes§4§lNetwork", "§e§lOrbitMin§6§les§4§lNetwork", "§e§lOrbitMine§6§ls§4§lNetwork", "§e§lOrbitMines§4§lNetwork", "§e§lOrbitMines§c§lN§4§letwork", "§e§lOrbitMines§c§lNe§4§ltwork", "§e§lOrbitMines§c§lNet§4§lwork", "§e§lOrbitMines§c§lNetw§4§lork", "§e§lOrbitMines§c§lNetwo§4§lrk", "§e§lOrbitMines§c§lNetwor§4§lk", "§e§lOrbitMines§c§lNetwork", "§6§lO§e§lrbitMines§c§lNetwork", "§6§lOr§e§lbitMines§c§lNetwork", "§6§lOrb§e§litMines§c§lNetwork", "§6§lOrbi§e§ltMines§c§lNetwork", "§6§lOrbit§e§lMines§c§lNetwork", "§6§lOrbitM§e§lines§c§lNetwork", "§6§lOrbitMi§e§lnes§c§lNetwork", "§6§lOrbitMin§e§les§c§lNetwork", "§6§lOrbitMine§e§ls§c§lNetwork", "§6§lOrbitMines§c§lNetwork", "§6§lOrbitMines§4§lN§c§letwork", "§6§lOrbitMines§4§lNe§c§ltwork", "§6§lOrbitMines§4§lNet§c§lwork", "§6§lOrbitMines§4§lNetw§c§lork", "§6§lOrbitMines§4§lNetwo§c§lrk", "§6§lOrbitMines§4§lNetwor§c§lk", "§6§lOrbitMines§4§lNetwork");
     }
 
     @Override
