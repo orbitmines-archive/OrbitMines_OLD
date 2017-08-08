@@ -15,9 +15,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -78,6 +76,15 @@ public class PreventionSet {
             case MONSTER_EGG_USAGE:
                 listener = new PreventMonsterEggUsage();
                 break;
+            case SWAP_HAND_ITEMS:
+                listener = new PreventSwapHandItems();
+                break;
+            case ITEM_DROP:
+                listener = new PreventItemDrop();
+                break;
+            case ITEM_PICKUP:
+                listener = new PreventItemPickup();
+                break;
         }
 
         listeners.put(prevention, listener);
@@ -107,7 +114,10 @@ public class PreventionSet {
         BLOCK_PLACE,
         BLOCK_BREAK,
         BLOCK_INTERACTING,
-        MONSTER_EGG_USAGE;
+        MONSTER_EGG_USAGE,
+        SWAP_HAND_ITEMS,
+        ITEM_DROP,
+        ITEM_PICKUP;
 
     }
 
@@ -270,6 +280,45 @@ public class PreventionSet {
 
             event.setCancelled(true);
             OMPlayer.getPlayer(player).updateInventory();
+        }
+    }
+
+    public class PreventSwapHandItems implements Listener {
+
+        @EventHandler
+        public void preventMonsterEggUsage(PlayerSwapHandItemsEvent event) {
+            Player player = event.getPlayer();
+
+            if (!worlds.get(Prevention.SWAP_HAND_ITEMS).contains(player.getWorld()))
+                return;
+
+            event.setCancelled(true);
+        }
+    }
+
+    public class PreventItemDrop implements Listener {
+
+        @EventHandler
+        public void preventMonsterEggUsage(PlayerDropItemEvent event) {
+            Player player = event.getPlayer();
+
+            if (!worlds.get(Prevention.ITEM_DROP).contains(player.getWorld()))
+                return;
+
+            event.setCancelled(true);
+        }
+    }
+
+    public class PreventItemPickup implements Listener {
+
+        @EventHandler
+        public void preventMonsterEggUsage(PlayerPickupItemEvent event) {
+            Player player = event.getPlayer();
+
+            if (!worlds.get(Prevention.ITEM_PICKUP).contains(player.getWorld()))
+                return;
+
+            event.setCancelled(true);
         }
     }
 }

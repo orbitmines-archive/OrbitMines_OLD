@@ -1,6 +1,7 @@
 package com.orbitmines.bungee.events;
 
 import com.orbitmines.api.Language;
+import com.orbitmines.api.PluginMessageType;
 import com.orbitmines.bungee.handlers.BungeePlayer;
 import com.orbitmines.bungee.utils.ConsoleUtils;
 import net.md_5.bungee.api.ProxyServer;
@@ -13,6 +14,7 @@ import net.md_5.bungee.event.EventHandler;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 /*
 * OrbitMines - @author Fadi Shawki - 6-8-2017
@@ -35,17 +37,20 @@ public class SpigotMessageEvent implements Listener {
         DataInputStream in = new DataInputStream(stream);
 
         try {
-            String action = in.readUTF();
+            switch (PluginMessageType.valueOf(in.readUTF())) {
 
-            if (action.equals("SetLanguage")) {
-                Language language = Language.valueOf(in.readUTF());
-                ProxiedPlayer p = proxy.getPlayer(in.readUTF());
+                case SET_LANGUAGE:
+                    ProxiedPlayer player = proxy.getPlayer(UUID.fromString(in.readUTF()));
+                    Language language = Language.valueOf(in.readUTF());
 
-                if (p != null) {
-                    BungeePlayer omp = BungeePlayer.getBungeePlayer(p);
-                    omp.setLanguage(language);
-                }
+                    if (player != null) {
+
+                        BungeePlayer omp = BungeePlayer.getBungeePlayer(player);
+                        omp.setLanguage(language);
+                    }
+                    break;
             }
+
         } catch (IOException ex) {
             ConsoleUtils.warn("Error while receiving data from OrbitMinesApi:");
             ex.printStackTrace();

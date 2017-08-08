@@ -3,6 +3,7 @@ package com.orbitmines.api.spigot;
 import com.orbitmines.api.Server;
 import com.orbitmines.api.spigot.enablers.*;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
+import com.orbitmines.api.spigot.handlers.WorldLoader;
 import org.bukkit.Location;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
@@ -22,6 +23,9 @@ public interface OrbitMinesServer {
 
     /* Messages displayed when voting */
     String[] getVoteMessages(OMPlayer omp);
+
+    /* WorldLoader for lobbies & others, return null if not used, use OrbitMines#getApi()#getWorldLoad() in order to use the WorldLoader */
+    WorldLoader registerWorldLoader();
 
     void registerEvents();
 

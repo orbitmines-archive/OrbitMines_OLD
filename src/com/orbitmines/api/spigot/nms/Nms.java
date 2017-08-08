@@ -206,7 +206,9 @@ public class Nms {
 
     public Nms() {
         api = OrbitMinesApi.getApi();
+    }
 
+    public void load() {
         String version = checkVersion();
         this.version = version;
 

@@ -3,6 +3,7 @@ package com.orbitmines.api.spigot;
 import com.orbitmines.api.BungeeDatabaseType;
 import com.orbitmines.api.Data;
 import com.orbitmines.api.Database;
+import com.orbitmines.api.PluginMessageType;
 import com.orbitmines.api.spigot.commands.Command;
 import com.orbitmines.api.spigot.commands.CommandServers;
 import com.orbitmines.api.spigot.commands.CommandTopVoters;
@@ -19,6 +20,7 @@ import com.orbitmines.api.spigot.events.npc.NpcInteractAtEntityEvent;
 import com.orbitmines.api.spigot.events.npc.NpcInteractEntityEvent;
 import com.orbitmines.api.spigot.handlers.ConfigHandler;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
+import com.orbitmines.api.spigot.handlers.WorldLoader;
 import com.orbitmines.api.spigot.handlers.currency.Currency;
 import com.orbitmines.api.spigot.handlers.currency.CurrencyTokens;
 import com.orbitmines.api.spigot.handlers.currency.CurrencyVipPoints;
@@ -55,6 +57,7 @@ public class OrbitMinesApi extends JavaPlugin {
     public static Currency TOKENS = new CurrencyTokens();
 
     private ConfigHandler configHandler;
+    private WorldLoader worldLoader;
 
     private Nms nms;
     private OrbitMinesServer server;
@@ -81,6 +84,7 @@ public class OrbitMinesApi extends JavaPlugin {
         configHandler.setup("settings");
 
         nms = new Nms();
+        nms.load();
 
         topVoters = new PodiumPlayer[5];
 
@@ -99,8 +103,8 @@ public class OrbitMinesApi extends JavaPlugin {
         BungeeMessageEvent event = new BungeeMessageEvent();
         messenger.registerOutgoingPluginChannel(this, "BungeeCord");
         messenger.registerIncomingPluginChannel(this, "BungeeCord", event);
-        messenger.registerOutgoingPluginChannel(this, "OrbitMinesApi");
-        messenger.registerIncomingPluginChannel(this, "OrbitMinesApi", event);
+        messenger.registerOutgoingPluginChannel(this, PluginMessageType.CHANNEL);
+        messenger.registerIncomingPluginChannel(this, PluginMessageType.CHANNEL, event);
 
         /* Setup Database */
         new Database(configHandler.get("settings").getString("host"), 3306, Database.NAME, configHandler.get("settings").getString("user"), configHandler.get("settings").getString("password"));
@@ -112,6 +116,9 @@ public class OrbitMinesApi extends JavaPlugin {
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.kickPlayer("§6§lOrbitMines§4§lNetwork\n    §7Restarting " + server().getServerType().getName() + "§7 Server...");
         }
+
+        if (worldLoader != null)
+            worldLoader.cleanUp();
     }
 
     public static OrbitMinesApi getApi() {
@@ -120,6 +127,10 @@ public class OrbitMinesApi extends JavaPlugin {
 
     public ConfigHandler getConfigHandler() {
         return configHandler;
+    }
+
+    public WorldLoader getWorldLoader() {
+        return worldLoader;
     }
 
     public Nms getNms() {
@@ -135,6 +146,8 @@ public class OrbitMinesApi extends JavaPlugin {
 
     public void setup(OrbitMinesServer server) {
         this.server = server;
+
+        worldLoader = server.registerWorldLoader();
 
         registerEvents();
         server.registerEvents();
@@ -203,6 +216,8 @@ public class OrbitMinesApi extends JavaPlugin {
         pluginManager.registerEvents(new ClickEvent(), this);
         /* Commands */
         pluginManager.registerEvents(new CommandPreprocessEvent(), this);
+        /* Hide Advancements */
+        pluginManager.registerEvents(new LoadEvent(), this);
         /* Login */
         pluginManager.registerEvents(new LoginEvent(), this);
         /* Quit */

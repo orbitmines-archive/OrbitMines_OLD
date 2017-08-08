@@ -50,7 +50,7 @@ public class BungeePlayer {
             login = new Login(this, bungee.getPasswords().get(getUUID()));
 
         if (!Database.get().contains(Database.Table.PLAYERS, Database.Column.UUID, new Database.Where(Database.Column.UUID, getUUID().toString())))
-            Database.get().insert(Database.Table.PLAYERS, Database.get().values(getUUID().toString(), player.getName(), StaffRank.NONE.toString(), VipRank.NONE.toString(), Language.DUTCH.toString(), "" + false, "" + false, "null"));
+            Database.get().insert(Database.Table.PLAYERS, Database.get().values(getUUID().toString(), player.getName(), StaffRank.NONE.toString(), VipRank.NONE.toString(), Language.DUTCH.toString(), "" + false, "" + false, "" + 0, "null", "null"));
 
         Map<Database.Column, String> values = Database.get().getValues(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()),
                 Database.Column.NAME, Database.Column.STAFFRANK, Database.Column.VIPRANK, Database.Column.LANGUAGE, Database.Column.SILENT);

@@ -23,4 +23,8 @@ public abstract class VipCommand extends Command {
         else
             omp.msgRequiredVipRank(vipRank);
     }
+
+    public void setVipRank(VipRank vipRank) {
+        this.vipRank = vipRank;
+    }
 }

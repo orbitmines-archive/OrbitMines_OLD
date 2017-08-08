@@ -14,6 +14,8 @@ public enum Server {
     FOG("§e", "FoG"),
     MINIGAMES("§f", "MiniGames");
 
+    public static Server[] values = Server.values();
+
     private final String color;
     private final String name;
     private int onlinePlayers;

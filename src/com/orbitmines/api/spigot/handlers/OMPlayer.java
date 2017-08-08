@@ -1,7 +1,5 @@
 package com.orbitmines.api.spigot.handlers;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.orbitmines.api.*;
 import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.handlers.chat.Title;
@@ -11,6 +9,7 @@ import com.orbitmines.api.spigot.handlers.playerdata.*;
 import com.orbitmines.api.spigot.handlers.scoreboard.Scoreboard;
 import com.orbitmines.api.spigot.handlers.scoreboard.ScoreboardSet;
 import com.orbitmines.api.spigot.runnable.OMRunnable;
+import com.orbitmines.api.spigot.utils.BungeeMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -104,7 +103,7 @@ public abstract class OMPlayer {
         player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
 
         if (!Database.get().contains(Database.Table.PLAYERS, Database.Column.UUID, new Database.Where(Database.Column.UUID, getUUID().toString())))
-            Database.get().insert(Database.Table.PLAYERS, Database.get().values(getUUID().toString(), player.getName(), StaffRank.NONE.toString(), VipRank.NONE.toString(), Language.DUTCH.toString(), "" + false, "" + false, "null"));
+            Database.get().insert(Database.Table.PLAYERS, Database.get().values(getUUID().toString(), player.getName(), StaffRank.NONE.toString(), VipRank.NONE.toString(), Language.DUTCH.toString(), "" + false, "" + false, "" + 0, "null", "null"));
 
         Map<Database.Column, String> values = Database.get().getValues(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()),
                 Database.Column.STAFFRANK, Database.Column.VIPRANK, Database.Column.LANGUAGE, Database.Column.SILENT, Database.Column.MONTHLYBONUS, Database.Column.STATS);
@@ -116,7 +115,6 @@ public abstract class OMPlayer {
         receivedMonthlyBonus = Boolean.parseBoolean(values.get(Database.Column.MONTHLYBONUS));
 
         updateVotes();
-        //TODO UPDATE NAME IN BUNGEECORD ON JOIN IF CHANGED
 
         /* DATA~STATS~DATA~STATS */
         String[] stats = values.get(Database.Column.STATS).split("~");
@@ -169,7 +167,7 @@ public abstract class OMPlayer {
         sendMessage(new Message("§7Beloningen voor de " + api.server().getServerType().getName() + "§7 Server:", "§7Reward on the " + api.server().getServerType().getName() + "§7 Server:"));
         p.sendMessage("");
 
-        String amount = votes == 1 ? "" : votes + "x ";
+        String amount = votes == 1 ? "" : "§b" + votes + "x§7 ";
         for (String message : api.server().getVoteMessages(this)) {
             p.sendMessage("§7  - " + amount + message);
         }
@@ -341,12 +339,7 @@ public abstract class OMPlayer {
         this.language = language;
 
         /* Also update on Bungeecord */
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("SetLanguage");
-        out.writeUTF(language.toString());
-        out.writeUTF(player.getName());
-
-        player.sendPluginMessage(api, "OrbitMinesApi", out.toByteArray());
+        BungeeMessage.send(PluginMessageType.SET_LANGUAGE, player, getUUID().toString(), language.toString());
 
         defaultTabList();
         updateStats();

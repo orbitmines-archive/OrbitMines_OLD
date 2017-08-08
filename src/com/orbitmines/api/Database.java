@@ -1,7 +1,5 @@
 package com.orbitmines.api;
 
-import com.orbitmines.api.spigot.utils.ConsoleUtils;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,29 +41,28 @@ public class Database {
     }
 
     private void setupTables() {
-        String query = "";
-
         for (Table table : Table.values()) {
-            String tableQuery = "CREATE TABLE IF NOT EXISTS `" + table.toString() + "` (";
+            StringBuilder tableQuery = new StringBuilder("CREATE TABLE IF NOT EXISTS `" + table.toString() + "` (");
             for (Column column : table.getColumns()) {
-                tableQuery += "`" + column.toString() + "` " + column.getType().toString(column.getChars()) + ", ";
+                tableQuery.append("`" + column.toString() + "` " + column.getType().toString(column.getChars()) + ", ");
             }
-            query += tableQuery.substring(0, tableQuery.length() -2) + ");";
-        }
 
-        try {
-            checkConnection();
+            String query = tableQuery.toString().substring(0, tableQuery.length() -2) + ");";
 
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            try {
+                checkConnection();
+
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.execute();
+                ps.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
     public boolean contains(Table table, Column column, Where where) {
-        String query = "SELECT `" + column.toString() + "` FROM `" + table.toString() + "` WHERE " + where.toString();
+        String query = "SELECT `" + column.toString() + "` FROM `" + table.toString() + "` WHERE " + where.toString() + ";";
 
         try {
             checkConnection();
@@ -83,7 +80,7 @@ public class Database {
     }
 
     public void insert(Table table, String values) {
-        String query = "INSERT INTO `" + table.toString() + "` (`" + table.columns() + "`) VALUES ('" + values + "')";
+        String query = "INSERT INTO `" + table.toString() + "` (`" + table.columns() + "`) VALUES ('" + values + "');";
 
         try {
             checkConnection();
@@ -101,7 +98,7 @@ public class Database {
             checkConnection();
 
             Statement s = getConnection().createStatement();
-            s.executeUpdate("DELETE FROM `" + table.toString() + "` WHERE " + where.toString());
+            s.executeUpdate("DELETE FROM `" + table.toString() + "` WHERE " + where.toString() + ";");
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -110,7 +107,7 @@ public class Database {
     public Map<Column, String> getValues(Table table, Where where, Column... columns) {
         Map<Column, String> values = new HashMap<>();
 
-        String query = "SELECT `" + colums(columns) + "` FROM `" + table.toString() + "` WHERE " + where.toString();
+        String query = "SELECT `" + colums(columns) + "` FROM `" + table.toString() + "` WHERE " + where.toString() + ";";
 
         try {
             checkConnection();
@@ -138,7 +135,7 @@ public class Database {
     public List<Map<Column, String>> getEntries(Table table, Column... columns) {
         List<Map<Column, String>> values = new ArrayList<>();
 
-        String query = "SELECT `" + colums(columns) + "` FROM `" + table.toString() + "`";
+        String query = "SELECT `" + colums(columns) + "` FROM `" + table.toString() + "`;";
 
         try {
             checkConnection();
@@ -164,7 +161,7 @@ public class Database {
     public int getInt(Table table, Column column, Where where) {
         int integer = 0;
 
-        String query = "SELECT `" + column.toString() + "` FROM `" + table.toString() + "` WHERE " + where.toString();
+        String query = "SELECT `" + column.toString() + "` FROM `" + table.toString() + "` WHERE " + where.toString() + ";";
 
         try {
             checkConnection();
@@ -185,7 +182,7 @@ public class Database {
     public String getString(Table table, Column column, Where where) {
         String string = "";
 
-        String query = "SELECT `" + column.toString() + "` FROM `" + table.toString() + "` WHERE " + where.toString();
+        String query = "SELECT `" + column.toString() + "` FROM `" + table.toString() + "` WHERE " + where.toString() + ";";
 
         try {
             checkConnection();
@@ -208,7 +205,7 @@ public class Database {
     public Map<String, Integer> getIntEntries(Table table, Column columnKey, Column columnValue) {
         Map<String, Integer> entries = new HashMap<>();
 
-        String query = "SELECT `" + where(columnKey.toString(), columnValue.toString()) + "` FROM `" + table.toString() + "`";
+        String query = "SELECT `" + where(columnKey.toString(), columnValue.toString()) + "` FROM `" + table.toString() + "`;";
 
         try {
             checkConnection();
@@ -230,7 +227,7 @@ public class Database {
     public Map<String, String> getStringEntries(Table table, Column columnKey, Column columnValue) {
         Map<String, String> entries = new HashMap<>();
 
-        String query = "SELECT `" + where(columnKey.toString(), columnValue.toString()) + "` FROM `" + table.toString() + "`";
+        String query = "SELECT `" + where(columnKey.toString(), columnValue.toString()) + "` FROM `" + table.toString() + "`;";
 
         try {
             checkConnection();
@@ -254,7 +251,7 @@ public class Database {
             checkConnection();
 
             Statement s = connection.createStatement();
-            s.executeUpdate("UPDATE `" + table.toString() + "` SET " + sets(sets) + " WHERE " + where.toString());
+            s.executeUpdate("UPDATE `" + table.toString() + "` SET " + sets(sets) + " WHERE " + where.toString() + ";");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -264,8 +261,6 @@ public class Database {
         try {
             this.connection = DriverManager.getConnection("jdbc:mysql://" + hostName + ":" + port + "/" + databaseName, username, password);
         } catch (SQLException ex) {
-            ConsoleUtils.warn("Cannot connect to the database.");
-            ConsoleUtils.warn("Error:");
             ex.printStackTrace();
         }
     }
@@ -281,7 +276,7 @@ public class Database {
             stringBuilder.append(value);
             stringBuilder.append("`,`");
         }
-        return stringBuilder.toString().substring(0, stringBuilder.length() - 2);
+        return stringBuilder.toString().substring(0, stringBuilder.length() - 3);
     }
 
     public String colums(Column... columns) {
@@ -290,7 +285,7 @@ public class Database {
             stringBuilder.append(column.toString());
             stringBuilder.append("`,`");
         }
-        return stringBuilder.toString().substring(0, stringBuilder.length() - 2);
+        return stringBuilder.toString().substring(0, stringBuilder.length() - 3);
     }
 
     public String values(String... values) {
@@ -299,7 +294,7 @@ public class Database {
             stringBuilder.append(value);
             stringBuilder.append("','");
         }
-        return stringBuilder.toString().substring(0, stringBuilder.length() - 2);
+        return stringBuilder.toString().substring(0, stringBuilder.length() - 3);
     }
 
     private String sets(Set... sets) {
@@ -372,7 +367,7 @@ public class Database {
                 stringBuilder.append(column.toString());
                 stringBuilder.append("`,`");
             }
-            return stringBuilder.toString().substring(0, stringBuilder.length() - 2);
+            return stringBuilder.toString().substring(0, stringBuilder.length() - 3);
         }
     }
 
@@ -383,14 +378,14 @@ public class Database {
         STAFFRANK(Type.VARCHAR, 30),
         VIPRANK(Type.VARCHAR, 30),
         LANGUAGE(Type.VARCHAR, 30),
-        SILENT(Type.VARCHAR, 4),
-        MONTHLYBONUS(Type.VARCHAR, 4),
-        VOTES(Type.INTEGER, 10),
+        SILENT(Type.VARCHAR, 5),
+        MONTHLYBONUS(Type.VARCHAR, 5),
+        VOTES(Type.INT, 10),
         CACHEDVOTES(Type.VARCHAR, 500),
-        STATS(Type.VARCHAR, 30000),
+        STATS(Type.VARCHAR, 20000),
 
         STATUS(Type.VARCHAR, 30),
-        MAXPLAYERS(Type.INTEGER, 10),
+        MAXPLAYERS(Type.INT, 10),
 
         TYPE(Type.VARCHAR, 30),
         DATA(Type.VARCHAR, 1000),
@@ -400,7 +395,7 @@ public class Database {
         HISTORY(Type.VARCHAR, 500),
 
         BANNED(Type.VARCHAR, 30),
-        ACTIVE(Type.VARCHAR, 4),
+        ACTIVE(Type.VARCHAR, 5),
         BANNEDBY(Type.VARCHAR, 36),
         BANNEDON(Type.VARCHAR, 30),
         BANNEDUNTIL(Type.VARCHAR, 30),
@@ -435,7 +430,7 @@ public class Database {
         public enum Type {
 
             VARCHAR,
-            INTEGER;
+            INT;
 
             public String toString(int chars) {
                 return super.toString() + "(" + chars + ")";

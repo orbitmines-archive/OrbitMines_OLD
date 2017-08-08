@@ -23,4 +23,8 @@ public abstract class StaffCommand extends Command {
         else
             omp.msgUnknownCommand(a[0]);
     }
+
+    public void setStaffRank(StaffRank staffRank) {
+        this.staffRank = staffRank;
+    }
 }

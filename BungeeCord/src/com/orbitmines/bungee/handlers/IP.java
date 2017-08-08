@@ -19,6 +19,8 @@ public class IP {
     private List<String> allIps;
 
     public IP(UUID uuid, String lastIp) {
+        ips.add(this);
+
         this.uuid = uuid;
         this.lastIp = lastIp;
         this.lastLogin = getDate();
@@ -26,6 +28,8 @@ public class IP {
     }
 
     public IP(UUID uuid, String lastIp, String lastLogin, List<String> allIps) {
+        ips.add(this);
+
         this.uuid = uuid;
         this.lastIp = lastIp;
         this.lastLogin = lastLogin;

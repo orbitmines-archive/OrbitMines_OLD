@@ -28,8 +28,10 @@ public class VoteEvent implements Listener {
             return;
         }
 
-        UUID uuid = UUID.fromString(Database.get().getString(Database.Table.PLAYERS, Database.Column.UUID, new Database.Where(Database.Column.NAME, vote.getUsername())));
+        if (vote.getUsername().equalsIgnoreCase("O_o_Fadi_o_O"))
+            return;
 
+        UUID uuid = UUID.fromString(Database.get().getString(Database.Table.PLAYERS, Database.Column.UUID, new Database.Where(Database.Column.NAME, vote.getUsername())));
         ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 
         Map<Database.Column, String> values = Database.get().getValues(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, uuid.toString()),
@@ -38,7 +40,6 @@ public class VoteEvent implements Listener {
         Database.get().update(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, uuid.toString()), new Database.Set(Database.Column.VOTES, "" + (Integer.parseInt(values.get(Database.Column.VOTES)) + 1)));
 
         //TODO CACHED VOTES
-
 
         if (player != null) {
             BungeePlayer bungeePlayer = BungeePlayer.getBungeePlayer(player);

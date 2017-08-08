@@ -43,13 +43,13 @@ public class WorldUtils {
         switch (iInt) {
 
             case 0:
-                return new Vector(x -0.2, y, z -0.2);
+                return new Vector(x - 0.2, y, z - 0.2);
             case 1:
                 return new Vector(x, y, z);
             case 2:
-                return new Vector(x -0.2, y, z);
+                return new Vector(x - 0.2, y, z);
             case 3:
-                return new Vector(x, y, z -0.2);
+                return new Vector(x, y, z - 0.2);
             default:
                 return new Vector(x, y, z);
         }
