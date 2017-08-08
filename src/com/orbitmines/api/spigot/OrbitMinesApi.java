@@ -20,7 +20,7 @@ import com.orbitmines.api.spigot.events.npc.NpcInteractAtEntityEvent;
 import com.orbitmines.api.spigot.events.npc.NpcInteractEntityEvent;
 import com.orbitmines.api.spigot.handlers.ConfigHandler;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
-import com.orbitmines.api.spigot.handlers.WorldLoader;
+import com.orbitmines.api.spigot.handlers.worlds.WorldLoader;
 import com.orbitmines.api.spigot.handlers.currency.Currency;
 import com.orbitmines.api.spigot.handlers.currency.CurrencyTokens;
 import com.orbitmines.api.spigot.handlers.currency.CurrencyVipPoints;

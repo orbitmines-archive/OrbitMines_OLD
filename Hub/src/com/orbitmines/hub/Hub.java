@@ -7,7 +7,8 @@ import com.orbitmines.api.spigot.OrbitMinesServer;
 import com.orbitmines.api.spigot.enablers.*;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.PreventionSet;
-import com.orbitmines.api.spigot.handlers.WorldLoader;
+import com.orbitmines.api.spigot.handlers.worlds.WorldLoader;
+import com.orbitmines.api.spigot.handlers.worlds.voidgenerator.WorldCreatorVoid;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -32,7 +33,7 @@ public class Hub extends JavaPlugin implements OrbitMinesServer {
 
         api.setup(this);
 
-        lobby = api.getWorldLoader().loadWorld("Hub", true);
+        lobby = api.getWorldLoader().loadWorld("Hub", true, WorldCreatorVoid.class);
         lobby.setGameRuleValue("doDaylightCycle", "false");
         lobby.setTime(20000);
 

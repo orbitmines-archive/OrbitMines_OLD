@@ -1,4 +1,4 @@
-package com.orbitmines.api.spigot.handlers;
+package com.orbitmines.api.spigot.handlers.worlds;
 
 import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.utils.WorldUtils;
@@ -18,6 +18,45 @@ import java.util.zip.ZipFile;
 */
 public class WorldLoader {
 
+    private List<World> worlds;
+    private List<World> normalWorlds;
+    private boolean cleanUpPlayerData;
+
+    /* If there are no worlds on the server that need inventories to be saved set cleanUpPlayerData = true */
+    public WorldLoader(boolean cleanUpPlayerData) {
+        this.worlds = new ArrayList<>();
+        this.normalWorlds = new ArrayList<>();
+        this.cleanUpPlayerData = cleanUpPlayerData;
+    }
+
+    /*
+        loadWorld : Create normal worlds; need saving.
+     */
+    public World loadWorld(String worldFile) {
+        return loadWorld(worldFile, false);
+    }
+
+    public World loadWorld(String worldFile, boolean removeEntities) {
+        return loadWorld(worldFile, removeEntities, WorldCreator.class);
+    }
+
+    public World loadWorld(String worldFile, boolean removeEntities, Class<? extends WorldCreator> worldCreator) {
+        try {
+            Bukkit.createWorld(worldCreator.getConstructor(String.class).newInstance(worldFile));
+            World world = Bukkit.getWorld(worldFile);
+            world.setAutoSave(true);
+            normalWorlds.add(world);
+
+            if (removeEntities)
+                WorldUtils.removeEntities(world);
+
+            return world;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     /*
     *   The following is only for lobbies & maps that don't need saving.
     *   They are stored in plugins/<plugin name>/<world name>.zip
@@ -32,23 +71,22 @@ public class WorldLoader {
     *         etc.
     * */
 
-    private List<World> worlds;
-    private boolean cleanUpPlayerData;
+    /*
+        fromZip : Pre-configured worlds.
+     */
 
-    /* If there are no worlds on the server that need inventories to be saved set cleanUpPlayerData = true */
-    public WorldLoader(boolean cleanUpPlayerData) {
-        this.worlds = new ArrayList<>();
-        this.cleanUpPlayerData = cleanUpPlayerData;
+    public World fromZip(String worldFile) {
+        return fromZip(worldFile, false);
     }
 
-    public World loadWorld(String worldFile) {
-        return loadWorld(worldFile, false);
+    public World fromZip(String worldFile, boolean removeEntities) {
+        return fromZip(worldFile, removeEntities, WorldCreator.class);
     }
 
-    public World loadWorld(String worldFile, boolean removeEntities) {
+    public World fromZip(String worldFile, boolean removeEntities, Class<? extends WorldCreator> worldCreator) {
         try {
             extractZip(new File(OrbitMinesApi.getApi().getDataFolder() + "/" + worldFile + ".zip"), Bukkit.getWorldContainer().getAbsoluteFile());
-            Bukkit.createWorld(new WorldCreator(worldFile));
+            Bukkit.createWorld(worldCreator.getConstructor(String.class).newInstance(worldFile));
             World world = Bukkit.getWorld(worldFile);
             worlds.add(world);
 
@@ -56,11 +94,10 @@ public class WorldLoader {
                 WorldUtils.removeEntities(world);
 
             return world;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-
-        return null;
     }
 
     public List<World> getWorlds() {

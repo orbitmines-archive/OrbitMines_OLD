@@ -3,7 +3,7 @@ package com.orbitmines.api.spigot;
 import com.orbitmines.api.Server;
 import com.orbitmines.api.spigot.enablers.*;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
-import com.orbitmines.api.spigot.handlers.WorldLoader;
+import com.orbitmines.api.spigot.handlers.worlds.WorldLoader;
 import org.bukkit.Location;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
