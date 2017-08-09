@@ -29,6 +29,12 @@ public class HatInventory extends PerkInventory {
 
         int slot = 0;
         for (Hat hat : getHatsForPage(data.getPage())) {
+            if (hat == null) {
+                inventory.setItem(slot, null);
+                slot++;
+                continue;
+            }
+
             add(slot, new ConfirmItemInstance(toItemBuilder(hat, omp).build()) {
 
                 @Override
@@ -76,6 +82,8 @@ public class HatInventory extends PerkInventory {
                     open(omp);
                 }
             });
+        else
+            inventory.setItem(36, null);
 
         if (canHaveMorePages(data.getPage()))
             add(44, new ItemInstance(new ItemBuilder(Material.EMPTY_MAP, 1, 0, "§e§n" + omp.getMessage(new Message("Meer Hats", "More Hats")) + " >>").build()) {
@@ -86,6 +94,8 @@ public class HatInventory extends PerkInventory {
                     open(omp);
                 }
             });
+        else
+            inventory.setItem(44, null);
 
         if (data.hasHatEnabled())
             add(50, new ItemInstance(new ItemBuilder(Material.BARRIER, 1, 0, omp.getMessage(new Message("§4§nZet Hat UIT", "§4§nDisable Hat"))).build()) {
@@ -130,6 +140,8 @@ public class HatInventory extends PerkInventory {
                         int next = HATS_PER_PAGE + check + (NEW_PER_PAGE * i);
                         if (hats.length > next)
                             pageHats[j] = hats[next];
+                        else
+                            pageHats[j] = null;
                     } else {
                         pageHats[j] = pageHats[j + 1];
                     }

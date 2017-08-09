@@ -38,7 +38,7 @@ public enum Color {
         this.chatColor = chatColor;
         this.name = name;
         this.bukkitColor = bukkitColor;
-        this.item = new ItemSet(material, durability);
+        this.item = new ItemSet(material, 1, durability);
     }
 
     public String getChatColor() {

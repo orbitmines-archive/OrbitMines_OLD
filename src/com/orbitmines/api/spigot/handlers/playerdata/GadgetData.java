@@ -41,7 +41,7 @@ public class GadgetData extends PlayerData {
     @Override
     public void onLogin() {
         if (gadgetEnabled != null)
-            omp.getPlayer().getInventory().setItem(api.gadgets().getGadgetSlot(), gadgetEnabled.getHandler().getItem(omp));
+            gadgetEnabled.getHandler().giveItem(omp);
     }
 
     @Override
@@ -64,20 +64,19 @@ public class GadgetData extends PlayerData {
             StringBuilder stringBuilder = new StringBuilder();
             for (Gadget gadget : gadgets) {
                 stringBuilder.append(gadget.toString());
-                stringBuilder.append("\\=");
+                stringBuilder.append("=");
             }
             gadgetsString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
         }
 
-        return gadgetEnabled.toString() + "-" + gadgetsString + "-" + Serializer.serialize(fireworkSettings) + "-" + fireworkPasses + "-" + stackerEnabled;
+        return (gadgetEnabled == null ? "null" : gadgetEnabled.toString()) + "-" + gadgetsString + "-" + Serializer.serialize(fireworkSettings) + "-" + fireworkPasses + "-" + stackerEnabled;
     }
 
     @Override
     public void parse(String string) {
         String[] data = string.split("-");
 
-        if (!data[0].equals("null"))
-            gadgetEnabled = Gadget.valueOf(data[0]);
+        gadgetEnabled = data[0].equals("null") ? null : Gadget.valueOf(data[0]);
 
         if (!data[1].equals("null")) {
             for (String gadget : data[1].split("=")) {
@@ -150,7 +149,7 @@ public class GadgetData extends PlayerData {
 
         Player p = omp.getPlayer();
         p.playSound(p.getLocation(), gadget == Gadget.FIREWORK_GUN ? Sound.BLOCK_ANVIL_BREAK : Sound.ENTITY_ARROW_HIT_PLAYER, 5, 1);
-        p.getInventory().setItem(api.gadgets().getGadgetSlot(), gadget.getHandler().getItem(omp));
+        gadget.getHandler().giveItem(omp);
 
         omp.sendMessage(new Message("§7Je " + gadget.getDisplayName() + "§7 staat nu §a§lAAN§7.", "§a§lENABLED §7your " + gadget.getDisplayName() +"§7!"));
     }

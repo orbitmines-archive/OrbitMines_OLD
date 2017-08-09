@@ -1,10 +1,10 @@
 package com.orbitmines.api.spigot.handlers.worlds;
 
-import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.utils.WorldUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -75,17 +75,17 @@ public class WorldLoader {
         fromZip : Pre-configured worlds.
      */
 
-    public World fromZip(String worldFile) {
-        return fromZip(worldFile, false);
+    public World fromZip(JavaPlugin plugin, String worldFile) {
+        return fromZip(plugin, worldFile, false);
     }
 
-    public World fromZip(String worldFile, boolean removeEntities) {
-        return fromZip(worldFile, removeEntities, WorldCreator.class);
+    public World fromZip(JavaPlugin plugin, String worldFile, boolean removeEntities) {
+        return fromZip(plugin, worldFile, removeEntities, WorldCreator.class);
     }
 
-    public World fromZip(String worldFile, boolean removeEntities, Class<? extends WorldCreator> worldCreator) {
+    public World fromZip(JavaPlugin plugin, String worldFile, boolean removeEntities, Class<? extends WorldCreator> worldCreator) {
         try {
-            extractZip(new File(OrbitMinesApi.getApi().getDataFolder() + "/" + worldFile + ".zip"), Bukkit.getWorldContainer().getAbsoluteFile());
+            extractZip(new File(plugin.getDataFolder() + "/" + worldFile + ".zip"), Bukkit.getWorldContainer().getAbsoluteFile());
             Bukkit.createWorld(worldCreator.getConstructor(String.class).newInstance(worldFile));
             World world = Bukkit.getWorld(worldFile);
             worlds.add(world);

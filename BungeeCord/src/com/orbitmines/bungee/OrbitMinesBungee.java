@@ -3,10 +3,11 @@ package com.orbitmines.bungee;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
-import com.orbitmines.api.Database;
-import com.orbitmines.api.Message;
-import com.orbitmines.api.ScrollerList;
-import com.orbitmines.api.Server;
+import com.orbitmines.api.*;
+import com.orbitmines.bungee.commands.*;
+import com.orbitmines.bungee.commands.moderator.*;
+import com.orbitmines.bungee.commands.owner.CommandMaintenance;
+import com.orbitmines.bungee.commands.staff.CommandStaffHelp;
 import com.orbitmines.bungee.events.*;
 import com.orbitmines.bungee.handlers.Ban;
 import com.orbitmines.bungee.handlers.ConfigHandler;
@@ -70,6 +71,7 @@ import java.util.logging.Level;
 public class OrbitMinesBungee extends Plugin implements VoteHandler, VotifierPlugin {
 
     private static OrbitMinesBungee bungee;
+    private Map<UUID, Language> cachedLanguage;
     private boolean inMaintenance;
 
     private ConfigHandler configHandler;
@@ -83,6 +85,7 @@ public class OrbitMinesBungee extends Plugin implements VoteHandler, VotifierPlu
     @Override
     public void onEnable() {
         bungee = this;
+        cachedLanguage = new HashMap<>();
 
         inMaintenance = false;
 
@@ -122,6 +125,10 @@ public class OrbitMinesBungee extends Plugin implements VoteHandler, VotifierPlu
         return bungee;
     }
 
+    public Map<UUID, Language> getCachedLanguage() {
+        return cachedLanguage;
+    }
+
     public boolean isInMaintenance() {
         return inMaintenance;
     }
@@ -157,7 +164,31 @@ public class OrbitMinesBungee extends Plugin implements VoteHandler, VotifierPlu
     }
 
     private void registerCommands() {
+        /* owner */
+        new CommandMaintenance();
+        /* moderator */
+        new CommandAllChat();
+        new CommandBan();
+        new CommandBroadcast();
+        new CommandKick();
+        new CommandKickAll();
+        new CommandLookUp();
+        new CommandSay();
+        new CommandSilent();
+        new CommandStaffMsg();
+        new CommandUnBan();
 
+        new CommandStaffHelp();
+
+        new CommandDonate();
+        new CommandHelp();
+        new CommandHub();
+        new CommandList();
+        new CommandMsg();
+        new CommandReply();
+        new CommandReport();
+        new CommandServer();
+        new CommandWebsite();
     }
 
     private void registerRunnables() {
@@ -185,7 +216,7 @@ public class OrbitMinesBungee extends Plugin implements VoteHandler, VotifierPlu
 
         for (Map<Database.Column, String> entry : entries) {
             List<String> history = new ArrayList<>();
-            for (String ip : entry.get(Database.Column.HISTORY).split("|")) {
+            for (String ip : entry.get(Database.Column.HISTORY).split("\\|")) {
                 history.add(ip);
             }
             new IP(UUID.fromString(entry.get(Database.Column.UUID)), entry.get(Database.Column.LASTIP), entry.get(Database.Column.LASTLOGIN), history);

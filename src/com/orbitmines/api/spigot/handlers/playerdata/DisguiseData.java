@@ -52,7 +52,7 @@ public class DisguiseData extends PlayerData {
             StringBuilder stringBuilder = new StringBuilder();
             for (Disguise disguise : disguises) {
                 stringBuilder.append(disguise.toString());
-                stringBuilder.append("\\=");
+                stringBuilder.append("=");
             }
             disguisesString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
         }

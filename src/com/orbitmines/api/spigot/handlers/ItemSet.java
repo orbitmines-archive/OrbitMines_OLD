@@ -13,18 +13,18 @@ public class ItemSet {
     private final String displayName;
 
     public ItemSet(Material material) {
-        this(material, 0);
+        this(material, 1);
     }
 
-    public ItemSet(Material material, int durability) {
-        this(material, 0, 1);
+    public ItemSet(Material material, int amount) {
+        this(material, amount, 0);
     }
 
-    public ItemSet(Material material, int durability, int amount) {
-        this(material, durability, amount, null);
+    public ItemSet(Material material, int amount, int durability) {
+        this(material, amount, durability, null);
     }
 
-    public ItemSet(Material material, int durability, int amount, String displayName) {
+    public ItemSet(Material material, int amount, int durability, String displayName) {
         this.material = material;
         this.amount = amount;
         this.durability = (short) durability;

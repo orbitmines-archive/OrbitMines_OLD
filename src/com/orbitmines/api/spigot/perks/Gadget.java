@@ -16,7 +16,7 @@ public enum Gadget implements Perk {
 
     STACKER("Stacker", Color.ORANGE, new ItemSet(Material.LEASH), new Obtainable(VipRank.NONE)),
     PAINTBALLS("Paintballs", Color.WHITE, new ItemSet(Material.SNOW_BALL), new Obtainable(OrbitMinesApi.VIP_POINTS, 700)),
-    CREEPER_LAUNCHER("Creeper Launcher", Color.LIME, new ItemSet(Material.SKULL_ITEM, 4), new Obtainable(OrbitMinesApi.VIP_POINTS, 525)),
+    CREEPER_LAUNCHER("Creeper Launcher", Color.LIME, new ItemSet(Material.SKULL_ITEM, 1, 4), new Obtainable(OrbitMinesApi.VIP_POINTS, 525)),
     PET_RIDE("Pet Ride", Color.YELLOW, new ItemSet(Material.SADDLE), new Obtainable(OrbitMinesApi.VIP_POINTS, 500)),
     BOOK_EXPLOSION("Book Explosion", Color.SILVER, new ItemSet(Material.BOOK), new Obtainable(OrbitMinesApi.VIP_POINTS, 475)),
     SWAP_TELEPORTER("Swap Teleporter", Color.GREEN, new ItemSet(Material.EYE_OF_ENDER), new Obtainable(OrbitMinesApi.VIP_POINTS, 500)),

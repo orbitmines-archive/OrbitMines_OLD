@@ -14,6 +14,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /*
 * OrbitMines - @author Fadi Shawki - 7-8-2017
@@ -64,6 +65,7 @@ public class JoinEvent implements Listener {
         }
 
         if (!bungeePlayer.isEligible(StaffRank.OWNER)) {
+            event.setCancelled(true);
             player.disconnect(new TextComponent(new Message("§d§lMaintenance Mode\n§dWe zijn wat aan het veranderen op de server!\n§d§oDank je, voor je begrip!", "§d§lMaintenance Mode\n§dWe're currently working on something!\n§d§oThank you, for your understanding!").lang(getLanguage(player.getUniqueId()))));
         } else {
             bungeePlayer.onLogin();
@@ -72,10 +74,21 @@ public class JoinEvent implements Listener {
     }
 
     private Language getLanguage(UUID uuid) {
+        if (bungee.getCachedLanguage().containsKey(uuid))
+            return bungee.getCachedLanguage().get(uuid);
+
+        Language language;
         try {
-            return Language.valueOf(Database.get().getString(Database.Table.BANS, Database.Column.LANGUAGE, new Database.Where(Database.Column.UUID, uuid.toString())));
+            language = Language.valueOf(Database.get().getString(Database.Table.PLAYERS, Database.Column.LANGUAGE, new Database.Where(Database.Column.UUID, uuid.toString())));
         } catch (NullPointerException | IllegalArgumentException ex) {
-            return Language.DUTCH;
+            language = Language.DUTCH;
         }
+
+        bungee.getCachedLanguage().put(uuid, language);
+
+        /* Cleanup */
+        bungee.getProxy().getScheduler().schedule(bungee, () -> bungee.getCachedLanguage().remove(uuid), 15, TimeUnit.MINUTES);
+
+        return language;
     }
 }

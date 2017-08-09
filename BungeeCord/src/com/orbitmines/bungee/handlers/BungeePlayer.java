@@ -18,6 +18,8 @@ public class BungeePlayer {
 
     private static List<BungeePlayer> players = new ArrayList<>();
 
+    private OrbitMinesBungee bungee;
+
     private ProxiedPlayer player;
 
     private Language language;
@@ -33,6 +35,8 @@ public class BungeePlayer {
 
     public BungeePlayer(ProxiedPlayer player) {
         players.add(this);
+
+        bungee = OrbitMinesBungee.getBungee();
 
         this.player = player;
         this.language = Language.DUTCH;
@@ -199,26 +203,12 @@ public class BungeePlayer {
         return player.getServer().getInfo();
     }
 
-    public boolean isEligible(StaffRank... staffRanks) {
-        if (staffRanks == null || staffRanks.length == 0)
-            return true;
-
-        for (StaffRank staffRank : staffRanks) {
-            if (this.staffRank == staffRank)
-                return true;
-        }
-        return false;
+    public boolean isEligible(StaffRank staffRank) {
+        return staffRank == null || this.staffRank.ordinal() >= staffRank.ordinal();
     }
 
-    public boolean isEligible(VipRank... vipRanks) {
-        if (vipRanks == null || vipRanks.length == 0 || isEligible(StaffRank.OWNER))
-            return true;
-
-        for (VipRank vipRank : vipRanks) {
-            if (this.vipRank == vipRank)
-                return true;
-        }
-        return false;
+    public boolean isEligible(VipRank vipRank) {
+        return vipRank == null || isEligible(StaffRank.OWNER) || this.vipRank.ordinal() >= vipRank.ordinal();
     }
 
     public void sendMessage(Message message) {

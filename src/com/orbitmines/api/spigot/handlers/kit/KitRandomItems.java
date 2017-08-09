@@ -43,19 +43,24 @@ public class KitRandomItems extends Kit {
     public void setItems(Player p) {
         super.setItems(p);
 
-        int index = 0;
-        for (List<ItemStack> items : getRandomItems()) {
-            if (items != null && items.size() > 0)
-                p.getInventory().setItem(index, items.get(RandomUtils.RANDOM.nextInt(items.size())));
-
-            index++;
-        }
+        randomize(p);
     }
 
     @Override
     public void addItems(Player p) {
         super.addItems(p);
 
+        randomize(p);
+    }
+
+    @Override
+    public void replaceItems(Player p) {
+        super.replaceItems(p);
+
+        randomize(p);
+    }
+
+    private void randomize(Player p) {
         int index = 0;
         for (List<ItemStack> items : getRandomItems()) {
             if (items != null && items.size() > 0)

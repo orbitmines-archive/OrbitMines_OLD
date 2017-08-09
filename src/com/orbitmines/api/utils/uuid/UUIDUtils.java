@@ -14,7 +14,8 @@ public class UUIDUtils {
         UUIDFetcher uuidFetcher = new UUIDFetcher(Collections.singletonList(playerName));
         try {
             UUID uuid = uuidFetcher.call().get(playerName);
-            if (uuid != null) playerUUIDs.put(playerName, uuid);
+            if (uuid != null)
+                playerUUIDs.put(playerName, uuid);
 
             return uuid;
         } catch (Exception ex) {

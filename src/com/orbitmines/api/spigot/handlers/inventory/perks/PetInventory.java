@@ -18,7 +18,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public class PetInventory extends PerkInventory {
 
     public PetInventory() {
-        super(45, "§0§lPets", 40);
+        super(27, "§0§lPets", 22);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class PetInventory extends PerkInventory {
 
         if (data.hasPetEnabled()) {
 
-            add(39, new ItemInstance(new ItemBuilder(Material.NAME_TAG, 1, 0, omp.getMessage(new Message("§fVerander de naam van je §fPet", "§fRename §fPet"))).build()) {
+            add(21, new ItemInstance(new ItemBuilder(Material.NAME_TAG, 1, 0, omp.getMessage(new Message("§fVerander de naam van je §fPet", "§fRename §fPet"))).build()) {
                 @Override
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     Player p = omp.getPlayer();
@@ -99,7 +99,7 @@ public class PetInventory extends PerkInventory {
                     p.getInventory().setItem(13, new ItemBuilder(Material.NAME_TAG, 1, 0, "§f§oClick the §6§oRight§f§o Egg to rename your Pet!").build());
                 }
             });
-            add(41, new ItemInstance(new ItemBuilder(Material.BARRIER, 1, 0, omp.getMessage(new Message("§4§nZet Pet UIT", "§4§nDisable Pet"))).build()) {
+            add(23, new ItemInstance(new ItemBuilder(Material.BARRIER, 1, 0, omp.getMessage(new Message("§4§nZet Pet UIT", "§4§nDisable Pet"))).build()) {
                 @Override
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     Player p = omp.getPlayer();

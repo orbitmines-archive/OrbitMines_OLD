@@ -20,7 +20,7 @@ public class BannerBuilder extends ItemBuilder {
     private ArrayList<Pattern> patterns;
 
     public BannerBuilder(DyeColor baseColor) {
-        this(baseColor, (ArrayList<Pattern>) null);
+        this(baseColor, new ArrayList<>());
     }
 
     public BannerBuilder(DyeColor baseColor, Pattern... patterns) {
@@ -78,7 +78,7 @@ public class BannerBuilder extends ItemBuilder {
         ItemStack itemStack = new ItemStack(material, amount, durability);
         BannerMeta meta = (BannerMeta) itemStack.getItemMeta();
         meta.setDisplayName(displayName);
-        meta.setLore(lore);
+        meta.setLore(lore == null ? null : new ArrayList<>(lore));
         meta.setBaseColor(baseColor);
         meta.setPatterns(new ArrayList<>(patterns));
         itemStack.setItemMeta(meta);

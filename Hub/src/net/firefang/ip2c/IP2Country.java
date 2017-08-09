@@ -29,7 +29,7 @@ public class IP2Country {
     }
 
     public IP2Country(int n) throws IOException {
-        this(Hub.getInstance().getDataFolder().getPath() + "/ip-to-country.bin", n);
+        this(Hub.getInstance().getDataFolder().getPath() + "/ip/ip-to-country.bin", n);
     }
 
     public IP2Country(String string, int n) throws IOException {

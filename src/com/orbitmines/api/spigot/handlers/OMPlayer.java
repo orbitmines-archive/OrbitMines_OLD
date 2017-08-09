@@ -5,6 +5,7 @@ import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.handlers.chat.Title;
 import com.orbitmines.api.spigot.handlers.inventory.OMInventory;
 import com.orbitmines.api.spigot.handlers.itembuilders.PotionBuilder;
+import com.orbitmines.api.spigot.handlers.kit.KitInteractive;
 import com.orbitmines.api.spigot.handlers.playerdata.*;
 import com.orbitmines.api.spigot.handlers.scoreboard.Scoreboard;
 import com.orbitmines.api.spigot.handlers.scoreboard.ScoreboardSet;
@@ -30,7 +31,7 @@ import java.util.*;
 */
 public abstract class OMPlayer {
 
-    private static List<OMPlayer> players = new ArrayList<>();
+    protected static List<OMPlayer> players = new ArrayList<>();
 
     protected OrbitMinesApi api;
 
@@ -38,6 +39,7 @@ public abstract class OMPlayer {
 
     protected Scoreboard scoreboard;
     protected OMInventory lastInventory;
+    protected KitInteractive lastInteractiveKit;
 
     protected List<PlayerData> data;
     private Map<Data, String> cachedData;
@@ -119,12 +121,18 @@ public abstract class OMPlayer {
         /* DATA~STATS~DATA~STATS */
         String[] stats = values.get(Database.Column.STATS).split("~");
 
-        if (!stats.equals("null")) {
+        if (!stats[0].equals("null")) {
             for (int i = 0; i < stats.length; i += 2) {
                 cachedData.put(Data.valueOf(stats[i]), stats[i + 1]);
             }
         } else {
-            /* New Player */
+            /* New Player (Should only happen in the Hub) */
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    broadcastMessage(new Message("§d" + player.getName() + " §7heeft §6§lOrbitMines§4§lNetwork§7 gejoind!", "§d" + player.getName() + " §7joined §6§lOrbitMines§4§lNetwork§7!"));
+                }
+            }.runTaskLater(api, 1);
         }
 
         for (Data data : api.getDataToRead()) {
@@ -134,8 +142,6 @@ public abstract class OMPlayer {
                 playerData.parse(cachedData.get(data));
                 cachedData.remove(data);
             }
-
-            this.data.add(playerData);
         }
 
         defaultTabList();
@@ -184,17 +190,17 @@ public abstract class OMPlayer {
     public void updateStats() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        for (Data data : cachedData.keySet()) {
-            stringBuilder.append(data.toString());
-            stringBuilder.append("~");
-            stringBuilder.append(cachedData.get(data));
-            stringBuilder.append("~");
-        }
-
         for (PlayerData playerData : data) {
             stringBuilder.append(playerData.getType().toString());
             stringBuilder.append("~");
             stringBuilder.append(playerData.serialize());
+            stringBuilder.append("~");
+        }
+
+        for (Data data : cachedData.keySet()) {
+            stringBuilder.append(data.toString());
+            stringBuilder.append("~");
+            stringBuilder.append(cachedData.get(data));
             stringBuilder.append("~");
         }
 
@@ -265,9 +271,11 @@ public abstract class OMPlayer {
     }
 
     public void setScoreboard(ScoreboardSet set) {
-        set.updateTitle();
-        set.updateScores();
-        set.updateTeams();
+        if (set != null) {
+            set.updateTitle();
+            set.updateScores();
+            set.updateTeams();
+        }
 
         scoreboard.set(set);
     }
@@ -282,6 +290,14 @@ public abstract class OMPlayer {
 
     public void setLastInventory(OMInventory lastInventory) {
         this.lastInventory = lastInventory;
+    }
+
+    public KitInteractive getLastInteractiveKit() {
+        return lastInteractiveKit;
+    }
+
+    public void setLastInteractiveKit(KitInteractive lastInteractiveKit) {
+        this.lastInteractiveKit = lastInteractiveKit;
     }
 
     public List<PlayerData> getData() {
@@ -507,26 +523,12 @@ public abstract class OMPlayer {
         Database.get().update(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()), new Database.Set(Database.Column.CACHEDVOTES, value));
     }
 
-    public boolean isEligible(StaffRank... staffRanks) {
-        if (staffRanks == null || staffRanks.length == 0)
-            return true;
-
-        for (StaffRank staffRank : staffRanks) {
-            if (this.staffRank == staffRank)
-                return true;
-        }
-        return false;
+    public boolean isEligible(StaffRank staffRank) {
+        return staffRank == null || this.staffRank.ordinal() >= staffRank.ordinal();
     }
 
-    public boolean isEligible(VipRank... vipRanks) {
-        if (vipRanks == null || vipRanks.length == 0 || isOpMode() && isEligible(StaffRank.OWNER))
-            return true;
-
-        for (VipRank vipRank : vipRanks) {
-            if (this.vipRank == vipRank)
-                return true;
-        }
-        return false;
+    public boolean isEligible(VipRank vipRank) {
+        return vipRank == null || isEligible(StaffRank.OWNER) || this.vipRank.ordinal() >= vipRank.ordinal();
     }
 
     public void sendMessage(Message message) {

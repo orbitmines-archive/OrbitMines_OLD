@@ -1,6 +1,6 @@
 package com.orbitmines.api.spigot.events;
 
-import org.bukkit.Location;
+import com.orbitmines.api.spigot.OrbitMinesApi;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
@@ -10,14 +10,14 @@ import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 */
 public class SpawnLocationEvent implements Listener {
 
-    private Location location;
+    private OrbitMinesApi api;
 
-    public SpawnLocationEvent(Location location) {
-        this.location = location;
+    public SpawnLocationEvent() {
+        this.api = OrbitMinesApi.getApi();
     }
 
     @EventHandler
     public void onSpawn(PlayerSpawnLocationEvent event) {
-        event.setSpawnLocation(location);
+        event.setSpawnLocation(api.server().getSpawnLocation());
     }
 }

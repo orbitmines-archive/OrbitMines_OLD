@@ -35,7 +35,9 @@ public class CommandStaffHelp extends StaffCommand {
             p.sendMessage(" §7 /freekits");
             p.sendMessage(" §7 /clearentities");
             p.sendMessage(" §7 /cagebuilder");
-        } else if (omp.isEligible(StaffRank.MODERATOR)) {
+        }
+
+        if (omp.isEligible(StaffRank.MODERATOR)) {
             p.sendMessage(" §b§lModerator");
             p.sendMessage(" §7 /ban <player>|<ip> <amount>y/m/d/h (reason)\n     §o-> /ban rienk222 30d Always Trolling");
             p.sendMessage(" §7 /unban <player>|<ip>");
@@ -46,16 +48,15 @@ public class CommandStaffHelp extends StaffCommand {
             p.sendMessage(" §7 /allchat | /all");
             p.sendMessage(" §7 /silent");
             p.sendMessage(" §7 /say <message>");
-            p.sendMessage(" §7 /ip <player>");
-            p.sendMessage(" §7 /lookup <uuid>|<player>");
+            p.sendMessage(" §7 /lookup <uuid>|<player>|<ip>");
             p.sendMessage(" §7 /invsee <player>");
             p.sendMessage(" §7 /tp <player | player1> (player2 | x) (y) (z)");
             p.sendMessage(" §7 /fly (player)");
-        } else {
-            p.sendMessage(" §d§lBuilder §7(In Builderworld)");
-            p.sendMessage(" §7 /fly (player)");
-            p.sendMessage(" §7 /builderworld");
-            p.sendMessage(" §7 /builderworld2");
         }
+
+        p.sendMessage(" §d§lBuilder §7(In Builderworld)");
+        p.sendMessage(" §7 /fly (player)");
+        p.sendMessage(" §7 /builderworld");
+        p.sendMessage(" §7 /builderworld2");
     }
 }

@@ -1,11 +1,8 @@
 package com.orbitmines.hub.handlers;
 
-import com.orbitmines.api.ScrollerList;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.scoreboard.ScoreboardSet;
 import com.orbitmines.hub.Hub;
-
-import java.util.Arrays;
 
 /**
  * Created by Fadi on 10-9-2016.
@@ -23,7 +20,7 @@ public class HubScoreboard extends ScoreboardSet {
     @Override
     public void updateTitle() {
         HubPlayer omp = (HubPlayer) getOMPlayer();
-        if(!omp.hasScoreboardEnabled())
+        if(!omp.hub().hasScoreboardEnabled())
             return;
 
         setTitle(hub.getApi().getScoreboardTitles().get());
@@ -32,22 +29,22 @@ public class HubScoreboard extends ScoreboardSet {
     @Override
     public void updateScores() {
         HubPlayer omp = (HubPlayer) getOMPlayer();
-        if(!omp.hasScoreboardEnabled())
+        if(!omp.hub().hasScoreboardEnabled())
             return;
 
-        addScore(14, "");
-        addScore(13, "§e§lOrbitMines Tokens");
-        addScore(12, " " + omp.general().getTokens() + "  ");
-        addScore(11, " ");
-        addScore(10, "§b§lVIP Points");
-        addScore(9, " " + omp.general().getVipPoints());
-        addScore(8, "  ");
+        addScore(9, "");
+        addScore(8, "§e§lOrbitMines Tokens");
+        addScore(7, " " + omp.general().getTokens() + "  ");
+        addScore(6, " ");
+        addScore(5, "§b§lVIP Points");
+        addScore(4, " " + omp.general().getVipPoints());
+        addScore(3, "  ");
 //        addScore(7, "§f§lMiniGame Coins");
 //        addScore(6, " " + omp.getMiniGameCoins() + " ");
-        addScore(5, "   ");
+//        addScore(4, "   ");
 //        if(!omp.getPlayer().getWorld().getName().equals(hub.getLobby().getName()) || omp.getPlayer().getLocation().distance(hub.getMiniGameLocation()) > 16) {
-        addScore(4, "§c§lRank");
-        addScore(3, " " + omp.getRankString());
+        addScore(2, "§c§lRank");
+        addScore(1, " " + omp.getRankString());
 //        }
 //        else{
 //            addScore(4, "§f§lTickets");
@@ -56,13 +53,17 @@ public class HubScoreboard extends ScoreboardSet {
 //            else
 //                addScore(3, " " + HubMessages.WORD_LOADING.get(omp) + "...   ");
 //        }
-        addScore(2, "    ");
-        addScore(1, "§d§l" + HubMessages.WORD_ALL_PLAYERS.get(omp) + ": §f#" + hub.getPlayerCounter());
+//        addScore(1, "    ");
         addScore(0, "     ");
     }
 
     @Override
     public void updateTeams() {
 
+    }
+
+    @Override
+    public boolean usePlayerRanks() {
+        return true;
     }
 }

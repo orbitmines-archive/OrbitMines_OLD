@@ -30,7 +30,7 @@ public class FireworkInventory extends PerkInventory {
         GadgetData data = omp.gadgets();
         FireworkSettings settings = data.getFireworkSettings();
 
-        add(10, new ItemInstance(getItemStack(settings.getColor1(), omp.getMessage(new Message("Kleur 1", "Color 1")))) {
+        add(11, new ItemInstance(getItemStack(settings.getColor1(), omp.getMessage(new Message("Kleur 1", "Color 1")))) {
             @Override
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
                 settings.nextColor1();
@@ -38,7 +38,7 @@ public class FireworkInventory extends PerkInventory {
             }
         });
 
-        add(28, new ItemInstance(getItemStack(settings.getColor2(), omp.getMessage(new Message("Kleur 1", "Color 1")))) {
+        add(29, new ItemInstance(getItemStack(settings.getColor2(), omp.getMessage(new Message("Kleur 1", "Color 1")))) {
             @Override
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
                 settings.nextColor2();
@@ -46,7 +46,7 @@ public class FireworkInventory extends PerkInventory {
             }
         });
 
-        add(12, new ItemInstance(getItemStack(settings.getFade1(), "Fade 1")) {
+        add(13, new ItemInstance(getItemStack(settings.getFade1(), "Fade 1")) {
             @Override
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
                 settings.nextFade1();
@@ -54,7 +54,7 @@ public class FireworkInventory extends PerkInventory {
             }
         });
 
-        add(30, new ItemInstance(getItemStack(settings.getFade2(), "Fade 2")) {
+        add(31, new ItemInstance(getItemStack(settings.getFade2(), "Fade 2")) {
             @Override
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
                 settings.nextFade2();
@@ -62,7 +62,7 @@ public class FireworkInventory extends PerkInventory {
             }
         });
 
-        add(14, new ItemInstance(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, settings.hasTrail() ? 5 : 14, "§7Trail: " + omp.statusString(settings.hasTrail())).build()) {
+        add(15, new ItemInstance(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, settings.hasTrail() ? 5 : 14, "§7Trail: " + omp.statusString(settings.hasTrail())).build()) {
             @Override
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
                 settings.nextTrail();
@@ -70,7 +70,7 @@ public class FireworkInventory extends PerkInventory {
             }
         });
 
-        add(32, new ItemInstance(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, settings.hasFlicker() ? 5 : 14, "§7Flicker: " + omp.statusString(settings.hasTrail())).build()) {
+        add(33, new ItemInstance(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, settings.hasFlicker() ? 5 : 14, "§7Flicker: " + omp.statusString(settings.hasTrail())).build()) {
             @Override
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
                 settings.nextFlicker();
@@ -85,7 +85,7 @@ public class FireworkInventory extends PerkInventory {
             }
         });
 
-        add(50, new EmptyItemInstance(new ItemBuilder(Material.EMPTY_MAP, data.getFireworkPasses() > 64 ? 64 : data.getFireworkPasses(), 0, "§c§nFirework Passes:§r §6§n" + data.getFireworkPasses()).build()));
+        add(50, new EmptyItemInstance(new ItemBuilder(Material.EMPTY_MAP, data.getFireworkPasses() > 64 ? 64 : (data.getFireworkPasses() == 0 ? 1 : data.getFireworkPasses()), 0, "§c§nFirework Passes:§r §6§n" + data.getFireworkPasses()).build()));
 
         int slot = 52;
         for (Passes passes : Passes.values()) {
@@ -105,6 +105,7 @@ public class FireworkInventory extends PerkInventory {
                     }
                 }
             });
+            slot++;
         }
     }
 
@@ -124,8 +125,8 @@ public class FireworkInventory extends PerkInventory {
 
     public enum Passes implements Perk {
 
-        FIREWORK_PASSES_5(5, "Firework Passes", Color.ORANGE, new ItemSet(Material.EMPTY_MAP), new Obtainable(OrbitMinesApi.VIP_POINTS, 2)),
-        FIREWORK_PASSES_25(25, "Firework Passes", Color.ORANGE, new ItemSet(Material.EMPTY_MAP), new Obtainable(OrbitMinesApi.VIP_POINTS, 10));
+        FIREWORK_PASSES_5(5, "Firework Passes", Color.ORANGE, new ItemSet(Material.EMPTY_MAP, 5), new Obtainable(OrbitMinesApi.VIP_POINTS, 2)),
+        FIREWORK_PASSES_25(25, "Firework Passes", Color.ORANGE, new ItemSet(Material.EMPTY_MAP, 25), new Obtainable(OrbitMinesApi.VIP_POINTS, 10));
 
         private final int amount;
         private final String name;

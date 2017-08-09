@@ -17,7 +17,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public class DisguiseInventory extends PerkInventory {
 
     public DisguiseInventory() {
-        super(54, "§0§lDisguises", 48);
+        super(45, "§0§lDisguises", 40);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class DisguiseInventory extends PerkInventory {
         }
 
         if (data.isDisguised())
-            add(50, new ItemInstance(new ItemBuilder(Material.BARRIER, 1, 0, omp.getMessage(new Message("§4§nZet Disguise UIT", "§4§nDisable Disguise"))).build()) {
+            add(41, new ItemInstance(new ItemBuilder(Material.BARRIER, 1, 0, omp.getMessage(new Message("§4§nZet Disguise UIT", "§4§nDisable Disguise"))).build()) {
                 @Override
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     Player p = omp.getPlayer();

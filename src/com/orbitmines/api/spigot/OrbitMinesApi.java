@@ -4,10 +4,7 @@ import com.orbitmines.api.*;
 import com.orbitmines.api.spigot.commands.Command;
 import com.orbitmines.api.spigot.commands.CommandServers;
 import com.orbitmines.api.spigot.commands.CommandTopVoters;
-import com.orbitmines.api.spigot.commands.moderator.CommandFly;
-import com.orbitmines.api.spigot.commands.moderator.CommandInvSee;
-import com.orbitmines.api.spigot.commands.moderator.CommandSilent;
-import com.orbitmines.api.spigot.commands.moderator.CommandTeleport;
+import com.orbitmines.api.spigot.commands.moderator.*;
 import com.orbitmines.api.spigot.commands.owner.*;
 import com.orbitmines.api.spigot.commands.perks.*;
 import com.orbitmines.api.spigot.commands.vip.CommandAfk;
@@ -19,6 +16,7 @@ import com.orbitmines.api.spigot.events.npc.NpcDamageEvent;
 import com.orbitmines.api.spigot.events.npc.NpcInteractAtEntityEvent;
 import com.orbitmines.api.spigot.events.npc.NpcInteractEntityEvent;
 import com.orbitmines.api.spigot.handlers.ConfigHandler;
+import com.orbitmines.api.spigot.handlers.NewsHologram;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.currency.Currency;
 import com.orbitmines.api.spigot.handlers.currency.CurrencyTokens;
@@ -33,7 +31,6 @@ import com.orbitmines.api.spigot.runnable.runnables.*;
 import com.orbitmines.api.spigot.runnable.runnables.player.ActionBarCooldownRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,6 +38,7 @@ import org.bukkit.plugin.messaging.Messenger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /*
 * OrbitMines - @author Fadi Shawki - 26-6-2017
@@ -74,6 +72,9 @@ public class OrbitMinesApi extends JavaPlugin {
     private TrailEnabler trailEnabler;
     private WardrobeEnabler wardrobeEnabler;
 
+    private boolean useNewsHolgrams;
+    private boolean useInteractiveKits;
+
     @Override
     public void onEnable() {
         api = this;
@@ -95,6 +96,9 @@ public class OrbitMinesApi extends JavaPlugin {
                 return new GeneralData(omp);
             }
         });
+
+        useNewsHolgrams = false;
+        useInteractiveKits = false;
 
         /* Setup Bungee messaging */
         Messenger messenger = getServer().getMessenger();
@@ -149,10 +153,6 @@ public class OrbitMinesApi extends JavaPlugin {
 
         registerEvents();
         server.registerEvents();
-
-        Location spawnLocation = server.getSpawnLocation();
-        if (spawnLocation != null)
-            getServer().getPluginManager().registerEvents(new SpawnLocationEvent(spawnLocation), this);
 
         registerCommands();
         server.registerCommands();
@@ -233,6 +233,8 @@ public class OrbitMinesApi extends JavaPlugin {
         pluginManager.registerEvents(new NpcDamageEvent(), this);
         pluginManager.registerEvents(new NpcInteractAtEntityEvent(), this);
         pluginManager.registerEvents(new NpcInteractEntityEvent(), this);
+        /* Spawn Location */
+        pluginManager.registerEvents(new SpawnLocationEvent(), this);
     }
 
     private void registerCommands() {
@@ -250,6 +252,7 @@ public class OrbitMinesApi extends JavaPlugin {
 
         /* moderator */
         new CommandFly();
+        new CommandHologram();
         new CommandInvSee();
         new CommandSilent();
         new CommandTeleport();
@@ -311,6 +314,27 @@ public class OrbitMinesApi extends JavaPlugin {
         //TODO MESSAGE TO BUNGEE TO UPDATE
     }
 
+    /* Setup News Holograms */
+    public void setupHolograms() {
+        List<Map<Database.Column, String>> entries = Database.get().getEntries(Database.Table.HOLOGRAMS, new Database.Where(Database.Column.SERVER, api.server().getServerType().toString()),
+                Database.Column.HOLOGRAMNAME);
+
+        for (Map<Database.Column, String> entry : entries) {
+            new NewsHologram(entry.get(Database.Column.HOLOGRAMNAME).substring(api.server().getServerType().toString().length() + 1));
+        }
+
+        useNewsHolgrams = true;
+    }
+
+    /* Done automatically when using the KitInteractive class */
+    public void setupInteractiveKits() {
+        if (useInteractiveKits)
+            return;
+
+        useInteractiveKits = true;
+        getServer().getPluginManager().registerEvents(new InteractiveKitEvent(), this);
+    }
+
     public ChatColorEnabler chatcolors() {
         return chatColorEnabler;
     }
@@ -361,5 +385,9 @@ public class OrbitMinesApi extends JavaPlugin {
 
     public WardrobeEnabler wardrobe() {
         return wardrobeEnabler;
+    }
+
+    public boolean useNewsHolgrams() {
+        return useNewsHolgrams;
     }
 }

@@ -22,7 +22,7 @@ public enum TrailType implements Perk {
     ORBIT_TRAIL("Orbit Trail", true, new Obtainable(OrbitMinesApi.VIP_POINTS, 1750)),
     SNAKE_TRAIL("Snake Trail", true, new Obtainable(OrbitMinesApi.VIP_POINTS, 1000)),
 
-    FULL_CYLINDER(null, true, new Obtainable());
+    FULL_CYLINDER(null, true, null);
 
     private final String name;
     private final boolean animated;

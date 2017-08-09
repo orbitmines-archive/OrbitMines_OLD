@@ -120,7 +120,7 @@ public class ItemBuilder {
         ItemStack itemStack = new ItemStack(material, amount, durability);
         ItemMeta meta = itemStack.getItemMeta();
         meta.setDisplayName(displayName);
-        meta.setLore(new ArrayList<>(lore));
+        meta.setLore(lore == null ? null : new ArrayList<>(lore));
         itemStack.setItemMeta(meta);
 
         return addEnchantments(itemStack);

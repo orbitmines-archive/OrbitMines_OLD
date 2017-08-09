@@ -26,9 +26,9 @@ public abstract class Command {
     }
 
     public static Command getCommand(String cmd) {
-        for(Command command : commands){
-            for(String alias : command.getAlias()){
-                if(cmd.equalsIgnoreCase(alias))
+        for (Command command : commands) {
+            for (String alias : command.getAlias()) {
+                if (cmd.equalsIgnoreCase(alias))
                     return command;
             }
         }

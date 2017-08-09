@@ -47,8 +47,7 @@ public class CommandReport extends Command {
                         Server server = omp.getServer();
                         String serverName = server.getColor() + "§l" + server.getName();
                         for (BungeePlayer bungeePlayer : BungeePlayer.getPlayers()) {
-                            if (bungeePlayer.showStaffMsg())
-                                bungeePlayer.getPlayer().sendMessage(new TextComponent("§7(" + serverName + "§7) §7§o" + p.getName() + " §7» §c§o" + p2.getName() + "§7. (§c§o" + reason + "§7)"));
+                            bungeePlayer.getPlayer().sendMessage(new TextComponent("§7(" + serverName + "§7) §7§o" + p.getName() + " §7» §c§o" + p2.getName() + "§7. (§c§o" + reason + "§7)"));
                         }
 
                         String reportedOn = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date(Calendar.getInstance().getTimeInMillis()));

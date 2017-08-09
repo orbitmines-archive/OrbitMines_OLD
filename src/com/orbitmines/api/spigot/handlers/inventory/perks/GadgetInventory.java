@@ -17,7 +17,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public class GadgetInventory extends PerkInventory {
 
     public GadgetInventory() {
-        super(45, "§0§lGadgets", 39);
+        super(27, "§0§lGadgets", 22);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class GadgetInventory extends PerkInventory {
         }
 
         if (data.hasGadgetEnabled())
-            add(50, new ItemInstance(new ItemBuilder(Material.BARRIER, 1, 0, omp.getMessage(new Message("§4§nZet Gadget UIT", "§4§nDisable Gadget"))).build()) {
+            add(23, new ItemInstance(new ItemBuilder(Material.BARRIER, 1, 0, omp.getMessage(new Message("§4§nZet Gadget UIT", "§4§nDisable Gadget"))).build()) {
                 @Override
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     Player p = omp.getPlayer();

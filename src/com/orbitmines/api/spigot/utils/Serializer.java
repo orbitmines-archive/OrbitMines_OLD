@@ -44,7 +44,7 @@ public class Serializer {
     }
 
     public static FireworkSettings parseFireworkSettings(String string) {
-        String[] data = string.split("|");
+        String[] data = string.split("\\|");
         return new FireworkSettings(Color.valueOf(data[0]), Color.valueOf(data[1]), Color.valueOf(data[2]), Color.valueOf(data[3]), Boolean.parseBoolean(data[4]), Boolean.parseBoolean(data[5]), FireworkEffect.Type.valueOf(data[6]));
     }
 
@@ -129,7 +129,7 @@ public class Serializer {
         if (string == null || string.equals("null"))
             return null;
 
-        String[] data = string.split("|");
+        String[] data = string.split("\\|");
 
         ItemStack item = new ItemStack(Material.valueOf(data[0]), Integer.parseInt(data[1]));
         item.setDurability(Short.parseShort(data[2]));

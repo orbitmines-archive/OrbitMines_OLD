@@ -20,7 +20,6 @@ public class Scoreboard {
     private OMPlayer omp;
 
     public Scoreboard(OMPlayer omp) {
-        omp.setScoreboard(set);
         this.board = new Board(omp.getPlayer().getName());
         this.omp = omp;
 

@@ -15,9 +15,11 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.*;
 
@@ -85,6 +87,15 @@ public class PreventionSet {
             case ITEM_PICKUP:
                 listener = new PreventItemPickup();
                 break;
+            case PHYSICAL_INTERACTING:
+                listener = new PreventPhysicalInteracting();
+                break;
+            case BUCKET_USAGE:
+                listener = new PreventBucketUsage();
+                break;
+            case CLICK_PLAYER_INVENTORY:
+                listener = new PreventClickPlayerInventory();
+                break;
         }
 
         listeners.put(prevention, listener);
@@ -117,7 +128,10 @@ public class PreventionSet {
         MONSTER_EGG_USAGE,
         SWAP_HAND_ITEMS,
         ITEM_DROP,
-        ITEM_PICKUP;
+        ITEM_PICKUP,
+        PHYSICAL_INTERACTING,
+        BUCKET_USAGE,
+        CLICK_PLAYER_INVENTORY;
 
     }
 
@@ -215,7 +229,7 @@ public class PreventionSet {
 
     public class PreventBlockInteracting implements Listener {
 
-        private final List<Material> notClickable = Arrays.asList(Material.CHEST, Material.ENDER_CHEST, Material.TRAPPED_CHEST, Material.FURNACE, Material.WORKBENCH, Material.ANVIL, Material.ENCHANTMENT_TABLE, Material.DISPENSER, Material.HOPPER, Material.DROPPER, Material.TRAP_DOOR, Material.LEVER, Material.STONE_BUTTON, Material.WOOD_BUTTON, Material.ACACIA_DOOR, Material.ACACIA_FENCE_GATE, Material.BED_BLOCK, Material.BIRCH_DOOR, Material.BIRCH_FENCE_GATE, Material.BREWING_STAND, Material.BURNING_FURNACE, Material.CAKE_BLOCK, Material.CAULDRON, Material.COMMAND, Material.DARK_OAK_DOOR, Material.DARK_OAK_FENCE_GATE, Material.ENDER_PORTAL, Material.FENCE_GATE, Material.FIRE, Material.FLOWER_POT, Material.JUNGLE_DOOR, Material.JUNGLE_FENCE_GATE, Material.JUKEBOX, Material.OBSERVER, Material.REDSTONE_COMPARATOR_OFF, Material.REDSTONE_COMPARATOR_ON, Material.REDSTONE_COMPARATOR, Material.SPRUCE_DOOR, Material.SPRUCE_FENCE_GATE, Material.TRAP_DOOR, Material.WOOD_DOOR, Material.WOODEN_DOOR);
+        private final List<Material> notClickable = Arrays.asList(Material.CHEST, Material.ENDER_CHEST, Material.TRAPPED_CHEST, Material.FURNACE, Material.WORKBENCH, Material.ANVIL, Material.ENCHANTMENT_TABLE, Material.DISPENSER, Material.HOPPER, Material.DROPPER, Material.TRAP_DOOR, Material.LEVER, Material.STONE_BUTTON, Material.WOOD_BUTTON, Material.ACACIA_DOOR, Material.ACACIA_FENCE_GATE, Material.BED_BLOCK, Material.BIRCH_DOOR, Material.BIRCH_FENCE_GATE, Material.BREWING_STAND, Material.BURNING_FURNACE, Material.CAKE_BLOCK, Material.CAULDRON, Material.COMMAND, Material.DARK_OAK_DOOR, Material.DARK_OAK_FENCE_GATE, Material.ENDER_PORTAL, Material.FENCE_GATE, Material.FIRE, Material.FLOWER_POT, Material.JUNGLE_DOOR, Material.JUNGLE_FENCE_GATE, Material.JUKEBOX, Material.OBSERVER, Material.REDSTONE_COMPARATOR_OFF, Material.REDSTONE_COMPARATOR_ON, Material.REDSTONE_COMPARATOR, Material.SPRUCE_DOOR, Material.SPRUCE_FENCE_GATE, Material.TRAP_DOOR, Material.WOOD_DOOR, Material.WOODEN_DOOR, Material.RAILS, Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL);
 
         @EventHandler
         public void preventBlockInteracting(PlayerInteractEvent event) {
@@ -286,7 +300,7 @@ public class PreventionSet {
     public class PreventSwapHandItems implements Listener {
 
         @EventHandler
-        public void preventMonsterEggUsage(PlayerSwapHandItemsEvent event) {
+        public void preventSwapHandItems(PlayerSwapHandItemsEvent event) {
             Player player = event.getPlayer();
 
             if (!worlds.get(Prevention.SWAP_HAND_ITEMS).contains(player.getWorld()))
@@ -299,7 +313,7 @@ public class PreventionSet {
     public class PreventItemDrop implements Listener {
 
         @EventHandler
-        public void preventMonsterEggUsage(PlayerDropItemEvent event) {
+        public void preventItemDrop(PlayerDropItemEvent event) {
             Player player = event.getPlayer();
 
             if (!worlds.get(Prevention.ITEM_DROP).contains(player.getWorld()))
@@ -312,10 +326,45 @@ public class PreventionSet {
     public class PreventItemPickup implements Listener {
 
         @EventHandler
-        public void preventMonsterEggUsage(PlayerPickupItemEvent event) {
+        public void preventItemPickup(PlayerPickupItemEvent event) {
             Player player = event.getPlayer();
 
             if (!worlds.get(Prevention.ITEM_PICKUP).contains(player.getWorld()))
+                return;
+
+            event.setCancelled(true);
+        }
+    }
+
+    public class PreventPhysicalInteracting implements Listener {
+
+        @EventHandler
+        public void preventPhysicalInteracting(PlayerInteractEvent event) {
+            if (event.getAction() != Action.PHYSICAL || !worlds.get(Prevention.BLOCK_INTERACTING).contains(event.getPlayer().getWorld()))
+                return;
+
+            event.setCancelled(true);
+        }
+    }
+
+    public class PreventBucketUsage implements Listener {
+
+        private final List<Material> buckets = Arrays.asList(Material.WATER_BUCKET, Material.LAVA_BUCKET);
+
+        @EventHandler
+        public void preventBucketUsage(PlayerInteractEvent event) {
+            if (event.getAction() != Action.RIGHT_CLICK_BLOCK || !worlds.get(Prevention.BLOCK_INTERACTING).contains(event.getPlayer().getWorld()) || event.getItem() == null || !buckets.contains(event.getItem().getType()))
+                return;
+
+            event.setCancelled(true);
+        }
+    }
+
+    public class PreventClickPlayerInventory implements Listener {
+
+        @EventHandler
+        public void preventClickPlayerInventory(InventoryClickEvent event) {
+            if (event.getClickedInventory() == null || !(event.getClickedInventory() instanceof PlayerInventory) || !worlds.get(Prevention.CLICK_PLAYER_INVENTORY).contains(event.getWhoClicked().getWorld()))
                 return;
 
             event.setCancelled(true);

@@ -3,7 +3,6 @@ package com.orbitmines.bungee.commands.moderator;
 import com.orbitmines.api.Database;
 import com.orbitmines.api.Message;
 import com.orbitmines.api.StaffRank;
-import com.orbitmines.api.utils.uuid.UUIDUtils;
 import com.orbitmines.bungee.commands.StaffCommand;
 import com.orbitmines.bungee.handlers.Ban;
 import com.orbitmines.bungee.handlers.BungeePlayer;
@@ -43,11 +42,12 @@ public class CommandBan extends StaffCommand {
                 } else {
                     omp.sendMessage(new Message("§7IP §d" + a[1] + "§7 is al §4§lGEBANNED§7!", "§7IP §d" + a[1] + "§7 has already been §4§lBANNED§7!"));
                 }
+                return;
             }
 
-            UUID uuid = UUIDUtils.getUUID(a[1]);
+            if (Database.get().contains(Database.Table.PLAYERS, Database.Column.UUID, new Database.Where(Database.Column.NAME, a[1]))) {
+                UUID uuid = UUID.fromString(Database.get().getString(Database.Table.PLAYERS, Database.Column.UUID, new Database.Where(Database.Column.NAME, a[1])));
 
-            if (uuid != null) {
                 if (Ban.getBan(uuid) == null) {
                     handle(omp, a, uuid, null);
                 } else {

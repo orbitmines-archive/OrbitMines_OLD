@@ -22,7 +22,7 @@ public abstract class GadgetHandler implements Listener {
 
     private final int ticks;
     private int tickIndex;
-    private final Gadget gadget;
+    protected final Gadget gadget;
 
     public GadgetHandler(Gadget gadget) {
         this(gadget, -1);
@@ -62,6 +62,10 @@ public abstract class GadgetHandler implements Listener {
     public ItemStack getItem(OMPlayer omp) {
         Gadget gadget = getGadget();
         return new ItemBuilder(gadget.item().getMaterial(), 1, gadget.item().getDurability(), gadget.color().getChatColor() + "§l" + gadget.getName()).build();
+    }
+
+    public void giveItem(OMPlayer omp) {
+        omp.getPlayer().getInventory().setItem(api.gadgets().getGadgetSlot(), getItem(omp));
     }
 
     public Gadget getGadget() {

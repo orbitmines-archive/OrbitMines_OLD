@@ -31,8 +31,8 @@ public class CommandHelp extends Command {
                 p.sendMessage(" §7Gebruik je§9 Cosmetic Perks§7 met §9/perks§7.");
                 p.sendMessage(" §cReport§7 een speler met §c/report§7.");
                 p.sendMessage(" §bVote§7 voor beloningen met §b/vote§7.");
-                p.sendMessage(" §7Bekijk je§2 vriendenlijst§7 met §2/friends§7.");
-                p.sendMessage(" §7Voeg§2 vrienden§7 toe met §2/friend <player>§7.");
+//                p.sendMessage(" §7Bekijk je§2 vriendenlijst§7 met §2/friends§7.");
+//                p.sendMessage(" §7Voeg§2 vrienden§7 toe met §2/friend <player>§7.");
                 p.sendMessage(" §3Doneer§7 voor VIP met §3/donate§7.");
                 p.sendMessage(" §7Stuur§9 privé berichten§7 met §9/msg§7.");
                 p.sendMessage(" §7Bekijk je§e OrbitMines Tokens§7 met §e/omt§7.");
@@ -84,8 +84,8 @@ public class CommandHelp extends Command {
                 p.sendMessage(" §7Use your§9 Cosmetic Perks§7 with §9/perks§7.");
                 p.sendMessage(" §cReport§7 a Player with §c/report§7.");
                 p.sendMessage(" §bVote§7 for Rewards with §b/vote§7.");
-                p.sendMessage(" §7Show your§2 Friends§7 with §2/friends§7.");
-                p.sendMessage(" §7Add§2 Friends§7 with §2/friend <player>§7.");
+//                p.sendMessage(" §7Show your§2 Friends§7 with §2/friends§7.");
+//                p.sendMessage(" §7Add§2 Friends§7 with §2/friend <player>§7.");
                 p.sendMessage(" §3Donate§7 for VIP with §3/donate§7.");
                 p.sendMessage(" §7Send§9 Private Messages§7 with §9/msg§7.");
                 p.sendMessage(" §7Show your§e OrbitMines Tokens§7 with §e/omt§7.");

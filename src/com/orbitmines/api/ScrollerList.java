@@ -18,7 +18,7 @@ public class ScrollerList<T> implements Cloneable {
     public T next() {
         index++;
 
-        if (index == list.size() +1)
+        if (list.size() == index + 1)
             index = 0;
 
         return list.get(index);

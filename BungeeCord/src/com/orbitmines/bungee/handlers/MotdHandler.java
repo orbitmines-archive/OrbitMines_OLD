@@ -29,7 +29,7 @@ public class MotdHandler {
             return;
         }
 
-        String[] motdData = Database.get().getString(Database.Table.BUNGEE, Database.Column.DATA, new Database.Where(Database.Column.TYPE, BungeeDatabaseType.MOTD.toString())).split("|");
+        String[] motdData = Database.get().getString(Database.Table.BUNGEE, Database.Column.DATA, new Database.Where(Database.Column.TYPE, BungeeDatabaseType.MOTD.toString())).split("\\|");
 
         /* FirstLine|SecondLine~SecondLine~SecondLine */
         firstLine = ChatColor.translateAlternateColorCodes('&', motdData[0]).replace("`", "'");

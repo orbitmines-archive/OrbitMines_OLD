@@ -72,7 +72,8 @@ public class PlayerChatEvent implements Listener {
             }
 
             /* Staff Message */
-            Message message = new Message("§e§lCMD §8» §e§o" + player.getName() + "§7§o: " + event.getMessage());
+            Server server = omp.getServer();
+            Message message = new Message("§e§lCMD §8» " + server.getColor() + server.getName() + " §8» §e§o" + player.getName() + "§7§o: " + event.getMessage());
 
             for (BungeePlayer bungeePlayer : BungeePlayer.getPlayers()) {
                 if (bungeePlayer.showStaffMsg())
@@ -84,8 +85,8 @@ public class PlayerChatEvent implements Listener {
             if (command == null) {
                 //TODO CHECK SPIGOT COMMANDS.
 
-                event.setCancelled(true);
-                omp.msgUnknownCommand(a[0]);
+//                event.setCancelled(true);
+//                omp.msgUnknownCommand(a[0]);
                 return;
             }
 

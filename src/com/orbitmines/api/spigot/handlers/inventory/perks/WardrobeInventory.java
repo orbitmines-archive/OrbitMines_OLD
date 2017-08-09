@@ -1,6 +1,7 @@
 package com.orbitmines.api.spigot.handlers.inventory.perks;
 
 import com.orbitmines.api.Message;
+import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.inventory.OMInventory;
 import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
@@ -21,42 +22,24 @@ import java.util.Arrays;
 public class WardrobeInventory extends PerkInventory {
 
     public WardrobeInventory() {
-        super(54, "§0§lWardrobe", 48);
+        super(45, "§0§lWardrobe", 40);
     }
 
     @Override
     protected void setPerkItems(OMPlayer omp) {
         WardrobeData data = omp.wardrobe();
 
-        int slot = 9;
+        int slot = 0;
         for (Wardrobe wardrobe : Wardrobe.values()) {
-            ItemBuilder itemBuilder = wardrobe.item().getMaterial() == Material.LEATHER_CHESTPLATE ? toLeatherArmorBuilder(wardrobe, omp, LeatherArmorBuilder.Type.CHESTPLATE, wardrobe.color().getBukkitColor()) : toItemBuilder(wardrobe, omp);
-
-            add(slot, new ConfirmItemInstance(api.getNms().customItem().hideFlags(itemBuilder.build(), ItemUtils.FLAG_ATTRIBUTES_MODIFIERS)) {
-                @Override
-                protected void onConfirm(InventoryClickEvent event, OMPlayer omp) {
-                    data.addWardrobe(wardrobe);
-                }
-
-                @Override
-                public void onClick(InventoryClickEvent event, OMPlayer omp) {
-                    if (!wardrobe.hasAccess(omp)) {
-                        if (wardrobe.obtainable().isPurchasable() && wardrobe.obtainable().canPurchase(omp)) {
-                            confirmPurchase(omp, wardrobe);
-                        } else {
-                            wardrobe.obtainable().msgNoAccess(omp);
-                        }
-                    } else {
-                        omp.getPlayer().closeInventory();
-                        data.wardrobe(wardrobe);
-                    }
-                }
-            });
+            if (wardrobe != Wardrobe.ELYTRA)
+                add(slot, wardrobe, omp, data);
 
             slot++;
         }
 
-        add(31, new ItemInstance(new ItemBuilder(Material.LEATHER_CHESTPLATE).build()) {
+        add(21, Wardrobe.ELYTRA, omp, data);
+
+        add(23, new ItemInstance(new ItemBuilder(Material.LEATHER_CHESTPLATE).build()) {
 
             @Override
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
@@ -75,7 +58,7 @@ public class WardrobeInventory extends PerkInventory {
         discoItem(omp, this);
 
         if (data.hasWardrobeEnabled())
-            add(50, new ItemInstance(new ItemBuilder(Material.BARRIER, 1, 0, omp.getMessage(new Message("§4§nZet Wardrobe UIT", "§4§nDisable Wardrobe"))).build()) {
+            add(41, new ItemInstance(new ItemBuilder(Material.BARRIER, 1, 0, omp.getMessage(new Message("§4§nZet Wardrobe UIT", "§4§nDisable Wardrobe"))).build()) {
                 @Override
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     Player p = omp.getPlayer();
@@ -97,10 +80,35 @@ public class WardrobeInventory extends PerkInventory {
         return !api.isWardrobeEnabled();
     }
 
+    private void add(int slot, Wardrobe wardrobe, OMPlayer omp, WardrobeData data) {
+        ItemBuilder itemBuilder = wardrobe.item().getMaterial() == Material.LEATHER_CHESTPLATE ? toLeatherArmorBuilder(wardrobe, omp, LeatherArmorBuilder.Type.CHESTPLATE, wardrobe.color().getBukkitColor()) : toItemBuilder(wardrobe, omp);
+
+        add(slot, new ConfirmItemInstance(api.getNms().customItem().hideFlags(itemBuilder.build(), ItemUtils.FLAG_ATTRIBUTES_MODIFIERS)) {
+            @Override
+            protected void onConfirm(InventoryClickEvent event, OMPlayer omp) {
+                data.addWardrobe(wardrobe);
+            }
+
+            @Override
+            public void onClick(InventoryClickEvent event, OMPlayer omp) {
+                if (!wardrobe.hasAccess(omp)) {
+                    if (wardrobe.obtainable().isPurchasable() && wardrobe.obtainable().canPurchase(omp)) {
+                        confirmPurchase(omp, wardrobe);
+                    } else {
+                        wardrobe.obtainable().msgNoAccess(omp);
+                    }
+                } else {
+                    omp.getPlayer().closeInventory();
+                    data.wardrobe(wardrobe);
+                }
+            }
+        });
+    }
+
     public static void discoItem(OMPlayer omp, WardrobeInventory inventory) {
         WardrobeData data = omp.wardrobe();
         Wardrobe wardrobe = Wardrobe.random(Arrays.asList(Wardrobe.COLORS));
 
-        inventory.getInventory().setItem(31, new LeatherArmorBuilder(LeatherArmorBuilder.Type.CHESTPLATE, wardrobe.color().getBukkitColor(), 1, wardrobe.color() + "Disco Armor", "", omp.isEligible(data.getWardrobeDiscoObtainable().getVipRank()) ? "§a§l" + omp.getMessage(new Message("Ontgrendeld", "Unlocked")) : data.getWardrobeDiscoObtainable().getRequiredLore(omp), "").build());
+        inventory.getInventory().setItem(23, OrbitMinesApi.getApi().getNms().customItem().hideFlags(new LeatherArmorBuilder(LeatherArmorBuilder.Type.CHESTPLATE, wardrobe.color().getBukkitColor(), 1, wardrobe.color().getChatColor() + "Disco Armor", "", omp.isEligible(data.getWardrobeDiscoObtainable().getVipRank()) ? "§a§l" + omp.getMessage(new Message("Ontgrendeld", "Unlocked")) : data.getWardrobeDiscoObtainable().getRequiredLore(omp), "").build(), ItemUtils.FLAG_ATTRIBUTES_MODIFIERS));
     }
 }

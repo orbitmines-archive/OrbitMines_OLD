@@ -80,7 +80,7 @@ public class Obtainable {
 
     public String getRequiredLore(OMPlayer omp) {
         if (currency != null) {
-            return "§7Price: " + currency.color().getChatColor() + "§l" + (price == 1 ? currency.getSingleName() : currency.getMultipleName());
+            return "§7Price: " + currency.color().getChatColor() + "§l" + price + " " + (price == 1 ? currency.getSingleName() : currency.getMultipleName());
         } else if (vipRank != null) {
             return "§7Required: " + vipRank.getRankString() + " VIP";
         } else if (other != null) {

@@ -71,7 +71,7 @@ public class PotionItemBuilder extends ItemBuilder {
         ItemStack itemStack = new ItemStack(material, amount, durability);
         PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
         meta.setDisplayName(displayName);
-        meta.setLore(new ArrayList<>(lore));
+        meta.setLore(lore == null ? null : new ArrayList<>(lore));
 
         for (PotionBuilder potionBuilder : potionBuilders) {
             meta.addCustomEffect(potionBuilder.build(), true);

@@ -50,7 +50,7 @@ public class HatData extends PlayerData {
             StringBuilder stringBuilder = new StringBuilder();
             for (Hat hat : hats) {
                 stringBuilder.append(hat.toString());
-                stringBuilder.append("\\=");
+                stringBuilder.append("=");
             }
             hatsString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
         }

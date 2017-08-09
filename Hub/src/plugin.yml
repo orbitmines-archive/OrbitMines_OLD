@@ -1,0 +1,7 @@
+name: OrbitMinesHub
+author: O_o_Fadi_o_O
+version: 1.0.0
+description: OrbitMinesHub by O_o_Fadi_o_O/FadiDev
+main: com.orbitmines.hub.Hub
+commands:
+depend: [OrbitMinesApi]

@@ -46,7 +46,7 @@ public class ChatColorData extends PlayerData {
             StringBuilder stringBuilder = new StringBuilder();
             for (ChatColor chatColor : chatColors) {
                 stringBuilder.append(chatColor.toString());
-                stringBuilder.append("\\=");
+                stringBuilder.append("=");
             }
             chatColorsString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
         }
@@ -56,12 +56,12 @@ public class ChatColorData extends PlayerData {
             StringBuilder stringBuilder = new StringBuilder();
             for (ChatColorType chatColorType : chatColorTypes) {
                 stringBuilder.append(chatColorType.toString());
-                stringBuilder.append("\\=");
+                stringBuilder.append("=");
             }
             chatColorTypesString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
         }
 
-        return chatColor.toString() + "-" + chatColorsString + "-" + chatColorType.toString() + "-" + chatColorTypesString;
+        return chatColor.toString() + "-" + chatColorsString + "-" + (chatColorType == null ? "null" : chatColorType.toString()) + "-" + chatColorTypesString;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class ChatColorData extends PlayerData {
             }
         }
 
-        chatColorType = ChatColorType.valueOf(data[2]);
+        chatColorType = data[2].equals("null") ? null : ChatColorType.valueOf(data[2]);
 
         if (!data[3].equals("null")) {
             for (String chatColorType : data[3].split("=")) {

@@ -35,11 +35,14 @@ public class PingEvent implements Listener {
 
     @EventHandler
     public void onPing(ProxyPingEvent event) {
+
         ServerPing res = event.getResponse();
-        ServerPing.Protocol protocolVersion = bungee.isInMaintenance() ? new ServerPing.Protocol("§d§lMaintenance Mode", 1) : res.getVersion();
 
         ServerPing.Players players = res.getPlayers();
         players.setMax(300);//TODO
+
+        //        ServerPing.Protocol protocolVersion = bungee.isInMaintenance() ? new ServerPing.Protocol("§d§lMaintenance Mode", 1) : res.getVersion();
+        ServerPing.Protocol protocolVersion = new ServerPing.Protocol("§7§lClosed Beta §7" + players.getOnline() + "§8/§7" + players.getMax(), 1);//TODO REMOVE
 
         List<String> secondLines = motdHandler.getSecondLines();
         ServerPing BF = new ServerPing(protocolVersion, players, " " + motdHandler.getFirstLine() + "\n    " + motdHandler.getColor() + "» " + secondLines.get(RandomUtils.RANDOM.nextInt(secondLines.size())), favicon);

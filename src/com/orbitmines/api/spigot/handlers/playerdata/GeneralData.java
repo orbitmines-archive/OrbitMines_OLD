@@ -34,7 +34,7 @@ public class GeneralData extends PlayerData {
 
     @Override
     public String serialize() {
-        return vipPoints + "-" + orbitMinesTokens + "-" + nickName.replaceAll("§", "&");
+        return vipPoints + "-" + orbitMinesTokens + "-" + (nickName == null ? "null" : nickName.replaceAll("§", "&"));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class GeneralData extends PlayerData {
 
         vipPoints = Integer.parseInt(data[0]);
         orbitMinesTokens = Integer.parseInt(data[1]);
-        nickName = data[2].replaceAll("&", "§");
+        nickName = data[2].equals("null") ? null : data[2].replaceAll("&", "§");
     }
 
     public int getVipPoints() {

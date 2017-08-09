@@ -50,7 +50,7 @@ public class WardrobeData extends PlayerData {
             StringBuilder stringBuilder = new StringBuilder();
             for (Wardrobe wardrobe : this.wardrobe) {
                 stringBuilder.append(wardrobe.toString());
-                stringBuilder.append("\\=");
+                stringBuilder.append("=");
             }
             wardrobeString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
         }
@@ -72,7 +72,13 @@ public class WardrobeData extends PlayerData {
     }
 
     public List<Wardrobe> getWardrobe() {
-        return this.wardrobe;
+        List<Wardrobe> list = new ArrayList<>(this.wardrobe);
+        for (Wardrobe value : Wardrobe.values()) {
+            if (value.obtainable().getVipRank() != null && omp.isEligible(value.obtainable().getVipRank()))
+                list.add(value);
+        }
+
+        return list;
     }
 
     public void addWardrobe(Wardrobe wardrobe) {

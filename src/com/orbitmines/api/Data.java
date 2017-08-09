@@ -10,6 +10,8 @@ public enum Data {
 
     GENERAL,
 
+    HUB,
+
     /* Perks */
     CHATCOLORS,
     DISGUISES,

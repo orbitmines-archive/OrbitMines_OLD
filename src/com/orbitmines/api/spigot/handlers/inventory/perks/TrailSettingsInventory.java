@@ -29,6 +29,9 @@ public class TrailSettingsInventory extends PerkInventory {
 
         int slot = 9;
         for (TrailType trailType : TrailType.values()) {
+            if (trailType.obtainable() == null)
+                return;
+
             add(slot, new ConfirmItemInstance(toItemBuilder(trailType, omp).build()) {
 
                 @Override
@@ -56,7 +59,25 @@ public class TrailSettingsInventory extends PerkInventory {
 
         add(4, new EmptyItemInstance(new ItemBuilder(Material.COMPASS, 1, 0, "§7Trail Types").build()));
 
-        add(19, new ConfirmItemInstance(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, data.isSpecial() ? 5 : 14, "§7§lSpecial Trail: " + omp.statusString(data.isSpecial()),
+        add(29, new ItemInstance(new ItemBuilder(Material.NETHER_STAR, data.getParticleAmount(), 0, "§7§lParticle Amount: §f§l" + data.getParticleAmount(),
+                "", omp.isEligible(data.getParticleAmountObtainable().getVipRank()) ? "§a§l" + omp.getMessage(new Message("Ontgrendeld", "Unlocked")) : data.getParticleAmountObtainable().getRequiredLore(omp), "").build()) {
+            @Override
+            public void onClick(InventoryClickEvent event, OMPlayer omp) {
+                if (omp.isEligible(data.getParticleAmountObtainable().getVipRank())) {
+                    data.addParticleAmount();
+
+                    ItemStack item = event.getCurrentItem();
+                    item.setAmount(data.getParticleAmount());
+                    ItemMeta meta = item.getItemMeta();
+                    meta.setDisplayName("§7§lParticle Amount: §f§l" + data.getParticleAmount());
+                    item.setItemMeta(meta);
+                } else {
+                    data.getParticleAmountObtainable().msgNoAccess(omp);
+                }
+            }
+        });
+
+        add(33, new ConfirmItemInstance(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, data.isSpecial() ? 5 : 14, "§7§lSpecial Trail: " + omp.statusString(data.isSpecial()),
                 "", data.hasUnlockedSpecialTrail() ? "§a§l" + omp.getMessage(new Message("Ontgrendeld", "Unlocked")) : data.getSpecialTrailObtainable().getRequiredLore(omp), "").build()) {
 
             @Override
@@ -89,24 +110,6 @@ public class TrailSettingsInventory extends PerkInventory {
                 } else {
                     omp.getPlayer().closeInventory();
                     returnInventory().open(omp);
-                }
-            }
-        });
-
-        add(35, new ItemInstance(new ItemBuilder(Material.NETHER_STAR, data.getParticleAmount(), 0, "§7§lParticle Amount: §f§l" + data.getParticleAmount(),
-                "", omp.isEligible(data.getParticleAmountObtainable().getVipRank()) ? "§a§l" + omp.getMessage(new Message("Ontgrendeld", "Unlocked")) : data.getParticleAmountObtainable().getRequiredLore(omp), "").build()) {
-            @Override
-            public void onClick(InventoryClickEvent event, OMPlayer omp) {
-                if (omp.isEligible(data.getParticleAmountObtainable().getVipRank())) {
-                    data.addParticleAmount();
-
-                    ItemStack item = event.getCurrentItem();
-                    item.setAmount(data.getParticleAmount());
-                    ItemMeta meta = item.getItemMeta();
-                    meta.setDisplayName("§7§lParticle Amount: §f§l" + data.getParticleAmount());
-                    item.setItemMeta(meta);
-                } else {
-                    data.getParticleAmountObtainable().msgNoAccess(omp);
                 }
             }
         });

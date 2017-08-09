@@ -32,7 +32,6 @@ public class GadgetFireworkGun extends GadgetHandler {
 
     @Override
     public ItemStack getItem(OMPlayer omp) {
-        Gadget gadget = getGadget();
         return new ItemBuilder(gadget.item().getMaterial(), 1, gadget.item().getDurability(), gadget.color().getChatColor() + "§l" + gadget.getName() + " " + gadget.color().getChatColor() + "(§6" + omp.gadgets().getFireworkPasses() + gadget.color().getChatColor() + ")").build();
     }
 
@@ -52,7 +51,7 @@ public class GadgetFireworkGun extends GadgetHandler {
 
             data.removeFireworkPass();
 
-            p.getInventory().setItem(api.gadgets().getGadgetSlot(), getItem(omp));
+            giveItem(omp);
         } else {
             omp.sendMessage(new Message("§7Je hebt geen §6§lFirework Passes§7 meer!", "§7You don't have any §6§lFirework Passes§7."));
         }

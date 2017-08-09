@@ -158,6 +158,32 @@ public class Database {
         return values;
     }
 
+    public List<Map<Column, String>> getEntries(Table table, Where where, Column... columns) {
+        List<Map<Column, String>> values = new ArrayList<>();
+
+        String query = "SELECT `" + colums(columns) + "` FROM `" + table.toString() + "` WHERE " + where.toString() + ";";
+
+        try {
+            checkConnection();
+
+            ResultSet rs = connection.prepareStatement(query).executeQuery();
+
+            while (rs.next()) {
+                Map<Column, String> entry = new HashMap<>();
+                for (Column column : columns) {
+                    entry.put(column, rs.getString(column.toString()));
+                }
+                values.add(entry);
+            }
+
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return values;
+    }
+
     public int getInt(Table table, Column column, Where where) {
         int integer = 0;
 
@@ -349,7 +375,8 @@ public class Database {
         BUNGEE(Column.TYPE, Column.DATA),
         IPS(Column.UUID, Column.LASTIP, Column.LASTLOGIN, Column.HISTORY),
         BANS(Column.BANNED, Column.ACTIVE, Column.BANNEDBY, Column.BANNEDON, Column.BANNEDUNTIL, Column.REASON),
-        REPORTS(Column.REPORTED, Column.REPORTEDBY, Column.REPORTEDON, Column.SERVER, Column.REASON);
+        REPORTS(Column.REPORTED, Column.REPORTEDBY, Column.REPORTEDON, Column.SERVER, Column.REASON),
+        HOLOGRAMS(Column.SERVER, Column.HOLOGRAMNAME, Column.DATA);
 
         private final Column[] columns;
 
@@ -394,7 +421,7 @@ public class Database {
         LASTLOGIN(Type.VARCHAR, 30),
         HISTORY(Type.VARCHAR, 500),
 
-        BANNED(Type.VARCHAR, 30),
+        BANNED(Type.VARCHAR, 36),
         ACTIVE(Type.VARCHAR, 5),
         BANNEDBY(Type.VARCHAR, 36),
         BANNEDON(Type.VARCHAR, 30),
@@ -404,7 +431,9 @@ public class Database {
         REPORTED(Type.VARCHAR, 36),
         REPORTEDBY(Type.VARCHAR, 36),
         REPORTEDON(Type.VARCHAR, 30),
-        SERVER(Type.VARCHAR, 30);
+        SERVER(Type.VARCHAR, 30),
+
+        HOLOGRAMNAME(Type.VARCHAR, 50);
 
         private final Type type;
         private final int chars;

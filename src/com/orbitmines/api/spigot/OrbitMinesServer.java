@@ -4,6 +4,7 @@ import com.orbitmines.api.Server;
 import com.orbitmines.api.spigot.enablers.*;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.List;
@@ -15,6 +16,9 @@ public interface OrbitMinesServer {
 
     /* Server Type */
     Server getServerType();
+
+    /* Return new player instance */
+    OMPlayer newPlayerInstance(Player player);
 
     /* Displayed in OMPlayer#msgJoin */
     String getDevelopedBy();

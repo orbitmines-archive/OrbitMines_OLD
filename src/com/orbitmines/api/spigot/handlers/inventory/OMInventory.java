@@ -27,6 +27,7 @@ public abstract class OMInventory {
     }
 
     protected void add(int slot, ItemInstance itemInstance) {
+        inventory.setItem(slot, itemInstance.itemStack);
         itemInstances[slot] = itemInstance;
     }
 

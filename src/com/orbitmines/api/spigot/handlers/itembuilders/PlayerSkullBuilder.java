@@ -50,7 +50,7 @@ public class PlayerSkullBuilder extends ItemBuilder {
         ItemStack itemStack = new ItemStack(material, amount, durability);
         SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
         meta.setDisplayName(displayName);
-        meta.setLore(new ArrayList<>(lore));
+        meta.setLore(lore == null ? null : new ArrayList<>(lore));
         meta.setOwner(playerName);
         itemStack.setItemMeta(meta);
 

@@ -55,7 +55,7 @@ public class LeatherArmorBuilder extends ItemBuilder {
         ItemStack itemStack = new ItemStack(material, amount, durability);
         LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
         meta.setDisplayName(displayName);
-        meta.setLore(new ArrayList<>(lore));
+        meta.setLore(lore == null ? null : new ArrayList<>(lore));
         meta.setColor(color);
         itemStack.setItemMeta(meta);
 

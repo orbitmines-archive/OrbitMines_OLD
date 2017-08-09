@@ -67,7 +67,7 @@ public class TrailData extends PlayerData {
             StringBuilder stringBuilder = new StringBuilder();
             for (Trail trail : trails) {
                 stringBuilder.append(trail.toString());
-                stringBuilder.append("\\=");
+                stringBuilder.append("=");
             }
             trailsString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
         }
@@ -76,7 +76,7 @@ public class TrailData extends PlayerData {
             StringBuilder stringBuilder = new StringBuilder();
             for (TrailType trailType : trailTypes) {
                 stringBuilder.append(trailType.toString());
-                stringBuilder.append("\\=");
+                stringBuilder.append("=");
             }
             trailTypesString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
         }
@@ -100,13 +100,13 @@ public class TrailData extends PlayerData {
             }
         }
 
-        if (!data[2].equals("null")) {
-            trail = Trail.valueOf(data[2]);
-        }
+        unlockedSpecialTrail = Boolean.parseBoolean(data[2]);
 
-        trailType = TrailType.valueOf(data[3]);
-        particleAmount = Integer.parseInt(data[4]);
-        special = Boolean.parseBoolean(data[5]);
+        trail = data[3].equals("null") ? null : Trail.valueOf(data[3]);
+
+        trailType = TrailType.valueOf(data[4]);
+        particleAmount = Integer.parseInt(data[5]);
+        special = Boolean.parseBoolean(data[6]);
     }
 
     public List<Trail> getTrails() {

@@ -29,38 +29,14 @@ public class ServerSelectorInventory extends OMInventory {
 
     @Override
     protected boolean onOpen(OMPlayer omp) {
-
-        int slot = 0;
-        for (Server server : Server.values()) {
-            Server.Status status = server.getStatus();
-            boolean thisServer = server == api.server().getServerType();
-
-            ItemBuilder itemBuilder = new ItemBuilder(getMaterial(server), 1, 0, server.getColor() + server.getName() + " ");
-            List<String> lore = new ArrayList<>();
-
-            lore.add("§7Status: " + status.getColor() + status.getName());
-            lore.add("§7Players: " + status.getColor() + server.getOnlinePlayers() + "§7/" + server.getColor() + server.getMaxPlayers());
-
-            if (server.is(Server.Status.ONLINE))
-                lore.add(thisServer ? omp.getMessage(new Message("§7§oKlik hier om te verbinden", "§7§oClick here to connect")) : omp.getMessage(new Message("§7§oVerbonden", "§7§oConnected")));
-
-            itemBuilder.setLore(lore);
-
-            if (thisServer)
-                itemBuilder.glow();
-
-            add(slot, new ItemInstance(api.getNms().customItem().hideFlags(itemBuilder.build(), ItemUtils.FLAG_ATTRIBUTES_MODIFIERS)) {
-                @Override
-                public void onClick(InventoryClickEvent event, OMPlayer omp) {
-                    if (!thisServer)
-                        omp.connect(server);
-                    else
-                        omp.sendMessage(new Message("§7Je bent al verbonden met die server!", "§7You are already connected to that server!"));
-                }
-            });
-
-            slot++;
-        }
+        add(4, Server.HUB, omp);
+        add(10, Server.SURVIVAL, omp);
+        add(11, Server.KITPVP, omp);
+        add(12, Server.PRISON, omp);
+        add(13, Server.SKYBLOCK, omp);
+        add(14, Server.CREATIVE, omp);
+        add(15, Server.MINIGAMES, omp);
+        add(16, Server.FOG, omp);
 
         return true;
     }
@@ -68,6 +44,35 @@ public class ServerSelectorInventory extends OMInventory {
     @Override
     protected void onClick(InventoryClickEvent event, OMPlayer omp) {
 
+    }
+
+    private void add(int slot, Server server, OMPlayer omp) {
+        Server.Status status = server.getStatus();
+        boolean thisServer = server == api.server().getServerType();
+
+        ItemBuilder itemBuilder = new ItemBuilder(getMaterial(server), 1, 0, server.getColor() + server.getName() + " ");
+        List<String> lore = new ArrayList<>();
+
+        lore.add("§7Status: " + status.getColor() + status.getName());
+        lore.add("§7Players: " + status.getColor() + server.getOnlinePlayers() + "§7/" + server.getColor() + server.getMaxPlayers());
+
+        if (server.is(Server.Status.ONLINE))
+            lore.add(thisServer ? omp.getMessage(new Message("§7§oKlik hier om te verbinden", "§7§oClick here to connect")) : omp.getMessage(new Message("§7§oVerbonden", "§7§oConnected")));
+
+        itemBuilder.setLore(lore);
+
+        if (thisServer)
+            itemBuilder.glow();
+
+        add(slot, new ItemInstance(api.getNms().customItem().hideFlags(itemBuilder.build(), ItemUtils.FLAG_ATTRIBUTES_MODIFIERS)) {
+            @Override
+            public void onClick(InventoryClickEvent event, OMPlayer omp) {
+                if (!thisServer)
+                    omp.connect(server);
+                else
+                    omp.sendMessage(new Message("§7Je bent al verbonden met die server!", "§7You are already connected to that server!"));
+            }
+        });
     }
 
     private Material getMaterial(Server server) {

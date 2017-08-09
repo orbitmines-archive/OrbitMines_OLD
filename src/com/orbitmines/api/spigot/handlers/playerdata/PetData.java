@@ -3,7 +3,6 @@ package com.orbitmines.api.spigot.handlers.playerdata;
 import com.orbitmines.api.Data;
 import com.orbitmines.api.Message;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
-import com.orbitmines.api.spigot.perks.Gadget;
 import com.orbitmines.api.spigot.perks.Pet;
 import org.bukkit.entity.Entity;
 
@@ -46,9 +45,9 @@ public class PetData extends PlayerData {
             StringBuilder stringBuilder = new StringBuilder();
             for (Pet pet : pets.keySet()) {
                 stringBuilder.append(pet.toString());
-                stringBuilder.append("\\<");
+                stringBuilder.append("<");
                 stringBuilder.append(pets.get(pet).replace("'", "`"));
-                stringBuilder.append("\\=");
+                stringBuilder.append("=");
             }
             petsString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
         }
