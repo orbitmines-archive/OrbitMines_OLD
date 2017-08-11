@@ -16,6 +16,9 @@ public class InteractiveKitEvent implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         OMPlayer omp = OMPlayer.getPlayer(event.getPlayer());
+        if (omp == null)
+            return;
+
         ItemStack itemStack = event.getItem();
 
         KitInteractive last = omp.getLastInteractiveKit();

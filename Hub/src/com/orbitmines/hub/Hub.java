@@ -64,7 +64,7 @@ public class Hub extends JavaPlugin implements OrbitMinesServer {
         lobby.setGameRuleValue("doDaylightCycle", "false");
         lobby.setTime(20000);
 
-        spawnLocation = new Location(lobby, 0, 70, 0);
+        spawnLocation = new Location(lobby, 0.5, 74, 0.5);
 
         /* Setup Holograms after world is loaded */
         api.setupHolograms();
@@ -74,18 +74,17 @@ public class Hub extends JavaPlugin implements OrbitMinesServer {
                 PreventionSet.Prevention.BLOCK_BREAK,
                 PreventionSet.Prevention.BLOCK_INTERACTING,
                 PreventionSet.Prevention.BLOCK_PLACE,
-                PreventionSet.Prevention.FALL_DAMAGE,
                 PreventionSet.Prevention.FOOD_CHANGE,
                 PreventionSet.Prevention.MOB_SPAWN,
                 PreventionSet.Prevention.MONSTER_EGG_USAGE,
-                PreventionSet.Prevention.PVP,
                 PreventionSet.Prevention.SWAP_HAND_ITEMS,
                 PreventionSet.Prevention.WEATHER_CHANGE,
                 PreventionSet.Prevention.ITEM_DROP,
                 PreventionSet.Prevention.ITEM_PICKUP,
                 PreventionSet.Prevention.PHYSICAL_INTERACTING,
                 PreventionSet.Prevention.BUCKET_USAGE,
-                PreventionSet.Prevention.CLICK_PLAYER_INVENTORY);
+                PreventionSet.Prevention.CLICK_PLAYER_INVENTORY,
+                PreventionSet.Prevention.PLAYER_DAMAGE);
 
         registerLobbyKit();
     }
@@ -222,6 +221,11 @@ public class Hub extends JavaPlugin implements OrbitMinesServer {
     @Override
     public Server getServerType() {
         return Server.HUB;
+    }
+
+    @Override
+    public int getMaxPlayers() {
+        return 100;
     }
 
     @Override

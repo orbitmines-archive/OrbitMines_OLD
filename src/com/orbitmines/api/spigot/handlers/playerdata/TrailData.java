@@ -72,7 +72,7 @@ public class TrailData extends PlayerData {
             trailsString = stringBuilder.toString().substring(0, stringBuilder.length() -1);
         }
         String trailTypesString = null;
-        if (trails.size() != 0){
+        if (trailTypes.size() != 0){
             StringBuilder stringBuilder = new StringBuilder();
             for (TrailType trailType : trailTypes) {
                 stringBuilder.append(trailType.toString());
@@ -136,7 +136,7 @@ public class TrailData extends PlayerData {
     public List<TrailType> getTrailTypes() {
         List<TrailType> list = new ArrayList<>(this.trailTypes);
         for (TrailType value : TrailType.values()) {
-            if (value.obtainable().getVipRank() != null && omp.isEligible(value.obtainable().getVipRank()))
+            if (value.obtainable() != null && value.obtainable().getVipRank() != null && omp.isEligible(value.obtainable().getVipRank()))
                 list.add(value);
         }
 
@@ -144,7 +144,7 @@ public class TrailData extends PlayerData {
     }
 
     public void addTrailType(TrailType trailType) {
-        getTrailTypes().add(trailType);
+        this.trailTypes.add(trailType);
 
         omp.updateStats();
     }

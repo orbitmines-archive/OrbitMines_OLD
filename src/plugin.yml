@@ -4,4 +4,12 @@ version: 1.0.0
 description: OrbitMinesApi by O_o_Fadi_o_O/FadiDev
 main: com.orbitmines.api.spigot.OrbitMinesApi
 commands:
+  setvip:
+    description: OrbitMines Command.
+  setstaff:
+    description: OrbitMines Command.
+  vippoints:
+    description: OrbitMines Command.
+  omt:
+    description: OrbitMines Command.
 softdepend: [WorldEdit]

@@ -4,6 +4,7 @@ import com.orbitmines.api.Message;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.gadget.GadgetHandler;
 import com.orbitmines.api.spigot.handlers.particle.Particle;
+import com.orbitmines.api.spigot.nms.entity.EntityNms;
 import com.orbitmines.api.spigot.perks.Gadget;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -13,6 +14,7 @@ import org.bukkit.entity.MagmaCube;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -54,7 +56,7 @@ public class GadgetMagmaCubeSoccer extends GadgetHandler implements Listener {
     public void onInteract(PlayerInteractEvent event, OMPlayer omp) {
         Player p = omp.getPlayer();
 
-        if (entities.containsKey(omp)) {
+        if (!entities.containsKey(omp)) {
             entities.put(omp, spawn(p.getLocation()));
 
             omp.sendMessage(new Message("§cMagmaCube Voetbal§7 staat nu §a§lAAN§7. §eRechtermuisknop§7 om het uit te zetten. §eLinkermuisknop§7 om het te schieten.", "§a§lENABLED§7 your §cMagmaCube Ball§7. §eRight Click§7 to remove it, §eLeft Click§7 to shoot it."));
@@ -78,6 +80,8 @@ public class GadgetMagmaCubeSoccer extends GadgetHandler implements Listener {
         mc.setRemoveWhenFarAway(false);
         mc.setCustomName("§cSoccer Ball");
         mc.setCustomNameVisible(true);
+
+        api.getNms().entity().setAttribute(mc, EntityNms.Attribute.MOVEMENT_SPEED, 0.0D);
 
         return mc;
     }
@@ -113,5 +117,11 @@ public class GadgetMagmaCubeSoccer extends GadgetHandler implements Listener {
 
         clear(omp);
         omp.sendMessage(new Message("§7Je §cMagmaCube Ball§7 staat nu §c§lUIT§7.", "§c§lDISABLED§7 your §cMagmaCube Ball§7!"));
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof MagmaCube && entities.containsValue(event.getEntity()))
+            event.setCancelled(true);
     }
 }

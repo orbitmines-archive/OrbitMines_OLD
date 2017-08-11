@@ -16,6 +16,7 @@ import com.orbitmines.bungee.handlers.MotdHandler;
 import com.orbitmines.bungee.runnable.DatabaseRunnable;
 import com.orbitmines.bungee.runnable.runnables.AnnouncementsRunnable;
 import com.orbitmines.bungee.runnable.runnables.LoginRunnable;
+import com.orbitmines.bungee.runnable.runnables.ServerCheckRunnable;
 import com.vexsoftware.votifier.VoteHandler;
 import com.vexsoftware.votifier.VotifierPlugin;
 import com.vexsoftware.votifier.bungee.events.VotifierEvent;
@@ -80,7 +81,7 @@ public class OrbitMinesBungee extends Plugin implements VoteHandler, VotifierPlu
     private Map<UUID, String> passwords;
     private ScrollerList<Message> announcements;
 
-    private Map<Server, List<String>> serverCommands;//TODO GET FROM DATABASE
+    private Map<Server, List<String>> serverCommands;
 
     @Override
     public void onEnable() {
@@ -153,6 +154,10 @@ public class OrbitMinesBungee extends Plugin implements VoteHandler, VotifierPlu
         return announcements;
     }
 
+    public Map<Server, List<String>> getServerCommands() {
+        return serverCommands;
+    }
+
     private void registerEvents() {
         PluginManager pluginManager = getProxy().getPluginManager();
         pluginManager.registerListener(this, new JoinEvent());
@@ -194,6 +199,7 @@ public class OrbitMinesBungee extends Plugin implements VoteHandler, VotifierPlu
     private void registerRunnables() {
         new AnnouncementsRunnable();
         new LoginRunnable();
+        new ServerCheckRunnable();
     }
 
     //TODO with command & saved in database

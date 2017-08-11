@@ -18,7 +18,7 @@ import java.util.LinkedHashSet;
 public class SquidPet_1_9_R1 implements SquidPet {
 
     public SquidPet_1_9_R1() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetSquid", Mob.SQUID.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomSquid", Mob.SQUID.getEggId());
     }
 
     @Override

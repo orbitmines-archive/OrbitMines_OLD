@@ -21,7 +21,7 @@ import java.util.LinkedHashSet;
 public class MushroomCowPet_1_10_R1 implements MushroomCowPet {
 
     public MushroomCowPet_1_10_R1() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetMushroomCow", Mob.MUSHROOM_COW.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomMushroomCow", Mob.MUSHROOM_COW.getEggId());
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.orbitmines.api.spigot.handlers.npc;
 
 import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -46,6 +45,7 @@ public class NpcArmorStand {
     private boolean visible;
 
     private boolean hideOnJoin;
+    private List<Player> watchers;
 
     private ClickAction clickAction;
 
@@ -59,6 +59,7 @@ public class NpcArmorStand {
 
         this.location = location;
         this.hideOnJoin = hideOnJoin;
+        this.watchers = new ArrayList<>();
 
         this.arms = false;
         this.basePlate = false;
@@ -261,6 +262,9 @@ public class NpcArmorStand {
     }
 
     public void spawn(Collection<? extends Player> createFor) {
+        if (watchers.size() != 0)
+            createFor = watchers;
+
         clear();
 
         Chunk chunk = location.getChunk();
@@ -271,13 +275,26 @@ public class NpcArmorStand {
 
         update();
 
+        if (createFor == null)
+            return;
+
+        watchers.addAll(createFor);
+
+        createForWatchers();
+    }
+
+    public void createForWatchers() {
         List<Player> hideFor = new ArrayList<>();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!createFor.contains(player))
+        for (Player player : location.getWorld().getPlayers()) {
+            if (!watchers.contains(player))
                 hideFor.add(player);
         }
 
         hideFor(hideFor);
+    }
+
+    public List<Player> getWatchers() {
+        return watchers;
     }
 
     public void clear() {

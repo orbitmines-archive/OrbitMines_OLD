@@ -22,6 +22,12 @@ public class PetInventory extends PerkInventory {
     }
 
     @Override
+    protected boolean onOpen(OMPlayer omp) {
+        omp.sendMessage(new Message("§7Pets zijn tijdelijk uitgeschakeld.", "§7Pets have been disabled temporarily."));
+        return false;
+    }
+
+    @Override
     protected void setPerkItems(OMPlayer omp) {
         PetData data = omp.pets();
 
@@ -38,7 +44,7 @@ public class PetInventory extends PerkInventory {
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     if (!pet.hasAccess(omp)) {
                         if (pet.obtainable().isPurchasable() && pet.obtainable().canPurchase(omp)) {
-                            confirmPurchase(omp, pet);
+                            confirmPurchase(omp, pet, this);
                         } else {
                             pet.obtainable().msgNoAccess(omp);
                         }

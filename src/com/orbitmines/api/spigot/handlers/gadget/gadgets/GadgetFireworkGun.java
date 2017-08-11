@@ -1,6 +1,7 @@
 package com.orbitmines.api.spigot.handlers.gadget.gadgets;
 
 import com.orbitmines.api.Message;
+import com.orbitmines.api.spigot.handlers.Cooldown;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.firework.FireworkBuilder;
 import com.orbitmines.api.spigot.handlers.gadget.GadgetHandler;
@@ -15,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 * OrbitMines - @author Fadi Shawki - 3-8-2017
 */
 public class GadgetFireworkGun extends GadgetHandler {
+
+    private final Cooldown COOLDOWN = new Cooldown(500, Gadget.FIREWORK_GUN.color().getChatColor() + "§l" + Gadget.FIREWORK_GUN.getName(), Gadget.FIREWORK_GUN.color().getChatColor() + "§l" + Gadget.FIREWORK_GUN.getName(), Cooldown.Action.RIGHT_CLICK);
 
     public GadgetFireworkGun() {
         super(Gadget.FIREWORK_GUN);
@@ -43,6 +46,9 @@ public class GadgetFireworkGun extends GadgetHandler {
         GadgetData data = omp.gadgets();
 
         if (data.getFireworkPasses() != 0) {
+            if (omp.onCooldown(COOLDOWN))
+                return;
+
             Player p = omp.getPlayer();
 
             FireworkBuilder fw = new FireworkBuilder(p.getLocation());
@@ -52,6 +58,8 @@ public class GadgetFireworkGun extends GadgetHandler {
             data.removeFireworkPass();
 
             giveItem(omp);
+
+            omp.resetCooldown(COOLDOWN);
         } else {
             omp.sendMessage(new Message("§7Je hebt geen §6§lFirework Passes§7 meer!", "§7You don't have any §6§lFirework Passes§7."));
         }

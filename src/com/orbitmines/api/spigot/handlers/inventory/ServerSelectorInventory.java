@@ -54,10 +54,10 @@ public class ServerSelectorInventory extends OMInventory {
         List<String> lore = new ArrayList<>();
 
         lore.add("§7Status: " + status.getColor() + status.getName());
-        lore.add("§7Players: " + status.getColor() + server.getOnlinePlayers() + "§7/" + server.getColor() + server.getMaxPlayers());
+        lore.add("§7Players: " + status.getColor() + server.getOnlinePlayers() + "§7/" + status.getColor() + server.getMaxPlayers());
 
         if (server.is(Server.Status.ONLINE))
-            lore.add(thisServer ? omp.getMessage(new Message("§7§oKlik hier om te verbinden", "§7§oClick here to connect")) : omp.getMessage(new Message("§7§oVerbonden", "§7§oConnected")));
+            lore.add(!thisServer ? omp.getMessage(new Message("§7§oKlik hier om te verbinden", "§7§oClick here to connect")) : omp.getMessage(new Message("§7§oVerbonden", "§7§oConnected")));
 
         itemBuilder.setLore(lore);
 

@@ -39,7 +39,7 @@ public class ChatColorInventory extends PerkInventory {
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     if (!chatColor.hasAccess(omp)) {
                         if (chatColor.obtainable().isPurchasable() && chatColor.obtainable().canPurchase(omp)) {
-                            confirmPurchase(omp, chatColor);
+                            confirmPurchase(omp, chatColor, this);
                         } else {
                             chatColor.obtainable().msgNoAccess(omp);
                         }
@@ -66,7 +66,7 @@ public class ChatColorInventory extends PerkInventory {
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     if (!chatColorType.hasAccess(omp)) {
                         if (chatColorType.obtainable().isPurchasable() && chatColorType.obtainable().canPurchase(omp)) {
-                            confirmPurchase(omp, chatColorType);
+                            confirmPurchase(omp, chatColorType, this);
                         } else {
                             chatColorType.obtainable().msgNoAccess(omp);
                         }

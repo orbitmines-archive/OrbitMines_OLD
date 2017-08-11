@@ -18,7 +18,7 @@ import java.util.LinkedHashSet;
 public class WolfPet_1_11_R1 implements WolfPet {
 
     public WolfPet_1_11_R1() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetWolf", Mob.WOLF.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomWolf", Mob.WOLF.getEggId());
     }
 
     @Override

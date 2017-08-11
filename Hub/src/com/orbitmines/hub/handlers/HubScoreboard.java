@@ -19,7 +19,7 @@ public class HubScoreboard extends ScoreboardSet {
 
     @Override
     public void updateTitle() {
-        HubPlayer omp = (HubPlayer) getOMPlayer();
+        HubPlayer omp = (HubPlayer) this.omp;
         if(!omp.hub().hasScoreboardEnabled())
             return;
 

@@ -32,8 +32,13 @@ public class CommandHologram extends StaffCommand {
             omp.msgUnknownCommand(a[0]);
             return;
         }
-
         Player p = omp.getPlayer();
+
+        if (a.length == 1) {
+            p.sendMessage("§7" + omp.getMessage(new Message("Gebruik", "Use")) + ":\n§7/hologram list\n§7/hologram <name> lines\n/hologram <name> relocate\n§7/hologram <name> delete\n§7/hologram <name> create\n§7/hologram <name> add <line>\n§7/hologram <name> remove <line number>\n§7/hologram <name> edit <line number> <line>");
+            return;
+        }
+
         String name = a[1];
 
         if (name.equalsIgnoreCase("list")) {

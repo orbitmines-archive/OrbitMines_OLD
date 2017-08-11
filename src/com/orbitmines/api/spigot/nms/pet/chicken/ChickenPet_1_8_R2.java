@@ -21,7 +21,7 @@ import java.util.List;
 public class ChickenPet_1_8_R2 implements ChickenPet {
 
     public ChickenPet_1_8_R2() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetChicken", Mob.CHICKEN.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomChicken", Mob.CHICKEN.getEggId());
     }
 
     @Override

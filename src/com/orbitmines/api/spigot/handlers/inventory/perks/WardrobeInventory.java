@@ -22,7 +22,7 @@ import java.util.Arrays;
 public class WardrobeInventory extends PerkInventory {
 
     public WardrobeInventory() {
-        super(45, "§0§lWardrobe", 40);
+        super(36, "§0§lWardrobe", 31);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class WardrobeInventory extends PerkInventory {
         discoItem(omp, this);
 
         if (data.hasWardrobeEnabled())
-            add(41, new ItemInstance(new ItemBuilder(Material.BARRIER, 1, 0, omp.getMessage(new Message("§4§nZet Wardrobe UIT", "§4§nDisable Wardrobe"))).build()) {
+            add(32, new ItemInstance(new ItemBuilder(Material.BARRIER, 1, 0, omp.getMessage(new Message("§4§nZet Wardrobe UIT", "§4§nDisable Wardrobe"))).build()) {
                 @Override
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     Player p = omp.getPlayer();
@@ -81,9 +81,7 @@ public class WardrobeInventory extends PerkInventory {
     }
 
     private void add(int slot, Wardrobe wardrobe, OMPlayer omp, WardrobeData data) {
-        ItemBuilder itemBuilder = wardrobe.item().getMaterial() == Material.LEATHER_CHESTPLATE ? toLeatherArmorBuilder(wardrobe, omp, LeatherArmorBuilder.Type.CHESTPLATE, wardrobe.color().getBukkitColor()) : toItemBuilder(wardrobe, omp);
-
-        add(slot, new ConfirmItemInstance(api.getNms().customItem().hideFlags(itemBuilder.build(), ItemUtils.FLAG_ATTRIBUTES_MODIFIERS)) {
+        add(slot, new ConfirmItemInstance(api.getNms().customItem().hideFlags(wardrobe.item().getMaterial() == Material.LEATHER_CHESTPLATE ? toLeatherArmorBuilder(wardrobe, omp, LeatherArmorBuilder.Type.CHESTPLATE, wardrobe.color().getBukkitColor()).build() : toItemBuilder(wardrobe, omp).build(), ItemUtils.FLAG_ATTRIBUTES_MODIFIERS)) {
             @Override
             protected void onConfirm(InventoryClickEvent event, OMPlayer omp) {
                 data.addWardrobe(wardrobe);
@@ -93,7 +91,7 @@ public class WardrobeInventory extends PerkInventory {
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
                 if (!wardrobe.hasAccess(omp)) {
                     if (wardrobe.obtainable().isPurchasable() && wardrobe.obtainable().canPurchase(omp)) {
-                        confirmPurchase(omp, wardrobe);
+                        confirmPurchase(omp, wardrobe, this);
                     } else {
                         wardrobe.obtainable().msgNoAccess(omp);
                     }

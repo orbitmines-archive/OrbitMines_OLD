@@ -37,7 +37,7 @@ public class GadgetInventory extends PerkInventory {
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     if (!gadget.hasAccess(omp)) {
                         if (gadget.obtainable().isPurchasable() && gadget.obtainable().canPurchase(omp)) {
-                            confirmPurchase(omp, gadget);
+                            confirmPurchase(omp, gadget, this);
                         } else {
                             gadget.obtainable().msgNoAccess(omp);
                         }

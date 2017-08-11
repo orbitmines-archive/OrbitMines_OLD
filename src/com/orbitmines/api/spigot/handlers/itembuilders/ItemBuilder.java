@@ -1,6 +1,7 @@
 package com.orbitmines.api.spigot.handlers.itembuilders;
 
 import com.orbitmines.api.spigot.OrbitMinesApi;
+import com.orbitmines.api.spigot.nms.customitem.CustomItemNms;
 import com.orbitmines.api.spigot.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -56,64 +57,77 @@ public class ItemBuilder {
         return material;
     }
 
-    public void setMaterial(Material material) {
+    public ItemBuilder setMaterial(Material material) {
         this.material = material;
+        return this;
     }
 
     public int getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public ItemBuilder setAmount(int amount) {
         this.amount = amount;
+        return this;
     }
 
     public short getDurability() {
         return durability;
     }
 
-    public void setDurability(short durability) {
+    public ItemBuilder setDurability(short durability) {
         this.durability = durability;
+        return this;
     }
 
     public String getDisplayName() {
         return displayName;
     }
 
-    public void setDisplayName(String displayName) {
+    public ItemBuilder setDisplayName(String displayName) {
         this.displayName = displayName;
+        return this;
     }
 
     public List<String> getLore() {
         return lore;
     }
 
-    public void setLore(List<String> lore) {
+    public ItemBuilder setLore(List<String> lore) {
         this.lore = lore;
+        return this;
     }
 
-    public void addEnchantment(Enchantment enchantment, int level) {
+    public Map<Enchantment, Integer> getEnchantments() {
+        return enchantments;
+    }
+
+    public ItemBuilder addEnchantment(Enchantment enchantment, int level) {
         if (enchantments == null)
             enchantments = new HashMap<>();
 
         enchantments.put(enchantment, level);
+        return this;
     }
 
-    public void setEnchantments(Map<Enchantment, Integer> enchantments) {
+    public ItemBuilder setEnchantments(Map<Enchantment, Integer> enchantments) {
         this.enchantments = enchantments;
+        return this;
     }
 
-    public void setEnchantmentsHidden(boolean enchantmentsHidden) {
+    public ItemBuilder setEnchantmentsHidden(boolean enchantmentsHidden) {
         this.enchantmentsHidden = enchantmentsHidden;
+        return this;
     }
 
     public boolean enchantmentsHidden() {
         return enchantmentsHidden;
     }
 
-    public void glow() {
+    public ItemBuilder glow() {
         addEnchantment(Enchantment.DURABILITY, 1);
         enchantmentsHidden = true;
+        return this;
     }
 
     public ItemStack build() {
@@ -124,6 +138,12 @@ public class ItemBuilder {
         itemStack.setItemMeta(meta);
 
         return addEnchantments(itemStack);
+    }
+
+    public ItemStack buildUnbreakable(boolean hide) {
+        CustomItemNms nms = OrbitMinesApi.getApi().getNms().customItem();
+        ItemStack itemStack = nms.setUnbreakable(build());
+        return hide ? nms.hideFlags(itemStack, ItemUtils.FLAG_UNBREAKABLE) : itemStack;
     }
 
     protected ItemStack addEnchantments(ItemStack building) {

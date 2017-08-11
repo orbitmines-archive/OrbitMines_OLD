@@ -1,7 +1,9 @@
 package com.orbitmines.api.spigot.events;
 
+import com.orbitmines.api.PluginMessageType;
 import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
+import com.orbitmines.api.spigot.utils.BungeeMessage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -13,6 +15,8 @@ public class LoginEvent implements Listener {
 
     private OrbitMinesApi api;
 
+    private boolean updatedCommands = false;
+
     public LoginEvent() {
         api = OrbitMinesApi.getApi();
     }
@@ -23,5 +27,12 @@ public class LoginEvent implements Listener {
 
         OMPlayer omp = api.server().newPlayerInstance(event.getPlayer());
         omp.login();
+
+        omp.destroyHiddenNpcs();
+
+        if (updatedCommands)
+            return;
+
+        BungeeMessage.send(PluginMessageType.UPDATE_COMMANDS, event.getPlayer(), api.server().getServerType().toString());
     }
 }

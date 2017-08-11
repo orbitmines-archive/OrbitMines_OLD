@@ -21,7 +21,7 @@ import java.util.List;
 public class SlimePet_1_8_R1 implements SlimePet {
 
     public SlimePet_1_8_R1() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetSlime", Mob.SLIME.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomSlime", Mob.SLIME.getEggId());
     }
 
     @Override

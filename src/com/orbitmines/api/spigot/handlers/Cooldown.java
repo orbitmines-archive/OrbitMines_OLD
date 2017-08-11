@@ -68,7 +68,7 @@ public class Cooldown {
             return false;
 
         String displayName = item.getItemMeta().getDisplayName();
-        boolean equals = displayName.endsWith(getName().replace("§l", "§n")) || displayName.endsWith(getItemName());
+        boolean equals = displayName.contains(name) || displayName.contains(itemName);
 
         if (equals && omp.onCooldown(this)) {
             double cooldown = getCooldown(omp) / 1000;

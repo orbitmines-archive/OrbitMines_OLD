@@ -3,6 +3,7 @@ package com.orbitmines.bungee.handlers;
 import com.orbitmines.api.*;
 import com.orbitmines.bungee.OrbitMinesBungee;
 import com.orbitmines.bungee.utils.ServerUtils;
+import com.orbitmines.bungee.utils.SpigotMessage;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -54,7 +55,7 @@ public class BungeePlayer {
             login = new Login(this, bungee.getPasswords().get(getUUID()));
 
         if (!Database.get().contains(Database.Table.PLAYERS, Database.Column.UUID, new Database.Where(Database.Column.UUID, getUUID().toString())))
-            Database.get().insert(Database.Table.PLAYERS, Database.get().values(getUUID().toString(), player.getName(), StaffRank.NONE.toString(), VipRank.NONE.toString(), Language.DUTCH.toString(), "" + false, "" + false, "" + 0, "null", "null"));
+            Database.get().insert(Database.Table.PLAYERS, Database.get().values(getUUID().toString(), player.getName(), StaffRank.NONE.toString(), VipRank.NONE.toString(), Language.DUTCH.toString(), "" + false, "" + false, "" + 0, "null", "" + 0, "null"));
 
         Map<Database.Column, String> values = Database.get().getValues(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()),
                 Database.Column.NAME, Database.Column.STAFFRANK, Database.Column.VIPRANK, Database.Column.LANGUAGE, Database.Column.SILENT);
@@ -76,7 +77,7 @@ public class BungeePlayer {
     }
 
     public void vote() {
-        //TODO VOTE TO SPIGOT
+        SpigotMessage.send(PluginMessageType.CHECK_VOTES, player, getUUID().toString());
     }
 
     /* Returns [COLOR][BOLD][RANK] [COLOR][NAME] - NONE; [COLOR][NAME] */
@@ -151,7 +152,7 @@ public class BungeePlayer {
 
         Database.get().update(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()), new Database.Set(Database.Column.SILENT, silent + ""));
 
-        //TODO UPDATE ON SPIGOT
+        SpigotMessage.send(PluginMessageType.UPDATE_SILENT, player, getUUID().toString());
     }
 
     public UUID getLastMsg() {

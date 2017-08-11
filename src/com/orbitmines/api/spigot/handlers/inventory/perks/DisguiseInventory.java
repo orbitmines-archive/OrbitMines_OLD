@@ -37,7 +37,7 @@ public class DisguiseInventory extends PerkInventory {
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     if (!disguise.hasAccess(omp)) {
                         if (disguise.obtainable().isPurchasable() && disguise.obtainable().canPurchase(omp)) {
-                            confirmPurchase(omp, disguise);
+                            confirmPurchase(omp, disguise, this);
                         } else {
                             disguise.obtainable().msgNoAccess(omp);
                         }

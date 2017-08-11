@@ -21,7 +21,7 @@ import java.util.LinkedHashSet;
 public class SpiderPet_1_9_R1 implements SpiderPet {
 
     public SpiderPet_1_9_R1() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetSpider", Mob.SPIDER.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomSpider", Mob.SPIDER.getEggId());
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
@@ -24,7 +25,7 @@ import java.util.List;
 */
 public class GadgetCreeperLauncher extends GadgetHandler implements Listener {
 
-    private final Cooldown COOLDOWN = new Cooldown(6000, Gadget.CREEPER_LAUNCHER.getName(), Gadget.CREEPER_LAUNCHER.getName(), Cooldown.Action.LEFT_CLICK);
+    private final Cooldown COOLDOWN = new Cooldown(6000, Gadget.CREEPER_LAUNCHER.color().getChatColor() + "§l" + Gadget.CREEPER_LAUNCHER.getName(), Gadget.CREEPER_LAUNCHER.color().getChatColor() + "§l" + Gadget.CREEPER_LAUNCHER.getName(), Cooldown.Action.LEFT_CLICK);
 
     private List<Entity> entities;
 
@@ -96,5 +97,11 @@ public class GadgetCreeperLauncher extends GadgetHandler implements Listener {
     public void onDeath(EntityDeathEvent e){
         if (e.getEntity() instanceof Creeper)
             e.getDrops().clear();
+    }
+
+    @EventHandler
+    public void DamageEvent(EntityDamageByEntityEvent event) {
+        if (!event.isCancelled() && event.getEntity() instanceof Player && event.getDamager() instanceof Creeper && entities.contains(event.getDamager()))
+            event.setCancelled(true);
     }
 }

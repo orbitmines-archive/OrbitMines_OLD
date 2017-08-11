@@ -26,7 +26,7 @@ public class NpcRunnable extends OMRunnable {
         }
 
         for (Npc npc : Npc.getNpcs()) {
-            //TODO npc.checkEntity();
+            npc.checkEntity();
 
             run(npc);
         }

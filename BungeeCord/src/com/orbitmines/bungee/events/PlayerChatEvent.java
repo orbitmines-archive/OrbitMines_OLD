@@ -3,6 +3,7 @@ package com.orbitmines.bungee.events;
 import com.orbitmines.api.Message;
 import com.orbitmines.api.Server;
 import com.orbitmines.api.StaffRank;
+import com.orbitmines.bungee.OrbitMinesBungee;
 import com.orbitmines.bungee.commands.Command;
 import com.orbitmines.bungee.handlers.BungeePlayer;
 import net.md_5.bungee.api.ProxyServer;
@@ -17,6 +18,12 @@ import net.md_5.bungee.event.EventHandler;
 * OrbitMines - @author Fadi Shawki - 7-8-2017
 */
 public class PlayerChatEvent implements Listener {
+
+    private OrbitMinesBungee bungee;
+
+    public PlayerChatEvent() {
+        bungee = OrbitMinesBungee.getBungee();
+    }
 
     @EventHandler
     public void onChat(ChatEvent event) {
@@ -83,7 +90,8 @@ public class PlayerChatEvent implements Listener {
             Command command = Command.getCommand(a[0]);
 
             if (command == null) {
-                //TODO CHECK SPIGOT COMMANDS.
+                if (bungee.getServerCommands().containsKey(server) && bungee.getServerCommands().get(server).contains(a[0]))
+                    return;
 
 //                event.setCancelled(true);
 //                omp.msgUnknownCommand(a[0]);

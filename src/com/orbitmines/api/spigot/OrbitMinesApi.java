@@ -4,6 +4,7 @@ import com.orbitmines.api.*;
 import com.orbitmines.api.spigot.commands.Command;
 import com.orbitmines.api.spigot.commands.CommandServers;
 import com.orbitmines.api.spigot.commands.CommandTopVoters;
+import com.orbitmines.api.spigot.commands.ConsoleCommandExecuter;
 import com.orbitmines.api.spigot.commands.moderator.*;
 import com.orbitmines.api.spigot.commands.owner.*;
 import com.orbitmines.api.spigot.commands.perks.*;
@@ -11,10 +12,7 @@ import com.orbitmines.api.spigot.commands.vip.CommandAfk;
 import com.orbitmines.api.spigot.commands.vip.CommandNick;
 import com.orbitmines.api.spigot.enablers.*;
 import com.orbitmines.api.spigot.events.*;
-import com.orbitmines.api.spigot.events.npc.NpcChunkEvent;
-import com.orbitmines.api.spigot.events.npc.NpcDamageEvent;
-import com.orbitmines.api.spigot.events.npc.NpcInteractAtEntityEvent;
-import com.orbitmines.api.spigot.events.npc.NpcInteractEntityEvent;
+import com.orbitmines.api.spigot.events.npc.*;
 import com.orbitmines.api.spigot.handlers.ConfigHandler;
 import com.orbitmines.api.spigot.handlers.NewsHologram;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
@@ -36,7 +34,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -82,8 +82,7 @@ public class OrbitMinesApi extends JavaPlugin {
         configHandler = new ConfigHandler(this);
         configHandler.setup("settings");
 
-        nms = new Nms();
-        nms.load();
+        new Nms();
 
         topVoters = new PodiumPlayer[5];
 
@@ -121,6 +120,8 @@ public class OrbitMinesApi extends JavaPlugin {
 
         if (worldLoader != null)
             worldLoader.cleanUp();
+
+        server().getServerType().setStatus(Server.Status.OFFLINE);
     }
 
     public static OrbitMinesApi getApi() {
@@ -139,6 +140,10 @@ public class OrbitMinesApi extends JavaPlugin {
         return nms;
     }
 
+    public void setNms(Nms nms) {
+        this.nms = nms;
+    }
+
     public OrbitMinesServer server() {
         if (server == null)
             throw new NullPointerException("OrbitMinesServer is not setup correctly!");
@@ -148,6 +153,9 @@ public class OrbitMinesApi extends JavaPlugin {
 
     public void setup(OrbitMinesServer server) {
         this.server = server;
+        setMaxPlayers(server.getMaxPlayers());
+        server.getServerType().setMaxPlayers(server.getMaxPlayers());
+        server.getServerType().setStatus(Server.Status.ONLINE);
 
         worldLoader = new WorldLoader(server.cleanUpPlayerData());
 
@@ -233,6 +241,7 @@ public class OrbitMinesApi extends JavaPlugin {
         pluginManager.registerEvents(new NpcDamageEvent(), this);
         pluginManager.registerEvents(new NpcInteractAtEntityEvent(), this);
         pluginManager.registerEvents(new NpcInteractEntityEvent(), this);
+        pluginManager.registerEvents(new WorldSwitchEvent(), this);
         /* Spawn Location */
         pluginManager.registerEvents(new SpawnLocationEvent(), this);
     }
@@ -275,6 +284,13 @@ public class OrbitMinesApi extends JavaPlugin {
         /* normal */
         new CommandServers();
         new CommandTopVoters();
+
+        ConsoleCommandExecuter ccE = new ConsoleCommandExecuter();
+        List<String> list = Arrays.asList("setvip", "setstaff", "vippoints", "omt");
+
+        for(String command : list){
+            getCommand(command).setExecutor(ccE);
+        }
     }
 
     private void registerRunnables() {
@@ -290,6 +306,9 @@ public class OrbitMinesApi extends JavaPlugin {
         new ScoreboardRunnable();
         new ServerCountRunnable();
         new TopVoterRunnable();
+        new ServerCheckRunnable();
+
+        new NpcRunnable();
     }
 
     /* Updates a list of commands in the database which allows tab completion for commands */
@@ -310,8 +329,6 @@ public class OrbitMinesApi extends JavaPlugin {
            Database.get().update(Database.Table.BUNGEE, new Database.Where(Database.Column.TYPE, dataType), new Database.Set(Database.Column.DATA, commandList));
        else
            Database.get().insert(Database.Table.BUNGEE, Database.get().values(dataType, commandList));
-
-        //TODO MESSAGE TO BUNGEE TO UPDATE
     }
 
     /* Setup News Holograms */
@@ -389,5 +406,34 @@ public class OrbitMinesApi extends JavaPlugin {
 
     public boolean useNewsHolgrams() {
         return useNewsHolgrams;
+    }
+
+    public void setMaxPlayers(int maxPlayers) {
+        try {
+            Object server = getOBCClass("CraftServer").getMethod("getHandle").invoke(Bukkit.getServer());
+            getDeclaredField(server.getClass().getSuperclass(), "maxPlayers").set(server, maxPlayers);
+        } catch (Exception ex) {
+        }
+    }
+
+    private Class<?> getOBCClass(String name) {
+        String version = OrbitMinesApi.getApi().getServer().getClass().getPackage().getName().split("\\.")[3];
+        try {
+            return Class.forName("org.bukkit.craftbukkit." + version + "." + name);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private Field getDeclaredField(Class<?> clazz, String name) {
+        try {
+            Field field = clazz.getDeclaredField(name);
+            field.setAccessible(true);
+            return field;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

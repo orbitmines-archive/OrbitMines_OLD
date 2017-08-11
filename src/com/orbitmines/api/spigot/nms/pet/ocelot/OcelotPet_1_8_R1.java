@@ -21,7 +21,7 @@ import java.util.List;
 public class OcelotPet_1_8_R1 implements OcelotPet {
 
     public OcelotPet_1_8_R1() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetOcelot", Mob.OCELOT.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomOcelot", Mob.OCELOT.getEggId());
     }
 
     @Override

@@ -11,6 +11,8 @@ public enum Data {
     GENERAL,
 
     HUB,
+    KITPVP, MASTERIES,
+
 
     /* Perks */
     CHATCOLORS,

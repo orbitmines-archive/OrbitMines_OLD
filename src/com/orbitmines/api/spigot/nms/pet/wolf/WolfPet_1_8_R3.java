@@ -21,7 +21,7 @@ import java.util.List;
 public class WolfPet_1_8_R3 implements WolfPet {
 
     public WolfPet_1_8_R3() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetWolf", Mob.WOLF.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomWolf", Mob.WOLF.getEggId());
     }
 
     @Override

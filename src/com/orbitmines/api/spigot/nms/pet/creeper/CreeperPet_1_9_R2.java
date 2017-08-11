@@ -21,7 +21,7 @@ import java.util.LinkedHashSet;
 public class CreeperPet_1_9_R2 implements CreeperPet {
 
     public CreeperPet_1_9_R2() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetCreeper", Mob.CREEPER.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomCreeper", Mob.CREEPER.getEggId());
     }
 
     @Override

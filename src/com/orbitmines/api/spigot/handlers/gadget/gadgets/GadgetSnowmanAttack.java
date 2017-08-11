@@ -18,6 +18,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
@@ -35,7 +36,7 @@ import java.util.Map;
 */
 public class GadgetSnowmanAttack extends GadgetHandler implements Listener {
 
-    private final Cooldown COOLDOWN = new Cooldown(180000, Gadget.SNOWMAN_ATTACK.getName(), Gadget.SNOWMAN_ATTACK.getName(), Cooldown.Action.RIGHT_CLICK);
+    private final Cooldown COOLDOWN = new Cooldown(180000, Gadget.SNOWMAN_ATTACK.color().getChatColor() + "§l" + Gadget.SNOWMAN_ATTACK.getName(), Gadget.SNOWMAN_ATTACK.color().getChatColor() + "§l" + Gadget.SNOWMAN_ATTACK.getName(), Cooldown.Action.RIGHT_CLICK);
 
     private Map<OMPlayer, Integer> seconds;
     private Map<OMPlayer, Item> item;
@@ -128,13 +129,13 @@ public class GadgetSnowmanAttack extends GadgetHandler implements Listener {
                 if (players.size() == 0)
                     return;
 
-                for (Entity entity : snowmen) {
-                    Player player = players.get(RandomUtils.RANDOM.nextInt(players.size()));
+                Entity entity = snowmen[snowmen.length -1];
 
-                    Snowball s = ((Snowman) entity).launchProjectile(Snowball.class, player.getLocation().toVector().subtract(entity.getLocation().toVector()).multiply(0.15));
-                    entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_SNOW_BREAK, 2, 1);
-                    entities.add(s);
-                }
+                Player player = players.get(RandomUtils.RANDOM.nextInt(players.size()));
+
+                Snowball s = ((Snowman) entity).launchProjectile(Snowball.class, player.getLocation().toVector().subtract(entity.getLocation().toVector()).multiply(0.15));
+                entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_SNOW_BREAK, 2, 1);
+                entities.add(s);
             }
         }.runTaskTimer(api, 0, 1);
 
@@ -206,5 +207,11 @@ public class GadgetSnowmanAttack extends GadgetHandler implements Listener {
                 }
             }.runTaskLater(api, 100);
         }
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Snowman && allSnowmen.contains(event.getEntity()))
+            event.setCancelled(true);
     }
 }

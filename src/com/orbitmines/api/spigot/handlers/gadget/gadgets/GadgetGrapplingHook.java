@@ -2,6 +2,7 @@ package com.orbitmines.api.spigot.handlers.gadget.gadgets;
 
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.gadget.GadgetHandler;
+import com.orbitmines.api.spigot.nms.customitem.CustomItemNms;
 import com.orbitmines.api.spigot.perks.Gadget;
 import com.orbitmines.api.spigot.utils.ItemUtils;
 import org.bukkit.Location;
@@ -39,28 +40,28 @@ public class GadgetGrapplingHook extends GadgetHandler implements Listener {
         event.setCancelled(false);
     }
 
+    @Override
+    public ItemStack getItem(OMPlayer omp) {
+        CustomItemNms nms = api.getNms().customItem();
+        return nms.hideFlags(nms.setUnbreakable(super.getItem(omp)), ItemUtils.FLAG_ATTRIBUTES_MODIFIERS);
+    }
+
     @EventHandler
     public void onHit(ProjectileHitEvent e) {
         Projectile projectile = e.getEntity();
 
-        if (projectile instanceof FishHook) {
-            if (!(projectile.getShooter() instanceof Player))
-                return;
+        if (!(projectile instanceof FishHook) || !(projectile.getShooter() instanceof Player))
+            return;
 
-            Player p = (Player) projectile.getShooter();
-            ItemStack item = p.getInventory().getItemInMainHand();
+        Player p = (Player) projectile.getShooter();
 
-            if (ItemUtils.isNull(item))
-                return;
+        if (p.getInventory().getHeldItemSlot() == api.gadgets().getGadgetSlot()) {
+            Location l1 = projectile.getLocation();
+            Location l2 = p.getLocation();
 
-            if (p.getInventory().first(item) == api.gadgets().getGadgetSlot()) {
-                Location l1 = projectile.getLocation();
-                Location l2 = p.getLocation();
+            p.setVelocity(l1.toVector().subtract(l2.toVector()).multiply(1.1).add(new Vector(0, 0.5, 0)));
 
-                p.setVelocity(l1.toVector().subtract(l2.toVector()).multiply(1.1).add(new Vector(0, 0.5, 0)));
-
-                projectile.remove();
-            }
+            projectile.remove();
         }
     }
 }

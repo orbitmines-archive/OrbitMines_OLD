@@ -5,7 +5,11 @@ package com.orbitmines.api;
 */
 public enum PluginMessageType {
 
-    SET_LANGUAGE;
+    SET_LANGUAGE,
+    UPDATE_COMMANDS,
+
+    CHECK_VOTES,
+    UPDATE_SILENT;
 
     public static String CHANNEL = "OrbitMinesApi";
 

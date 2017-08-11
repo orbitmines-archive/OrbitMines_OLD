@@ -17,6 +17,9 @@ public interface OrbitMinesServer {
     /* Server Type */
     Server getServerType();
 
+    /* Max Players */
+    int getMaxPlayers();
+
     /* Return new player instance */
     OMPlayer newPlayerInstance(Player player);
 

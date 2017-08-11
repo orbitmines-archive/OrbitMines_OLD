@@ -18,7 +18,7 @@ public class Kit {
     private ItemStack[] contents;
     private ItemStack itemOffHand;
 
-    private PotionEffect potionEffect;
+    private List<PotionEffect> potionEffects;
 
     public Kit(String name) {
         kits.add(this);
@@ -26,6 +26,7 @@ public class Kit {
         this.name = name;
         this.armorContents = new ItemStack[4];
         this.contents = new ItemStack[36];
+        this.potionEffects = new ArrayList<>();
     }
 
     public String getName() {
@@ -117,12 +118,12 @@ public class Kit {
         return amount;
     }
 
-    public PotionEffect getPotionEffect() {
-        return potionEffect;
+    public List<PotionEffect> getPotionEffects() {
+        return potionEffects;
     }
 
-    public void setPotionEffect(PotionEffect potionEffect) {
-        this.potionEffect = potionEffect;
+    public void addPotionEffect(PotionEffect potionEffect) {
+        this.potionEffects.add(potionEffect);
     }
 
     public void setItems(Player p) {
@@ -156,8 +157,11 @@ public class Kit {
 
         p.getInventory().setItemInOffHand(getItemOffHand());
 
-        if (getPotionEffect() != null)
-            p.addPotionEffect(getPotionEffect());
+        if (potionEffects.size() != 0) {
+            for (PotionEffect potionEffect : potionEffects) {
+                p.addPotionEffect(potionEffect);
+            }
+        }
     }
 
     public void replaceItems(Player p) {
@@ -192,8 +196,11 @@ public class Kit {
         if (getItemOffHand() != null && setItem(getItemOffHand(), p.getInventory().getItemInOffHand()))
             p.getInventory().setItemInOffHand(getItemOffHand());
 
-        if (getPotionEffect() != null)
-            p.addPotionEffect(getPotionEffect());
+        if (potionEffects.size() != 0) {
+            for (PotionEffect potionEffect : potionEffects) {
+                p.addPotionEffect(potionEffect);
+            }
+        }
     }
 
     private boolean setItem(ItemStack item, ItemStack item2) {
@@ -241,8 +248,11 @@ public class Kit {
         else
             p.getInventory().addItem(getItemOffHand());
 
-        if (getPotionEffect() != null)
-            p.addPotionEffect(getPotionEffect());
+        if (potionEffects.size() != 0) {
+            for (PotionEffect potionEffect : potionEffects) {
+                p.addPotionEffect(potionEffect);
+            }
+        }
     }
 
     public static Kit getKit(String name) {

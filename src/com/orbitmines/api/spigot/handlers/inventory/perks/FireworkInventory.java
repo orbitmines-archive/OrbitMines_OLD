@@ -12,6 +12,7 @@ import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
 import com.orbitmines.api.spigot.handlers.playerdata.GadgetData;
 import com.orbitmines.api.spigot.perks.Gadget;
 import com.orbitmines.api.spigot.perks.Perk;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +31,7 @@ public class FireworkInventory extends PerkInventory {
         GadgetData data = omp.gadgets();
         FireworkSettings settings = data.getFireworkSettings();
 
-        add(11, new ItemInstance(getItemStack(settings.getColor1(), omp.getMessage(new Message("Kleur 1", "Color 1")))) {
+        add(10, new ItemInstance(getItemStack(settings.getColor1(), omp.getMessage(new Message("Kleur 1", "Color 1")))) {
             @Override
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
                 settings.nextColor1();
@@ -38,7 +39,7 @@ public class FireworkInventory extends PerkInventory {
             }
         });
 
-        add(29, new ItemInstance(getItemStack(settings.getColor2(), omp.getMessage(new Message("Kleur 1", "Color 1")))) {
+        add(28, new ItemInstance(getItemStack(settings.getColor2(), omp.getMessage(new Message("Kleur 1", "Color 1")))) {
             @Override
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
                 settings.nextColor2();
@@ -46,7 +47,7 @@ public class FireworkInventory extends PerkInventory {
             }
         });
 
-        add(13, new ItemInstance(getItemStack(settings.getFade1(), "Fade 1")) {
+        add(12, new ItemInstance(getItemStack(settings.getFade1(), "Fade 1")) {
             @Override
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
                 settings.nextFade1();
@@ -54,7 +55,7 @@ public class FireworkInventory extends PerkInventory {
             }
         });
 
-        add(31, new ItemInstance(getItemStack(settings.getFade2(), "Fade 2")) {
+        add(30, new ItemInstance(getItemStack(settings.getFade2(), "Fade 2")) {
             @Override
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
                 settings.nextFade2();
@@ -62,7 +63,7 @@ public class FireworkInventory extends PerkInventory {
             }
         });
 
-        add(15, new ItemInstance(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, settings.hasTrail() ? 5 : 14, "§7Trail: " + omp.statusString(settings.hasTrail())).build()) {
+        add(14, new ItemInstance(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, settings.hasTrail() ? 5 : 14, "§7Trail: " + omp.statusString(settings.hasTrail())).build()) {
             @Override
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
                 settings.nextTrail();
@@ -70,7 +71,15 @@ public class FireworkInventory extends PerkInventory {
             }
         });
 
-        add(33, new ItemInstance(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, settings.hasFlicker() ? 5 : 14, "§7Flicker: " + omp.statusString(settings.hasTrail())).build()) {
+        add(25, new ItemInstance(new ItemBuilder(getMaterial(settings.getType()), 1, getDurability(settings.getType()), "§7Type: " + getName(settings.getType())).build()) {
+            @Override
+            public void onClick(InventoryClickEvent event, OMPlayer omp) {
+                settings.nextType();
+                open(omp);
+            }
+        });
+
+        add(32, new ItemInstance(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, settings.hasFlicker() ? 5 : 14, "§7Flicker: " + omp.statusString(settings.hasTrail())).build()) {
             @Override
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
                 settings.nextFlicker();
@@ -99,7 +108,7 @@ public class FireworkInventory extends PerkInventory {
                 @Override
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     if (passes.obtainable().isPurchasable() && passes.obtainable().canPurchase(omp)) {
-                        confirmPurchase(omp, passes);
+                        confirmPurchase(omp, passes, this);
                     } else {
                         passes.obtainable().msgNoAccess(omp);
                     }
@@ -121,6 +130,49 @@ public class FireworkInventory extends PerkInventory {
 
     private ItemStack getItemStack(Color color, String name) {
         return new ItemBuilder(color.item().getMaterial(), 1, color.item().getDurability(), "§7" + name + ": " + color.getChatColor() + "§l" + color.getName()).build();
+    }
+
+    private Material getMaterial(FireworkEffect.Type type) {
+        switch (type) {
+            case BALL:
+                return Material.FIREWORK_CHARGE;
+            case BALL_LARGE:
+                return Material.FIREBALL;
+            case BURST:
+                return Material.TNT;
+            case CREEPER:
+                return Material.SKULL_ITEM;
+            case STAR:
+                return Material.NETHER_STAR;
+            default:
+                return Material.FIREWORK_CHARGE;
+        }
+    }
+
+    private short getDurability(FireworkEffect.Type type) {
+        switch (type) {
+            case CREEPER:
+                return 4;
+            default:
+                return 0;
+        }
+    }
+
+    private String getName(FireworkEffect.Type type) {
+        switch (type) {
+            case BALL:
+                return "§e§lSmall";
+            case BALL_LARGE:
+                return "§6§lLarge";
+            case BURST:
+                return "§c§lSpecial";
+            case CREEPER:
+                return "§a§lCreeper";
+            case STAR:
+                return "§f§lStar";
+            default:
+                return "§e§lSmall";
+        }
     }
 
     public enum Passes implements Perk {

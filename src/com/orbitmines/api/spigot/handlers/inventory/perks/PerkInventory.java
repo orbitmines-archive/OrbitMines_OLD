@@ -70,7 +70,7 @@ public abstract class PerkInventory extends OMInventory {
 
     }
 
-    public void confirmPurchase(OMPlayer omp, Perk perk) {
+    public void confirmPurchase(OMPlayer omp, Perk perk, ConfirmItemInstance itemInstance) {
         if (!perk.obtainable().isPurchasable())
             return;
 
@@ -78,7 +78,7 @@ public abstract class PerkInventory extends OMInventory {
             @Override
             public void onConfirm(InventoryClickEvent event, OMPlayer omp) {
                 perk.obtainable().purchase(omp);
-                ((ConfirmItemInstance) itemInstances[event.getSlot()]).onConfirm(event, omp);
+                itemInstance.onConfirm(event, omp);
                 returnInventory().open(omp);
             }
 

@@ -27,7 +27,7 @@ public class CommandAfk extends VipCommand {
             omp.noLongerAfk();
         } else {
             if (a.length == 1) {
-                omp.setAfk(null);
+                omp.setAfk("null");
             } else if (a.length == 2) {
                 if (omp.isEligible(VipRank.DIAMOND)) {
                     if (a[1].length() <= 20) {

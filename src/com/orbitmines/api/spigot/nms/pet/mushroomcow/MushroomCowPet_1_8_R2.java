@@ -21,7 +21,7 @@ import java.util.List;
 public class MushroomCowPet_1_8_R2 implements MushroomCowPet {
 
     public MushroomCowPet_1_8_R2() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetMushroomCow", Mob.MUSHROOM_COW.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomMushroomCow", Mob.MUSHROOM_COW.getEggId());
     }
 
     @Override

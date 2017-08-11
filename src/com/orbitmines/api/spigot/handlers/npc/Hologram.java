@@ -1,7 +1,6 @@
 package com.orbitmines.api.spigot.handlers.npc;
 
 import com.orbitmines.api.spigot.OrbitMinesApi;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -23,6 +22,7 @@ public class Hologram {
     private List<String> lines;
     private Map<String, ArmorStand> displayNames;
 
+    private List<Player> watchers;
     private boolean hideOnJoin;
 
     public Hologram(Location location) {
@@ -38,6 +38,7 @@ public class Hologram {
         this.armorStands = new ArrayList<>();
         this.lines = new ArrayList<>();
         this.displayNames = new HashMap<>();
+        this.watchers = new ArrayList<>();
     }
 
     public Location getLocation() {
@@ -131,7 +132,7 @@ public class Hologram {
 
     public void createHideFor(Player... players) {
         ArrayList<Player> createFor = new ArrayList<>();
-        createFor.addAll(Bukkit.getOnlinePlayers());
+        createFor.addAll(location.getWorld().getPlayers());
 
         for (Player player : players) {
             createFor.remove(player);
@@ -145,6 +146,8 @@ public class Hologram {
         if (armorStands.size() != 0) {
             delete();
             armorStands.clear();
+
+            createFor = watchers;
         }
 
         if (location == null)
@@ -169,14 +172,24 @@ public class Hologram {
             if (createFor == null)
                 continue;
 
-            List<Player> hideFor = new ArrayList<>();
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (!createFor.contains(player))
-                    hideFor.add(player);
-            }
+            watchers.addAll(createFor);
 
-            hideFor(hideFor);
+            createForWatchers();
         }
+    }
+
+    public void createForWatchers() {
+        List<Player> hideFor = new ArrayList<>();
+        for (Player player : location.getWorld().getPlayers()) {
+            if (!watchers.contains(player))
+                hideFor.add(player);
+        }
+
+        hideFor(hideFor);
+    }
+
+    public List<Player> getWatchers() {
+        return watchers;
     }
 
     public void clear() {

@@ -24,7 +24,7 @@ import java.util.Map;
 */
 public class GadgetSwapTeleporter extends GadgetHandler {
 
-    public final Cooldown COOLDOWN = new Cooldown(4000, Gadget.SWAP_TELEPORTER.getName(), Gadget.SWAP_TELEPORTER.getName(), Cooldown.Action.LEFT_CLICK);
+    public final Cooldown COOLDOWN = new Cooldown(4000, Gadget.SWAP_TELEPORTER.color().getChatColor() + "§l" + Gadget.SWAP_TELEPORTER.getName(), Gadget.SWAP_TELEPORTER.color().getChatColor() + "§l" + Gadget.SWAP_TELEPORTER.getName(), Cooldown.Action.LEFT_CLICK);
 
     private Map<OMPlayer, Entity> entities;
 

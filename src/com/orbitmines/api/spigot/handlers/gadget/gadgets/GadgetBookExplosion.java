@@ -27,7 +27,7 @@ import java.util.List;
 */
 public class GadgetBookExplosion extends GadgetHandler implements Listener {
 
-    private final Cooldown COOLDOWN = new Cooldown(6000, Gadget.BOOK_EXPLOSION.getName(), Gadget.BOOK_EXPLOSION.getName(), Cooldown.Action.RIGHT_CLICK);
+    private final Cooldown COOLDOWN = new Cooldown(6000, Gadget.BOOK_EXPLOSION.color().getChatColor() + "§l" + Gadget.BOOK_EXPLOSION.getName(), Gadget.BOOK_EXPLOSION.color().getChatColor() + "§l" + Gadget.BOOK_EXPLOSION.getName(), Cooldown.Action.RIGHT_CLICK);
 
     private List<Entity> entities;
 

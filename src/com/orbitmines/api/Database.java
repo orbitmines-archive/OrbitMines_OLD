@@ -370,7 +370,7 @@ public class Database {
 
     public enum Table {
 
-        PLAYERS(Column.UUID, Column.NAME, Column.STAFFRANK, Column.VIPRANK, Column.LANGUAGE, Column.SILENT, Column.MONTHLYBONUS, Column.VOTES, Column.CACHEDVOTES, Column.STATS),
+        PLAYERS(Column.UUID, Column.NAME, Column.STAFFRANK, Column.VIPRANK, Column.LANGUAGE, Column.SILENT, Column.MONTHLYBONUS, Column.VOTES, Column.CACHEDVOTES, Column.KITPVPKILLS, Column.STATS),
         SERVERS(Column.NAME, Column.STATUS, Column.MAXPLAYERS),
         BUNGEE(Column.TYPE, Column.DATA),
         IPS(Column.UUID, Column.LASTIP, Column.LASTLOGIN, Column.HISTORY),
@@ -409,6 +409,7 @@ public class Database {
         MONTHLYBONUS(Type.VARCHAR, 5),
         VOTES(Type.INT, 10),
         CACHEDVOTES(Type.VARCHAR, 500),
+        KITPVPKILLS(Type.INT, 100),
         STATS(Type.VARCHAR, 20000),
 
         STATUS(Type.VARCHAR, 30),

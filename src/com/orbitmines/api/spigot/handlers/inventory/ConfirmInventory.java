@@ -4,6 +4,7 @@ import com.orbitmines.api.Message;
 import com.orbitmines.api.spigot.handlers.ItemSet;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.Obtainable;
+import com.orbitmines.api.spigot.handlers.currency.Currency;
 import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -44,6 +45,7 @@ public abstract class ConfirmInventory extends OMInventory {
             public void onClick(InventoryClickEvent event, OMPlayer omp) {
                 Player p = omp.getPlayer();
 
+                p.sendMessage("");
                 omp.sendMessage(new Message("§7Item Gekocht: " + displayName + "§7.", "§7Item Bought: " + displayName + "§7."));
                 p.sendMessage("§7" + omp.getMessage(new Message("Prijs", "Price")) + ": " + getItem(Slot.CURRENCY).getItemMeta().getDisplayName() + "§7.");
                 p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 5, 1);
@@ -70,7 +72,8 @@ public abstract class ConfirmInventory extends OMInventory {
                 add(slot, new EmptyItemInstance(new ItemBuilder(item.getMaterial(), item.getAmount(), item.getDurability(), displayName).build()));
             } else if (slot == Slot.CURRENCY.slot) {
                 ItemSet item = obtainable.item();
-                add(slot, new EmptyItemInstance(new ItemBuilder(item.getMaterial(), item.getAmount(), item.getDurability(), item.getDisplayName()).build()));
+                Currency currency = obtainable.getCurrency();
+                add(slot, new EmptyItemInstance(new ItemBuilder(item.getMaterial(), item.getAmount(), item.getDurability(), currency.color().getChatColor() + "§l" + obtainable.getPrice() + " " + (obtainable.getPrice() == 1 ? currency.getSingleName() : currency.getMultipleName())).build()));
             }
         }
 

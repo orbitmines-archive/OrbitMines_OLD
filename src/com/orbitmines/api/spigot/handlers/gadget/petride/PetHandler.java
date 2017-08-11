@@ -54,7 +54,7 @@ public abstract class PetHandler {
 
         tickIndex++;
 
-        if (ticks >= tickIndex) {
+        if (tickIndex >= ticks) {
             onRun();
 
             tickIndex = 0;

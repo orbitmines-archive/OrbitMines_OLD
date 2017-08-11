@@ -12,6 +12,7 @@ import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -76,5 +77,10 @@ public class GadgetFlameThrower extends GadgetHandler implements Listener {
                 }
             }.runTaskLater(api, 40);
         }
+    }
+
+    @EventHandler
+    public void onSpread(BlockSpreadEvent event) {
+        event.setCancelled(true);
     }
 }

@@ -21,7 +21,7 @@ import java.util.List;
 public class SheepPet_1_8_R3 implements SheepPet {
 
     public SheepPet_1_8_R3() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetSheep", Mob.SHEEP.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomSheep", Mob.SHEEP.getEggId());
     }
 
     @Override

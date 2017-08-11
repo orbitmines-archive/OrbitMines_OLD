@@ -90,11 +90,17 @@ public class PreventionSet {
             case PHYSICAL_INTERACTING:
                 listener = new PreventPhysicalInteracting();
                 break;
+            case PHYSICAL_INTERACTING_EXCEPT_PLATES:
+                listener = new PreventPhysicalExceptPlatesInteracting();
+                break;
             case BUCKET_USAGE:
                 listener = new PreventBucketUsage();
                 break;
             case CLICK_PLAYER_INVENTORY:
                 listener = new PreventClickPlayerInventory();
+                break;
+            case PLAYER_DAMAGE:
+                listener = new PreventPlayerDamage();
                 break;
         }
 
@@ -130,8 +136,10 @@ public class PreventionSet {
         ITEM_DROP,
         ITEM_PICKUP,
         PHYSICAL_INTERACTING,
+        PHYSICAL_INTERACTING_EXCEPT_PLATES,
         BUCKET_USAGE,
-        CLICK_PLAYER_INVENTORY;
+        CLICK_PLAYER_INVENTORY,
+        PLAYER_DAMAGE;
 
     }
 
@@ -229,7 +237,7 @@ public class PreventionSet {
 
     public class PreventBlockInteracting implements Listener {
 
-        private final List<Material> notClickable = Arrays.asList(Material.CHEST, Material.ENDER_CHEST, Material.TRAPPED_CHEST, Material.FURNACE, Material.WORKBENCH, Material.ANVIL, Material.ENCHANTMENT_TABLE, Material.DISPENSER, Material.HOPPER, Material.DROPPER, Material.TRAP_DOOR, Material.LEVER, Material.STONE_BUTTON, Material.WOOD_BUTTON, Material.ACACIA_DOOR, Material.ACACIA_FENCE_GATE, Material.BED_BLOCK, Material.BIRCH_DOOR, Material.BIRCH_FENCE_GATE, Material.BREWING_STAND, Material.BURNING_FURNACE, Material.CAKE_BLOCK, Material.CAULDRON, Material.COMMAND, Material.DARK_OAK_DOOR, Material.DARK_OAK_FENCE_GATE, Material.ENDER_PORTAL, Material.FENCE_GATE, Material.FIRE, Material.FLOWER_POT, Material.JUNGLE_DOOR, Material.JUNGLE_FENCE_GATE, Material.JUKEBOX, Material.OBSERVER, Material.REDSTONE_COMPARATOR_OFF, Material.REDSTONE_COMPARATOR_ON, Material.REDSTONE_COMPARATOR, Material.SPRUCE_DOOR, Material.SPRUCE_FENCE_GATE, Material.TRAP_DOOR, Material.WOOD_DOOR, Material.WOODEN_DOOR, Material.RAILS, Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL);
+        private final List<Material> notClickable = Arrays.asList(Material.CHEST, Material.ENDER_CHEST, Material.TRAPPED_CHEST, Material.FURNACE, Material.WORKBENCH, Material.ANVIL, Material.ENCHANTMENT_TABLE, Material.DISPENSER, Material.HOPPER, Material.DROPPER, Material.TRAP_DOOR, Material.LEVER, Material.STONE_BUTTON, Material.WOOD_BUTTON, Material.ACACIA_DOOR, Material.ACACIA_FENCE_GATE, Material.BED_BLOCK, Material.BIRCH_DOOR, Material.BIRCH_FENCE_GATE, Material.BREWING_STAND, Material.BURNING_FURNACE, Material.CAKE_BLOCK, Material.CAULDRON, Material.COMMAND, Material.DARK_OAK_DOOR, Material.DARK_OAK_FENCE_GATE, Material.ENDER_PORTAL, Material.FENCE_GATE, Material.FIRE, Material.FLOWER_POT, Material.JUNGLE_DOOR, Material.JUNGLE_FENCE_GATE, Material.JUKEBOX, Material.OBSERVER, Material.REDSTONE_COMPARATOR_OFF, Material.REDSTONE_COMPARATOR_ON, Material.REDSTONE_COMPARATOR, Material.SPRUCE_DOOR, Material.SPRUCE_FENCE_GATE, Material.TRAP_DOOR, Material.WOOD_DOOR, Material.WOODEN_DOOR, Material.RAILS, Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL, Material.BLACK_SHULKER_BOX, Material.SILVER_SHULKER_BOX, Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX, Material.CYAN_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.LIME_SHULKER_BOX, Material.MAGENTA_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.PINK_SHULKER_BOX, Material.PURPLE_SHULKER_BOX, Material.RED_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX);
 
         @EventHandler
         public void preventBlockInteracting(PlayerInteractEvent event) {
@@ -340,7 +348,18 @@ public class PreventionSet {
 
         @EventHandler
         public void preventPhysicalInteracting(PlayerInteractEvent event) {
-            if (event.getAction() != Action.PHYSICAL || !worlds.get(Prevention.BLOCK_INTERACTING).contains(event.getPlayer().getWorld()))
+            if (event.getAction() != Action.PHYSICAL || !worlds.get(Prevention.PHYSICAL_INTERACTING).contains(event.getPlayer().getWorld()))
+                return;
+
+            event.setCancelled(true);
+        }
+    }
+
+    public class PreventPhysicalExceptPlatesInteracting implements Listener {
+
+        @EventHandler
+        public void preventPhysicalInteracting(PlayerInteractEvent event) {
+            if (event.getAction() != Action.PHYSICAL || !worlds.get(Prevention.PHYSICAL_INTERACTING_EXCEPT_PLATES).contains(event.getPlayer().getWorld()) || event.getClickedBlock().getType() != Material.STONE_PLATE && event.getClickedBlock().getType() != Material.WOOD_PLATE)
                 return;
 
             event.setCancelled(true);
@@ -365,6 +384,17 @@ public class PreventionSet {
         @EventHandler
         public void preventClickPlayerInventory(InventoryClickEvent event) {
             if (event.getClickedInventory() == null || !(event.getClickedInventory() instanceof PlayerInventory) || !worlds.get(Prevention.CLICK_PLAYER_INVENTORY).contains(event.getWhoClicked().getWorld()))
+                return;
+
+            event.setCancelled(true);
+        }
+    }
+
+    public class PreventPlayerDamage implements Listener {
+
+        @EventHandler
+        public void preventPlayerDamage(EntityDamageEvent event) {
+            if (!(event.getEntity() instanceof Player) || !worlds.get(Prevention.PLAYER_DAMAGE).contains(event.getEntity().getWorld()))
                 return;
 
             event.setCancelled(true);

@@ -1,6 +1,7 @@
 package com.orbitmines.api.spigot.handlers.podium;
 
 import com.orbitmines.api.spigot.Direction;
+import com.orbitmines.api.spigot.utils.LocationUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,6 +26,8 @@ public abstract class Podium {
     private Location[] locations;
 
     public Podium(Location location, Direction direction) {
+        podia.add(this);
+
         this.location = location;
         this.direction = direction;
         this.locations = new Location[3];
@@ -44,10 +47,30 @@ public abstract class Podium {
         return direction;
     }
 
+    @Deprecated
     private void setup() {
-        locations[0] = direction.getAsNewLocation(location, 0, 2, -1);
-        locations[1] = direction.getAsNewLocation(location, -1, 1, -1);
-        locations[2] = direction.getAsNewLocation(location, 1, 0, -1);
+        switch(getDirection()){
+            case NORTH:
+                locations[0] = LocationUtils.asNewLocation(location, 0, +2, -1);
+                locations[1] = LocationUtils.asNewLocation(location, -1, +1, -1);
+                locations[2] = LocationUtils.asNewLocation(location, +1, 0, -1);
+                break;
+            case EAST:
+                locations[0] = LocationUtils.asNewLocation(location, +1, +2, 0);
+                locations[1] = LocationUtils.asNewLocation(location, +1, +1, -1);
+                locations[2] = LocationUtils.asNewLocation(location, +1, 0, +1);
+                break;
+            case SOUTH:
+                locations[0] = LocationUtils.asNewLocation(location, 0, +2, +1);
+                locations[1] = LocationUtils.asNewLocation(location, +1, +1, +1);
+                locations[2] = LocationUtils.asNewLocation(location, -1, 0, +1);
+                break;
+            case WEST:
+                locations[0] = LocationUtils.asNewLocation(location, -1, +2, 0);
+                locations[1] = LocationUtils.asNewLocation(location, -1, +1, +1);
+                locations[2] = LocationUtils.asNewLocation(location, -1, 0, -1);
+                break;
+        }
     }
 
     private Skull getSkull(Location location) {
@@ -61,8 +84,20 @@ public abstract class Podium {
         return (Skull) b.getState();
     }
 
+    @Deprecated
     private Location getSkullLocation(Location location) {
-        return direction.getAsNewLocation(location, 0, 1, 1);
+        switch(getDirection()){
+            case NORTH:
+                return LocationUtils.asNewLocation(location, 0, 1, 1);
+            case EAST:
+                return LocationUtils.asNewLocation(location, -1, 1, 0);
+            case SOUTH:
+                return LocationUtils.asNewLocation(location, 0, 1, -1);
+            case WEST:
+                return LocationUtils.asNewLocation(location, 1, 1, 0);
+            default:
+                return null;
+        }
     }
 
     public void update() {
@@ -85,7 +120,6 @@ public abstract class Podium {
 
     private void updateSkull(Skull skull, PodiumPlayer player) {
         if (player == null || player.getUuid() == null) {
-            skull.setOwningPlayer(null);
             skull.setSkullType(SkullType.SKELETON);
         } else {
             skull.setSkullType(SkullType.PLAYER);

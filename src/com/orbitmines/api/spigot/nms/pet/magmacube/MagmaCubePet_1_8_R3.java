@@ -21,7 +21,7 @@ import java.util.List;
 public class MagmaCubePet_1_8_R3 implements MagmaCubePet {
 
     public MagmaCubePet_1_8_R3() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetMagmaCube", Mob.MAGMA_CUBE.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomMagmaCube", Mob.MAGMA_CUBE.getEggId());
     }
 
     @Override

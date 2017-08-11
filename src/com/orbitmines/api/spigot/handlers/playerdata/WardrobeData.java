@@ -8,7 +8,9 @@ import com.orbitmines.api.spigot.handlers.OMPlayer;
 import com.orbitmines.api.spigot.handlers.Obtainable;
 import com.orbitmines.api.spigot.handlers.itembuilders.ItemBuilder;
 import com.orbitmines.api.spigot.handlers.itembuilders.LeatherArmorBuilder;
+import com.orbitmines.api.spigot.nms.customitem.CustomItemNms;
 import com.orbitmines.api.spigot.perks.Wardrobe;
+import com.orbitmines.api.spigot.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -200,11 +202,12 @@ public class WardrobeData extends PlayerData {
         Player p = omp.getPlayer();
         Color color = wardrobe.color();
 
+        CustomItemNms nms = api.getNms().customItem();
         LeatherArmorBuilder builder = new LeatherArmorBuilder(LeatherArmorBuilder.Type.CHESTPLATE, color.getBukkitColor(), 1, displayName);
-        p.getInventory().setChestplate(builder.build());
+        p.getInventory().setChestplate(nms.hideFlags(builder.build(), ItemUtils.FLAG_ATTRIBUTES_MODIFIERS));
         builder.setType(LeatherArmorBuilder.Type.LEGGINGS);
-        p.getInventory().setLeggings(builder.build());
+        p.getInventory().setLeggings(nms.hideFlags(builder.build(), ItemUtils.FLAG_ATTRIBUTES_MODIFIERS));
         builder.setType(LeatherArmorBuilder.Type.BOOTS);
-        p.getInventory().setBoots(builder.build());
+        p.getInventory().setBoots(nms.hideFlags(builder.build(), ItemUtils.FLAG_ATTRIBUTES_MODIFIERS));
     }
 }

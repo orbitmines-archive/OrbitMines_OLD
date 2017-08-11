@@ -21,7 +21,7 @@ import java.util.LinkedHashSet;
 public class PigPet_1_9_R2 implements PigPet {
 
     public PigPet_1_9_R2() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetPig", Mob.PIG.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomPig", Mob.PIG.getEggId());
     }
 
     @Override

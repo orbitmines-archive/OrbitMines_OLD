@@ -21,7 +21,7 @@ import java.util.List;
 public class CowPet_1_8_R3 implements CowPet {
 
     public CowPet_1_8_R3() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetCow", Mob.COW.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomCow", Mob.COW.getEggId());
     }
 
     @Override

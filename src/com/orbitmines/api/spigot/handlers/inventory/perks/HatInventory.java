@@ -46,7 +46,7 @@ public class HatInventory extends PerkInventory {
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     if (!hat.hasAccess(omp)) {
                         if (hat.obtainable().isPurchasable() && hat.obtainable().canPurchase(omp)) {
-                            confirmPurchase(omp, hat);
+                            confirmPurchase(omp, hat, this);
                         } else {
                             hat.obtainable().msgNoAccess(omp);
                         }

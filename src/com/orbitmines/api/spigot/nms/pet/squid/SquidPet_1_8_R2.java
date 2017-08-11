@@ -21,7 +21,7 @@ import java.util.List;
 public class SquidPet_1_8_R2 implements SquidPet {
 
     public SquidPet_1_8_R2() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetSquid", Mob.SQUID.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomSquid", Mob.SQUID.getEggId());
     }
 
     @Override

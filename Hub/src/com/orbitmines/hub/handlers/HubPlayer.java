@@ -10,6 +10,7 @@ import com.orbitmines.api.spigot.perks.Gadget;
 import com.orbitmines.hub.handlers.playerdata.HubData;
 import net.firefang.ip2c.IpUtils;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -38,12 +39,12 @@ public class HubPlayer extends OMPlayer {
 
     @Override
     public void onVote(int votes) {
-        general().addTokens(1);
+        general().addTokens(votes);
 
         if (votes != 1)
             return;
 
-        Title title = new Title("§b§lVote", "§e+1 OrbitMines Token", 20, 40, 20);
+        Title title = new Title("§b§lVote", "§e+" + votes + " OrbitMines Token", 20, 40, 20);
         title.send(player);
     }
 
@@ -106,7 +107,7 @@ public class HubPlayer extends OMPlayer {
     }
 
     private void giveLobbyKit() {
-        player.getInventory().clear();
+        player.getInventory().setContents(new ItemStack[36]);
 
         Kit.getKit(language.toString()).setItems(player);
 

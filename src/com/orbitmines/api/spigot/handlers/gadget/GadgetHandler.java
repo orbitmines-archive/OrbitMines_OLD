@@ -51,7 +51,7 @@ public abstract class GadgetHandler implements Listener {
 
         tickIndex++;
 
-        if (ticks >= tickIndex) {
+        if (tickIndex >= ticks) {
             onRun();
 
             tickIndex = 0;

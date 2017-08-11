@@ -21,7 +21,7 @@ import java.util.LinkedHashSet;
 public class SilverfishPet_1_10_R1 implements SilverfishPet {
 
     public SilverfishPet_1_10_R1() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetSilverfish", Mob.SILVERFISH.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomSilverfish", Mob.SILVERFISH.getEggId());
     }
 
     @Override

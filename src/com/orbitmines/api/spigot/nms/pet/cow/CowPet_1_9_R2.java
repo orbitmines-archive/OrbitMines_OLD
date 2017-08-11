@@ -21,7 +21,7 @@ import java.util.LinkedHashSet;
 public class CowPet_1_9_R2 implements CowPet {
 
     public CowPet_1_9_R2() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetCow", Mob.COW.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomCow", Mob.COW.getEggId());
     }
 
     @Override

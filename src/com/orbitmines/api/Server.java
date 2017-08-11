@@ -53,12 +53,28 @@ public enum Server {
         return maxPlayers;
     }
 
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
+    }
+
     public Status getStatus() {
         return status;
     }
 
     public void updateStatus() {
-        status = Status.valueOf(Database.get().getString(Database.Table.SERVERS, Database.Column.STATUS, new Database.Where(Database.Column.NAME, toString())));
+        if (Database.get().contains(Database.Table.SERVERS, Database.Column.NAME, new Database.Where(Database.Column.NAME, toString())))
+            status = Status.valueOf(Database.get().getString(Database.Table.SERVERS, Database.Column.STATUS, new Database.Where(Database.Column.NAME, toString())));
+        else
+            status = Status.OFFLINE;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+
+        if (Database.get().contains(Database.Table.SERVERS, Database.Column.NAME, new Database.Where(Database.Column.NAME, toString())))
+            Database.get().update(Database.Table.SERVERS, new Database.Where(Database.Column.NAME, toString()), new Database.Set(Database.Column.STATUS, status.toString()), new Database.Set(Database.Column.MAXPLAYERS, maxPlayers + ""));
+        else
+            Database.get().insert(Database.Table.SERVERS, Database.get().values(toString(), status.toString(), getMaxPlayers() + ""));
     }
 
     public boolean is(Status status) {

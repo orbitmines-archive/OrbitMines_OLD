@@ -24,6 +24,12 @@ public class TrailSettingsInventory extends PerkInventory {
     }
 
     @Override
+    protected boolean onOpen(OMPlayer omp) {
+        omp.sendMessage(new Message("§7Trail Settings zijn tijdelijk uitgeschakeld.", "§7Trail Settings have been disabled temporarily."));
+        return false;
+    }
+
+    @Override
     protected void setPerkItems(OMPlayer omp) {
         TrailData data = omp.trails();
 
@@ -43,13 +49,13 @@ public class TrailSettingsInventory extends PerkInventory {
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     if (!trailType.hasAccess(omp)) {
                         if (trailType.obtainable().isPurchasable() && trailType.obtainable().canPurchase(omp)) {
-                            confirmPurchase(omp, trailType);
+                            confirmPurchase(omp, trailType, this);
                         } else {
                             trailType.obtainable().msgNoAccess(omp);
                         }
                     } else {
+                        data.setTrailType(trailType);
                         omp.getPlayer().closeInventory();
-                        returnInventory().open(omp);
                     }
                 }
             });

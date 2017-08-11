@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public abstract class ScoreboardSet {
 
-    private OMPlayer omp;
+    protected OMPlayer omp;
     private String title;
     private Map<Integer, String> scores;
     private List<ScoreboardTeam> teams;

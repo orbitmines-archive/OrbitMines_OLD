@@ -2,7 +2,6 @@ package com.orbitmines.api.spigot.handlers.npc;
 
 import com.orbitmines.api.spigot.OrbitMinesApi;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -191,10 +190,12 @@ public class FloatingItem {
         private FloatingItem floatingItem;
         private Item item;
         private boolean hideOnJoin;
+        private List<Player> watchers;
 
         public ItemInstance(FloatingItem floatingItem, boolean hideOnJoin) {
             this.floatingItem = floatingItem;
             this.hideOnJoin = hideOnJoin;
+            this.watchers = new ArrayList<>();
             this.floatingItem.itemInstances.add(this);
         }
 
@@ -225,6 +226,9 @@ public class FloatingItem {
         }
 
         public void spawn(Collection<? extends Player> createFor) {
+            if (watchers.size() != 0)
+                createFor = watchers;
+
             item = floatingItem.location.getWorld().dropItem(floatingItem.location, getItemStack());
 
             if (!floatingItem.canPickUp())
@@ -238,18 +242,28 @@ public class FloatingItem {
             if (createFor == null)
                 return;
 
+            watchers.addAll(createFor);
+
+            createForWatchers();
+        }
+
+        public void delete() {
+            if (item != null)
+                item.remove();
+        }
+
+        public void createForWatchers() {
             List<Player> hideFor = new ArrayList<>();
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (!createFor.contains(player))
+            for (Player player : floatingItem.location.getWorld().getPlayers()) {
+                if (!watchers.contains(player))
                     hideFor.add(player);
             }
 
             hideFor(hideFor);
         }
 
-        public void delete() {
-            if (item != null)
-                item.remove();
+        public List<Player> getWatchers() {
+            return watchers;
         }
 
         public void hideFor(Player player) {
@@ -267,6 +281,8 @@ public class FloatingItem {
         public void updateName() {
             item.setCustomName(getDisplayName());
             item.setCustomNameVisible(isDisplayNameVisible());
+
+            createForWatchers();
         }
     }
 }

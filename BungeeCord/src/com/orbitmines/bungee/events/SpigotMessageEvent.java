@@ -1,12 +1,11 @@
 package com.orbitmines.bungee.events;
 
-import com.orbitmines.api.Language;
-import com.orbitmines.api.PluginMessageType;
+import com.orbitmines.api.*;
+import com.orbitmines.bungee.OrbitMinesBungee;
 import com.orbitmines.bungee.handlers.BungeePlayer;
 import com.orbitmines.bungee.utils.ConsoleUtils;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -14,6 +13,7 @@ import net.md_5.bungee.event.EventHandler;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.UUID;
 
 /*
@@ -29,7 +29,7 @@ public class SpigotMessageEvent implements Listener {
 
     @EventHandler
     public void onPluginMessage(PluginMessageEvent e) {
-        if (!e.getTag().equals("OrbitMinesApi") || !(e.getSender() instanceof Server)) {
+        if (!e.getTag().equals("OrbitMinesApi") || !(e.getSender() instanceof  net.md_5.bungee.api.connection.Server)) {
             return;
         }
 
@@ -48,6 +48,13 @@ public class SpigotMessageEvent implements Listener {
                         BungeePlayer omp = BungeePlayer.getBungeePlayer(player);
                         omp.setLanguage(language);
                     }
+                    break;
+                case UPDATE_COMMANDS:
+                    Server server = Server.valueOf(in.readUTF());
+                    String dataType = BungeeDatabaseType.COMMANDS.toString() + "_" + server.toString();
+                    String[] commands = Database.get().getString(Database.Table.BUNGEE, Database.Column.DATA, new Database.Where(Database.Column.TYPE, dataType)).split("\\|");
+
+                    OrbitMinesBungee.getBungee().getServerCommands().put(server, Arrays.asList(commands));
                     break;
             }
 

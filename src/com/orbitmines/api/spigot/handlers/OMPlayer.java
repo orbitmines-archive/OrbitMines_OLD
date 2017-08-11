@@ -6,6 +6,9 @@ import com.orbitmines.api.spigot.handlers.chat.Title;
 import com.orbitmines.api.spigot.handlers.inventory.OMInventory;
 import com.orbitmines.api.spigot.handlers.itembuilders.PotionBuilder;
 import com.orbitmines.api.spigot.handlers.kit.KitInteractive;
+import com.orbitmines.api.spigot.handlers.npc.FloatingItem;
+import com.orbitmines.api.spigot.handlers.npc.Hologram;
+import com.orbitmines.api.spigot.handlers.npc.NpcArmorStand;
 import com.orbitmines.api.spigot.handlers.playerdata.*;
 import com.orbitmines.api.spigot.handlers.scoreboard.Scoreboard;
 import com.orbitmines.api.spigot.handlers.scoreboard.ScoreboardSet;
@@ -105,7 +108,7 @@ public abstract class OMPlayer {
         player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
 
         if (!Database.get().contains(Database.Table.PLAYERS, Database.Column.UUID, new Database.Where(Database.Column.UUID, getUUID().toString())))
-            Database.get().insert(Database.Table.PLAYERS, Database.get().values(getUUID().toString(), player.getName(), StaffRank.NONE.toString(), VipRank.NONE.toString(), Language.DUTCH.toString(), "" + false, "" + false, "" + 0, "null", "null"));
+            Database.get().insert(Database.Table.PLAYERS, Database.get().values(getUUID().toString(), player.getName(), StaffRank.NONE.toString(), VipRank.NONE.toString(), Language.DUTCH.toString(), "" + false, "" + false, "" + 0, "null", "" + 0, "null"));
 
         Map<Database.Column, String> values = Database.get().getValues(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()),
                 Database.Column.STAFFRANK, Database.Column.VIPRANK, Database.Column.LANGUAGE, Database.Column.SILENT, Database.Column.MONTHLYBONUS, Database.Column.STATS);
@@ -115,8 +118,6 @@ public abstract class OMPlayer {
         language = Language.valueOf(values.get(Database.Column.LANGUAGE));
         silent = Boolean.parseBoolean(values.get(Database.Column.SILENT));
         receivedMonthlyBonus = Boolean.parseBoolean(values.get(Database.Column.MONTHLYBONUS));
-
-        updateVotes();
 
         /* DATA~STATS~DATA~STATS */
         String[] stats = values.get(Database.Column.STATS).split("~");
@@ -149,6 +150,8 @@ public abstract class OMPlayer {
         for (PlayerData playerData : data) {
             playerData.onLogin();
         }
+
+        updateVotes();
 
         onLogin();
     }
@@ -354,11 +357,12 @@ public abstract class OMPlayer {
     public void setLanguage(Language language) {
         this.language = language;
 
+        Database.get().update(Database.Table.PLAYERS, new Database.Where(Database.Column.UUID, getUUID().toString()), new Database.Set(Database.Column.LANGUAGE, language.toString()));
+
         /* Also update on Bungeecord */
         BungeeMessage.send(PluginMessageType.SET_LANGUAGE, player, getUUID().toString(), language.toString());
 
         defaultTabList();
-        updateStats();
     }
 
     public boolean isSilent() {
@@ -418,9 +422,11 @@ public abstract class OMPlayer {
         String playerName = getName();
 
         if (afk != null) {
-            broadcastMessage(new Message("§7 " + playerName + "§7 is nu §6AFK§7. (§7" + afk + "§7)", "§7 " + playerName + "§7 is now §6AFK§7. (§7" + afk + "§7)"));
-        } else if (afk.equals("null")) {
-            broadcastMessage(new Message("§7 " + playerName + "§7 is nu §6AFK§7.", "§7 " + playerName + "§7 is now §6AFK§7."));
+            if (afk.equals("null")) {
+                broadcastMessage(new Message("§7 " + playerName + "§7 is nu §6AFK§7.", "§7 " + playerName + "§7 is now §6AFK§7."));
+            } else {
+                broadcastMessage(new Message("§7 " + playerName + "§7 is nu §6AFK§7. (§7" + afk + "§7)", "§7 " + playerName + "§7 is now §6AFK§7. (§7" + afk + "§7)"));
+            }
         } else {
             if (!this.afk.equals("null")) {
                 broadcastMessage(new Message("§7 " + playerName + "§7 is niet meer §6AFK§7.", "§7 " + playerName + "§7 is no longer §6AFK§7."));
@@ -430,6 +436,7 @@ public abstract class OMPlayer {
         }
         this.afk = afk;
     }
+
 
     public Map<Cooldown, Long> getCooldowns() {
         return cooldowns;
@@ -494,7 +501,13 @@ public abstract class OMPlayer {
 
             Server server = api.server().getServerType();
             if (cachedVotes.containsKey(server)) {
-                vote(cachedVotes.get(server));
+                int votes = cachedVotes.get(server);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        vote(votes);
+                    }
+                }.runTaskLater(api, 20);
 
                 cachedVotes.remove(server);
             }
@@ -547,6 +560,10 @@ public abstract class OMPlayer {
 
     public String statusString(boolean bl) {
         return bl ? getMessage(new Message("§a§lAAN", "§a§lENABLED")) : getMessage(new Message("§c§lUIT", "§c§lDISABLED"));
+    }
+
+    public String statusString(Language language, boolean bl) {
+        return bl ? new Message("§a§lAAN", "§a§lENABLED").lang(language) : new Message("§c§lUIT", "§c§lDISABLED").lang(language);
     }
 
     public BukkitTask sendDelayedMessage(OMRunnable.Time time, Message... messages) {
@@ -752,6 +769,26 @@ public abstract class OMPlayer {
         return players;
     }
 
+    public void destroyHiddenNpcs() {
+        /* Destroy hidden items */
+        for (FloatingItem floatingItem : FloatingItem.getFloatingItems()) {
+            for (FloatingItem.ItemInstance itemInstance : floatingItem.getItemInstances()) {
+                if (itemInstance.hideOnJoin() && itemInstance.getItem().getWorld().getName().equals(player.getWorld().getName()) && !itemInstance.getWatchers().contains(player))
+                    itemInstance.hideFor(player);
+            }
+        }
+            /* Destroy hidden ArmorStands */
+        for (NpcArmorStand npcArmorStand : NpcArmorStand.getNpcArmorStands()) {
+            if (npcArmorStand.hideOnJoin() && npcArmorStand.getArmorStand().getWorld().getName().equals(player.getWorld().getName()) && !npcArmorStand.getWatchers().contains(player))
+                npcArmorStand.hideFor(player);
+        }
+            /* Destroy hidden Hologram */
+        for (Hologram hologram : Hologram.getHolograms()) {
+            if (hologram.hideOnJoin() && hologram.getLocation().getWorld().getName().equals(player.getWorld().getName()) && !hologram.getWatchers().contains(player))
+                hologram.hideFor(player);
+        }
+    }
+
     public void connect(Server server) {
         switch (server.getStatus()) {
 
@@ -760,7 +797,7 @@ public abstract class OMPlayer {
                 forceConnect(server);
                 break;
             case OFFLINE:
-                sendMessage(new Message("§7De " + server.getColor() + server.getName() + "§7 Server is §4§lOffline§7!", "§7The " + server.getColor() + server.getName() + "§7 Server is §4§lOffline§7!"));
+                sendMessage(new Message("§7De " + server.getColor() + server.getName() + "§7 Server is §c§lOffline§7!", "§7The " + server.getColor() + server.getName() + "§7 Server is §4§lOffline§7!"));
                 break;
             case MAINTENANCE:
                 if (isEligible(StaffRank.OWNER)) {

@@ -21,7 +21,7 @@ import java.util.LinkedHashSet;
 public class MagmaCubePet_1_9_R2 implements MagmaCubePet {
 
     public MagmaCubePet_1_9_R2() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetMagmaCube", Mob.MAGMA_CUBE.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomMagmaCube", Mob.MAGMA_CUBE.getEggId());
     }
 
     @Override

@@ -38,7 +38,7 @@ public class TrailInventory extends PerkInventory {
                 public void onClick(InventoryClickEvent event, OMPlayer omp) {
                     if (!trail.hasAccess(omp)) {
                         if (trail.obtainable().isPurchasable() && trail.obtainable().canPurchase(omp)) {
-                            confirmPurchase(omp, trail);
+                            confirmPurchase(omp, trail, this);
                         } else {
                             trail.obtainable().msgNoAccess(omp);
                         }

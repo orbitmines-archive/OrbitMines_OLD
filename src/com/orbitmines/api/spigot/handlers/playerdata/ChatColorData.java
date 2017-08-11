@@ -52,7 +52,7 @@ public class ChatColorData extends PlayerData {
         }
 
         String chatColorTypesString = null;
-        if (chatColors.size() != 0){
+        if (chatColorTypes.size() != 0){
             StringBuilder stringBuilder = new StringBuilder();
             for (ChatColorType chatColorType : chatColorTypes) {
                 stringBuilder.append(chatColorType.toString());
@@ -121,14 +121,14 @@ public class ChatColorData extends PlayerData {
     }
 
     public void setChatColorType(ChatColorType chatColorType) {
-        this.chatColorType = chatColorType;
-
         omp.getPlayer().playSound(omp.getPlayer().getLocation(), Sound.BLOCK_PISTON_EXTEND, 5, 1);
 
         if (chatColorType != null)
             omp.sendMessage(new Message("§7Je " + chatColorType.getDisplayName() + "§7 staat nu §a§lAAN§7.", "§a§lENABLED §7your " + chatColorType.getDisplayName() + "§7."));
         else
             omp.sendMessage(new Message("§7Je " + chatColorType.getDisplayName() + "§7 staat nu §c§lUIT§7.", "§c§lDISABLED §7your " + chatColorType.getDisplayName() + "§7."));
+
+        this.chatColorType = chatColorType;
     }
 
     public List<ChatColorType> getChatColorTypes() {

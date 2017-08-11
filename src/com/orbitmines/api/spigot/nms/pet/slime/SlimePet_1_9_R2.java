@@ -21,7 +21,7 @@ import java.util.LinkedHashSet;
 public class SlimePet_1_9_R2 implements SlimePet {
 
     public SlimePet_1_9_R2() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetSlime", Mob.SLIME.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomSlime", Mob.SLIME.getEggId());
     }
 
     @Override

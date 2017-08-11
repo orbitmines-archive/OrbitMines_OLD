@@ -21,7 +21,7 @@ import java.util.List;
 public class PigPet_1_8_R3 implements PigPet {
 
     public PigPet_1_8_R3() {
-        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "PetPig", Mob.PIG.getEggId());
+        OrbitMinesApi.getApi().getNms().npc().addCustomEntity(CustomNPC.class, "CustomPig", Mob.PIG.getEggId());
     }
 
     @Override

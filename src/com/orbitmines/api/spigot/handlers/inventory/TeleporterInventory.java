@@ -2,10 +2,13 @@ package com.orbitmines.api.spigot.handlers.inventory;
 
 import com.orbitmines.api.Message;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
+import com.orbitmines.api.spigot.runnable.OMRunnable;
+import com.orbitmines.api.spigot.runnable.PlayerRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -15,8 +18,22 @@ import java.util.List;
 */
 public abstract class TeleporterInventory extends OMInventory {
 
+    private boolean started = false;
+
     public TeleporterInventory() {
         newInventory(27, "§0§lTeleporter");
+
+        if (started)
+            return;
+
+        new PlayerRunnable(OMRunnable.TimeUnit.SECOND, 1) {
+            @Override
+            public void run(OMPlayer omp) {
+                InventoryView inv = omp.getPlayer().getOpenInventory();
+                if (omp.getLastInventory() instanceof TeleporterInventory && inv != null && inv.getTopInventory() != null && inv.getTopInventory().getName().equals(inventory.getName()))
+                    ((TeleporterInventory) omp.getLastInventory()).update();
+            }
+        };
     }
 
     protected abstract List<OMPlayer> getPlayers();
