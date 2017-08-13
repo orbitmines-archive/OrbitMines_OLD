@@ -12,6 +12,7 @@ public enum Data {
 
     HUB,
     KITPVP, MASTERIES,
+    SURVIVAL,
 
 
     /* Perks */

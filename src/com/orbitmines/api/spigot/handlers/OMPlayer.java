@@ -501,13 +501,7 @@ public abstract class OMPlayer {
 
             Server server = api.server().getServerType();
             if (cachedVotes.containsKey(server)) {
-                int votes = cachedVotes.get(server);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        vote(votes);
-                    }
-                }.runTaskLater(api, 20);
+                vote(votes);
 
                 cachedVotes.remove(server);
             }

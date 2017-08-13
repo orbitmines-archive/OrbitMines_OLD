@@ -20,7 +20,6 @@ import com.orbitmines.api.spigot.handlers.kit.KitInteractive;
 import com.orbitmines.api.spigot.handlers.npc.FloatingItem;
 import com.orbitmines.api.spigot.handlers.npc.Npc;
 import com.orbitmines.api.spigot.handlers.npc.NpcArmorStand;
-import com.orbitmines.api.spigot.handlers.playerdata.PetData;
 import com.orbitmines.api.spigot.handlers.playerdata.PlayerData;
 import com.orbitmines.api.spigot.handlers.playerdata.TrailData;
 import com.orbitmines.api.spigot.handlers.podium.Podium;
@@ -552,7 +551,7 @@ public class KitPvP extends JavaPlugin implements OrbitMinesServer {
                 @Override
                 public void click(PlayerInteractEntityEvent event, OMPlayer player) {
                     KitPvPPlayer omp = (KitPvPPlayer) player; 
-                    PetData petData = omp.pets();
+//                    PetData petData = omp.pets();
                     TrailData trailData = omp.trails();
                     
 //                    if(petData != null)
@@ -785,6 +784,11 @@ public class KitPvP extends JavaPlugin implements OrbitMinesServer {
     @Override
     public Location getSpawnLocation() {
         return spawnLocation;
+    }
+
+    @Override
+    public boolean teleportToSpawn(Player player) {
+        return true;
     }
 
     @Override

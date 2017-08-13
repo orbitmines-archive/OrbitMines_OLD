@@ -1,6 +1,6 @@
-package com.orbitmines.api.spigot.events;
+package com.orbitmines.survival.events;
 
-import com.orbitmines.api.StaffRank;
+import com.orbitmines.api.VipRank;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -16,7 +16,7 @@ public class SignEvent implements Listener {
     public void onChange(SignChangeEvent event) {
         OMPlayer omp = OMPlayer.getPlayer(event.getPlayer());
 
-        if (!omp.isEligible(StaffRank.OWNER) || !omp.isOpMode())
+        if (!omp.isEligible(VipRank.EMERALD))
             return;
 
         for (int i = 0; i < 4; i++) {

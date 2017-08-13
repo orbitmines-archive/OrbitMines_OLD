@@ -18,6 +18,7 @@ public class SpawnLocationEvent implements Listener {
 
     @EventHandler
     public void onSpawn(PlayerSpawnLocationEvent event) {
-        event.setSpawnLocation(api.server().getSpawnLocation());
+        if (api.server().teleportToSpawn(event.getPlayer()))
+            event.setSpawnLocation(api.server().getSpawnLocation());
     }
 }

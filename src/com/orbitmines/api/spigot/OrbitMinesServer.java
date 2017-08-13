@@ -29,6 +29,8 @@ public interface OrbitMinesServer {
     /* Return null if player should stay at their place */
     Location getSpawnLocation();
 
+    boolean teleportToSpawn(Player player);
+
     /* Messages displayed when voting */
     String[] getVoteMessages(OMPlayer omp);
 

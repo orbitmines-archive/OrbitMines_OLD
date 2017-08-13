@@ -33,6 +33,8 @@ public class LoginEvent implements Listener {
         if (updatedCommands)
             return;
 
+        updatedCommands = true;
+
         BungeeMessage.send(PluginMessageType.UPDATE_COMMANDS, event.getPlayer(), api.server().getServerType().toString());
     }
 }

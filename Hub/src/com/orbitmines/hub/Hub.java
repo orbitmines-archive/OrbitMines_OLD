@@ -64,7 +64,7 @@ public class Hub extends JavaPlugin implements OrbitMinesServer {
         lobby.setGameRuleValue("doDaylightCycle", "false");
         lobby.setTime(20000);
 
-        spawnLocation = new Location(lobby, 0.5, 74, 0.5);
+        spawnLocation = new Location(lobby, 0.5, 75, 0.5);
 
         /* Setup Holograms after world is loaded */
         api.setupHolograms();
@@ -241,6 +241,11 @@ public class Hub extends JavaPlugin implements OrbitMinesServer {
     @Override
     public Location getSpawnLocation() {
         return spawnLocation;
+    }
+
+    @Override
+    public boolean teleportToSpawn(Player player) {
+        return true;
     }
 
     @Override

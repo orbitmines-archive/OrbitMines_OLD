@@ -359,7 +359,7 @@ public class PreventionSet {
 
         @EventHandler
         public void preventPhysicalInteracting(PlayerInteractEvent event) {
-            if (event.getAction() != Action.PHYSICAL || !worlds.get(Prevention.PHYSICAL_INTERACTING_EXCEPT_PLATES).contains(event.getPlayer().getWorld()) || event.getClickedBlock().getType() != Material.STONE_PLATE && event.getClickedBlock().getType() != Material.WOOD_PLATE)
+            if (event.getAction() != Action.PHYSICAL || !worlds.get(Prevention.PHYSICAL_INTERACTING_EXCEPT_PLATES).contains(event.getPlayer().getWorld()) || event.getClickedBlock().getType() == Material.STONE_PLATE || event.getClickedBlock().getType() != Material.WOOD_PLATE)
                 return;
 
             event.setCancelled(true);

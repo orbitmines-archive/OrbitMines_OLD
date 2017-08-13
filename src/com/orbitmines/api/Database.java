@@ -410,6 +410,7 @@ public class Database {
         VOTES(Type.INT, 10),
         CACHEDVOTES(Type.VARCHAR, 500),
         KITPVPKILLS(Type.INT, 100),
+        SURVIVALMONEY(Type.INT, 100),
         STATS(Type.VARCHAR, 20000),
 
         STATUS(Type.VARCHAR, 30),

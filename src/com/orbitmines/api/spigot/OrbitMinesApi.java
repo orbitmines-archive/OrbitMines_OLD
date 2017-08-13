@@ -16,6 +16,7 @@ import com.orbitmines.api.spigot.events.npc.*;
 import com.orbitmines.api.spigot.handlers.ConfigHandler;
 import com.orbitmines.api.spigot.handlers.NewsHologram;
 import com.orbitmines.api.spigot.handlers.OMPlayer;
+import com.orbitmines.api.spigot.handlers.SchematicGenerator;
 import com.orbitmines.api.spigot.handlers.currency.Currency;
 import com.orbitmines.api.spigot.handlers.currency.CurrencyTokens;
 import com.orbitmines.api.spigot.handlers.currency.CurrencyVipPoints;
@@ -80,7 +81,7 @@ public class OrbitMinesApi extends JavaPlugin {
         api = this;
 
         configHandler = new ConfigHandler(this);
-        configHandler.setup("settings");
+        configHandler.setup("settings", SchematicGenerator.CONFIG);
 
         new Nms();
 
@@ -234,8 +235,6 @@ public class OrbitMinesApi extends JavaPlugin {
         pluginManager.registerEvents(new LoginEvent(), this);
         /* Quit */
         pluginManager.registerEvents(new QuitEvent(), this);
-        /* Color Signs */
-        pluginManager.registerEvents(new SignEvent(), this);
         /* Npcs */
         pluginManager.registerEvents(new NpcChunkEvent(), this);
         pluginManager.registerEvents(new NpcDamageEvent(), this);
@@ -244,6 +243,8 @@ public class OrbitMinesApi extends JavaPlugin {
         pluginManager.registerEvents(new WorldSwitchEvent(), this);
         /* Spawn Location */
         pluginManager.registerEvents(new SpawnLocationEvent(), this);
+        /* Schematic Generator */
+        pluginManager.registerEvents(new SchematicGeneratorEvent(), this);
     }
 
     private void registerCommands() {
@@ -253,6 +254,7 @@ public class OrbitMinesApi extends JavaPlugin {
         new CommandDisguise();
         new CommandFeed();
         new CommandGameMode();
+        new CommandGenerator();
         new CommandGive();
         new CommandHeal();
         new CommandOpMode();

@@ -1,0 +1,15 @@
+name: OrbitMinesSurvival
+author: O_o_Fadi_o_O
+version: 1.0.0
+description: OrbitMinesSurvival by O_o_Fadi_o_O/FadiDev
+main: com.orbitmines.survival.Survival
+commands:
+  money:
+    description: OrbitMines Command.
+  addhomes:
+    description: OrbitMines Command.
+  addshops:
+    description: OrbitMines Command.
+  addwarps:
+    description: OrbitMines Command.
+depend: [OrbitMinesApi]
